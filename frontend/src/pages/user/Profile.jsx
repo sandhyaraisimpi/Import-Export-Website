@@ -1,58 +1,93 @@
-// src/pages/user/Profile.jsx
-import React from "react";
-import Sidebar from "../../components/user/sidebar"; // tumhara existing Sidebar
-import Header from "../../components/user/Header";   // tumhara existing Header
-import { User } from "lucide-react";
-import user from "../../assets/userProfile/user.webp";
+import { useState } from "react";
+import Sidebar from "../../components/user/sidebar";
+import Header from "../../components/user/Header";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
-  // Dummy user data (tum API se fetch kar sakte ho)
-  const userData = {
+  const navigate = useNavigate();
+
+  const [twoFactor, setTwoFactor] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeactivateModal, setShowDeactivateModal] = useState(false);
+
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [showDeactivateForm, setShowDeactivateForm] = useState(false);
+
+  const [password, setPassword] = useState("");
+  const [reason, setReason] = useState("");
+  const [deleteText, setDeleteText] = useState("");
+
+  const [user] = useState({
     name: "Akhil Jha",
     email: "akhil@example.com",
     phone: "+91 9876543210",
-    role: "Admin",
-    avatar: user,
-  };
+    gender: "Male",
+    dob: "1995-08-12",
+    city: "Madhubani",
+    state: "Bihar",
+    accountType: "Premium User",
+    createdAt: "15 Jan 2024",
+    verified: true,
+    lastLogin: "20 Feb 2026, 10:45 AM",
+    orders: 24,
+    wishlist: 6,
+    savedAddresses: 3,
+    profileImage: "https://i.pravatar.cc/150?img=12",
+  });
+
+
+
+
+
+
+
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
+    <div className="flex">
       <Sidebar />
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
+      <div className="flex-1 ml-64">
         <Header />
 
-        {/* Page content */}
-        <main className="p-6 ml-20 mt-20 overflow-auto">
-          <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6">
-            <div className="flex items-center space-x-6">
-              {/* Avatar */}
-              <img
-                src={userData.avatar}
-                alt="User Avatar"
-                className="w-24 h-24 rounded-full border-2 border-indigo-500"
-              />
+        <div className="p-8 min-h-screen mt-15 bg-gray-50 space-y-8">
 
-              {/* User Info */}
-              <div>
-                <h2 className="text-2xl font-bold text-gray-800">{userData.name}</h2>
-                <p className="text-gray-500">{userData.role}</p>
-                <p className="mt-2 text-gray-600">Email: {userData.email}</p>
-                <p className="text-gray-600">Phone: {userData.phone}</p>
-              </div>
-            </div>
+          {/* 🔹 1. Basic Profile Info */}
+          <div className="bg-white rounded-3xl shadow-xl p-8 flex items-center gap-6">
+            <img
+              src={user.profileImage}
+              alt="Profile"
+              className="w-28 h-28 rounded-full shadow-md object-cover"
+            />
 
-            {/* Edit Profile Button */}
-            <div className="mt-6">
-              <button className="px-6 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition">
-                Edit Profile
-              </button>
+            <div>
+              <h2 className="text-2xl font-bold">{user.name}</h2>
+              <p className="text-gray-500">
+                {user.email}
+                {user.verified && (
+                  <span className="ml-2 text-green-600 font-semibold text-sm">
+                    ✔ Verified
+                  </span>
+                )}
+              </p>
             </div>
           </div>
-        </main>
+
+          {/* 🔹 2. Account Status */}
+          <div className="bg-white rounded-3xl shadow-xl p-8">
+            <h3 className="text-xl font-bold mb-4">Account Status</h3>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <p><strong>Account Type:</strong> {user.accountType}</p>
+              <p><strong>Account Created:</strong> {user.createdAt}</p>
+              <p><strong>Verification:</strong> {user.verified ? "Verified" : "Not Verified"}</p>
+              <p><strong>Last Login:</strong> {user.lastLogin}</p>
+            </div>
+          </div>
+
+          
+
+
+
+        </div>
       </div>
     </div>
   );

@@ -4,21 +4,31 @@ import Dashboard from "./pages/user/Dashboard";
 import Order from "./pages/user/OrderManagement";
 import Profile from "./pages/user/Profile";
 import Settings from "./pages/user/Settings";
+import MyInquiries from "./pages/user/MyInquiries";
+import InquiryDetail from "./pages/user/InquiryDetail";   // ✅ ADD THIS
 
 function App() {
   return (
     <Router>
       <Routes>
 
-        {/* Redirect default */}
+        {/* Redirect Default */}
         <Route path="/" element={<Navigate to="/user/dashboard" />} />
 
-        {/* Direct Pages */}
+        {/* User Routes */}
         <Route path="/user/dashboard" element={<Dashboard />} />
         <Route path="/user/orders" element={<Order />} />
         <Route path="/user/profile" element={<Profile />} />
         <Route path="/user/settings" element={<Settings />} />
-        
+
+        {/* My Inquiries */}
+        <Route path="/user/inquiries" element={<MyInquiries />} />
+
+        {/* 🔥 Inquiry Detail Dynamic Route */}
+        <Route path="/user/inquiries/:id" element={<InquiryDetail />} />
+
+        {/* Fallback Route */}
+        <Route path="*" element={<Navigate to="/user/dashboard" />} />
 
       </Routes>
     </Router>
