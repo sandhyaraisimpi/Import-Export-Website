@@ -5,7 +5,7 @@ import { useState } from 'react'
 // import './App.css'
 import Homepage from './Homepage';
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Dashboard from "./pages/user/Dashboard";
 import Order from "./pages/user/OrderManagement";
@@ -21,37 +21,25 @@ import ForgotPass from "./pages/user/ForgotPass";
 
 function App() {
   return (
-    <>
-      <AppRoutes />
-      <Homepage />
+    <Routes>
 
-      <Router>
-        <Routes>
+      <Route path="/" element={<Homepage />} />
+      <Route path="/admin/*" element={<AppRoutes />} />
 
-          {/* Redirect Default */}
-          <Route path="/" element={<Navigate to="/user/dashboard" />} />
+      <Route path="/user/dashboard" element={<Dashboard />} />
+      <Route path="/user/orders" element={<Order />} />
+      <Route path="/user/profile" element={<Profile />} />
+      <Route path="/user/settings" element={<Settings />} />
 
-          {/* User Routes */}
-          <Route path="/user/dashboard" element={<Dashboard />} />
-          <Route path="/user/orders" element={<Order />} />
-          <Route path="/user/profile" element={<Profile />} />
-          <Route path="/user/settings" element={<Settings />} />
+      <Route path="/user/inquiries" element={<MyInquiries />} />
+      <Route path="/user/inquiries/:id" element={<InquiryDetail />} />
 
-          {/* My Inquiries */}
-          <Route path="/user/inquiries" element={<MyInquiries />} />
-          <Route path="/user/inquiries/:id" element={<InquiryDetail />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-pass" element={<ForgotPass />} />
 
-          {/* User Auth */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-pass" element={<ForgotPass />} />
-
-          {/* Fallback Route */}
-          <Route path="*" element={<Navigate to="/user/dashboard" />} />
-
-        </Routes>
-      </Router>
-    </>
+      <Route path="*" element={<Navigate to="/user/dashboard" />} />
+    </Routes>
   );
 }
 
