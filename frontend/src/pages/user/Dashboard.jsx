@@ -1,5 +1,5 @@
 import Sidebar from "../../components/user/sidebar";
-import Header from "../../components/user/Header"; // Add this
+import Header from "../../components/user/Header";  
 import { useState } from "react";
 import {
   PlusCircle,
@@ -37,7 +37,7 @@ export default function Dashboard() {
 
       <Sidebar />
 
-      <div className="flex-1 ml-64 pt-16 p-6 space-y-6 "> {/* pt-16 for Header height */}
+      <div className="flex-1 ml-64 pt-16 p-6 space-y-6 "> 
         <Header />
 
         {/* Dashboard Content */}

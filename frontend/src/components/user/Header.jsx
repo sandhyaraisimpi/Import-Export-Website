@@ -1,5 +1,5 @@
 import { Bell, User, LogOut } from "lucide-react";
-import logo from "../../assets/logo/logo.webp"; // apna logo path
+import logo from "../../assets/logo/logo.webp";  
 import { useState } from "react";
 
 export default function Header() {
@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <div className="fixed top-0 left-64 right-0 h-18 bg-white/80 backdrop-blur-lg shadow-md flex items-center justify-between px-6 z-40 ">
       
-      {/* Left: Logo / Title */}
+      {/* Left */}
       <div className="flex text-4xl items-center gap-4">
        My Dashboard
        

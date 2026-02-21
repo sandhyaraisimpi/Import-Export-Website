@@ -270,9 +270,3 @@ export default function OrderManagement() {
   );
 }
 
-
-{/* import Sidebar from "../../components/user/sidebar";
-import Header from "../../components/user/Header";
-
-
-*/}

@@ -51,7 +51,7 @@ export default function Profile() {
 
         <div className="p-8 min-h-screen mt-15 bg-gray-50 space-y-8">
 
-          {/* 🔹 1. Basic Profile Info */}
+          {/*  Basic Profile Info */}
           <div className="bg-white rounded-3xl shadow-xl p-8 flex items-center gap-6">
             <img
               src={user.profileImage}
@@ -72,7 +72,7 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* 🔹 2. Account Status */}
+          {/*  Account Status */}
           <div className="bg-white rounded-3xl shadow-xl p-8">
             <h3 className="text-xl font-bold mb-4">Account Status</h3>
             <div className="grid md:grid-cols-2 gap-4 text-sm">

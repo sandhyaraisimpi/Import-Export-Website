@@ -117,7 +117,7 @@ export default function Profile() {
     );
   }
 
-  /* ---------------- FULL SCREEN DELETE ---------------- */
+  /* FULL SCREEN DELETE  */
   if (showDeleteModal) {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-red-900 to-black flex items-center justify-center">
@@ -178,7 +178,7 @@ export default function Profile() {
     );
   }
 
-  /* ---------------- PERMANENT DELETE LOGIC ---------------- */
+  /*  PERMANENT DELETE LOGIC  */
   const handleDeleteVerify = () => {
     if (password && deleteText === "DELETE") {
       localStorage.setItem("account_status", "pending_delete");
@@ -188,7 +188,7 @@ export default function Profile() {
     }
   };
 
-  /* ---------------- TEMPORARY DEACTIVATE LOGIC ---------------- */
+  /*   TEMPORARY DEACTIVATE LOGIC   */
   const handleDeactivateVerify = () => {
     if (password && reason) {
       localStorage.setItem("account_status", "deactivated");
@@ -207,7 +207,7 @@ export default function Profile() {
 
         <div className="p-8 min-h-screen mt-15 bg-gray-50 space-y-8">
 
-          {/* 🔹 1. Basic Profile Info */}
+          {/*   Basic Profile Info */}
           <div className="bg-white rounded-3xl shadow-xl p-8">
             <div className="flex items-center gap-6">
 
@@ -308,7 +308,7 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* 🔹 2. Account Status */}
+          {/*  Account Status */}
           <div className="bg-white rounded-3xl shadow-xl p-8">
             <h3 className="text-xl font-bold mb-4">Account Status</h3>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
@@ -319,7 +319,7 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* 🔹 3. Security */}
+          {/*  Security */}
           <div className="bg-white rounded-3xl shadow-xl p-8">
             <h3 className="text-xl font-bold mb-4">Security</h3>
 
@@ -345,7 +345,7 @@ export default function Profile() {
             </button>
           </div>
 
-          {/* 🔹 4. Danger Zone */}
+          {/*  Danger Zone */}
           <div className="bg-gradient-to-br from-red-50 to-red-100 border border-red-300 rounded-3xl p-8 shadow-xl">
 
             <h3 className="text-xl font-bold text-red-700 mb-3">

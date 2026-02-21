@@ -102,7 +102,7 @@ export default function MyInquiries() {
 
         <div className="p-8 min-h-screen bg-gray-50">
 
-          {/* 🔥 Detail Page */}
+          {/*   Detail Page */}
           {id ? (
             (() => {
               const inquiry = inquiries.find((item) => item.id === id);

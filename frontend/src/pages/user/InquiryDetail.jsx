@@ -6,7 +6,7 @@ export default function InquiryDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Same Data as MyInquiries Page
+   
   const inquiries = [
     {
       id: "1",

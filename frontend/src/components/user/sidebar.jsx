@@ -4,7 +4,7 @@ import {
   ClipboardList,
   User,
   Settings,
-  MessageSquare,   // 👈 Inquiry icon
+  MessageSquare,    
 } from "lucide-react";
 import logo from "../../assets/logo/logo.webp";
 
@@ -52,7 +52,7 @@ export default function Sidebar() {
           Orders
         </NavLink>
 
-        {/* 🔥 My Inquiries (NEW ADDED) */}
+        {/*  My Inquiries   */}
         <NavLink
           to="/user/inquiries"
           className={({ isActive }) =>
@@ -80,7 +80,7 @@ export default function Sidebar() {
           Profile
         </NavLink>
 
-        {/* Settings (Bottom) */}
+        {/* Settings  */}
         <NavLink
           to="/user/settings"
           className={({ isActive }) =>
