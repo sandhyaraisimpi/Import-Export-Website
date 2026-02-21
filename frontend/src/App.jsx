@@ -12,6 +12,9 @@ import Login from "./pages/user/UserLogin";
 import Signup from "./pages/user/UserSignup";
 import ForgotPass from "./pages/user/ForgotPass";
 
+import MainCategory from "./pages/Products/MainCategory";
+import SubCategory from "./pages/Products/SubCategory";
+
 function App() {
   return (
     <Router>
@@ -32,6 +35,11 @@ function App() {
 
         {/* Fallback Route */}
         <Route path="*" element={<Navigate to="/user/dashboard" />} />
+
+
+        {/* Products Pages */}
+        <Route path="/main-category" element={<MainCategory />} />
+        <Route path="/category/:id" element={<SubCategory />} />
 
         {/*  User Rotes */}
         <Route path="/login" element={<Login />} /> 
