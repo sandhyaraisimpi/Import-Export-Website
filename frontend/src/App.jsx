@@ -3,7 +3,7 @@ import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 // import './App.css'
-import Homepage from './Homepage';
+import Homepage from "./Homepage.jsx";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 
@@ -19,10 +19,13 @@ import Login from "./pages/user/UserLogin";
 import Signup from "./pages/user/UserSignup";
 import ForgotPass from "./pages/user/ForgotPass";
 
+import ProductImageManager from "./pages/ProductImageManager.jsx";
+import ProductManagement from "./pages/ProductManagement.jsx";
 function App() {
   return (
     <Routes>
 
+      
       <Route path="/" element={<Homepage />} />
       <Route path="/admin/*" element={<AppRoutes />} />
 
