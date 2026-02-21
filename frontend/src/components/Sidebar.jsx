@@ -1,19 +1,23 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Sidebar() {
   const location = useLocation();
 
-  const [openCategory, setOpenCategory] = useState(
-    location.pathname.startsWith("/categories") ||
-    location.pathname.startsWith("/sub-categories")
-  );
+  // Dropdown open state based on current URL
+  const [openCategory, setOpenCategory] = useState(false);
+  const [openProducts, setOpenProducts] = useState(false);
 
-  // ✅ NEW: Products dropdown state
-  const [openProducts, setOpenProducts] = useState(
-    location.pathname.startsWith("/products") ||
-    location.pathname.startsWith("/product-images")
-  );
+  useEffect(() => {
+    if (location.pathname.startsWith("/admin/categories")) {
+      setOpenCategory(true);
+    }
+
+    if (location.pathname.startsWith("/admin/products") ||
+        location.pathname.startsWith("/admin/product-images")) {
+      setOpenProducts(true);
+    }
+  }, [location.pathname]);
 
   return (
     <aside className="w-64 bg-white shadow-md p-5 min-h-screen">
@@ -25,9 +29,9 @@ export default function Sidebar() {
 
         {/* Dashboard */}
         <Link
-          to="/"
+          to="/admin/dashboard"
           className={`block p-2 rounded hover:bg-blue-50 ${
-            location.pathname === "/"
+            location.pathname === "/admin/dashboard"
               ? "bg-blue-100 text-blue-600 font-semibold"
               : "text-gray-700"
           }`}
@@ -42,7 +46,6 @@ export default function Sidebar() {
             className="w-full flex justify-between items-center p-2 rounded hover:bg-blue-50 text-gray-700"
           >
             <span>Categories</span>
-
             <span
               className={`transition-transform duration-200 ${
                 openCategory ? "rotate-90" : ""
@@ -56,9 +59,9 @@ export default function Sidebar() {
             <div className="ml-4 mt-1 space-y-1">
 
               <Link
-                to="/categories"
+                to="/admin/categories"
                 className={`block p-2 rounded text-sm hover:bg-blue-50 ${
-                  location.pathname === "/categories"
+                  location.pathname === "/admin/categories"
                     ? "bg-blue-100 text-blue-600 font-semibold"
                     : "text-gray-600"
                 }`}
@@ -66,31 +69,18 @@ export default function Sidebar() {
                 All Categories
               </Link>
 
-              <Link
-                to="/sub-categories"
-                className={`block p-2 rounded text-sm hover:bg-blue-50 ${
-                  location.pathname === "/sub-categories"
-                    ? "bg-blue-100 text-blue-600 font-semibold"
-                    : "text-gray-600"
-                }`}
-              >
-                Sub Categories
-              </Link>
-
             </div>
           )}
         </div>
 
 
-        {/* ✅ PRODUCTS DROPDOWN (NEW LOGIC) */}
+        {/* PRODUCTS DROPDOWN */}
         <div>
-
           <button
             onClick={() => setOpenProducts(!openProducts)}
             className="w-full flex justify-between items-center p-2 rounded hover:bg-blue-50 text-gray-700"
           >
             <span>Products</span>
-
             <span
               className={`transition-transform duration-200 ${
                 openProducts ? "rotate-90" : ""
@@ -98,17 +88,15 @@ export default function Sidebar() {
             >
               ▶
             </span>
-
           </button>
 
           {openProducts && (
             <div className="ml-4 mt-1 space-y-1">
 
-              {/* Product Management */}
               <Link
-                to="/products"
+                to="/admin/products"
                 className={`block p-2 rounded text-sm hover:bg-blue-50 ${
-                  location.pathname === "/products"
+                  location.pathname === "/admin/products"
                     ? "bg-blue-100 text-blue-600 font-semibold"
                     : "text-gray-600"
                 }`}
@@ -116,12 +104,10 @@ export default function Sidebar() {
                 Product Management
               </Link>
 
-
-              {/* Image Management */}
               <Link
-                to="/product-images"
+                to="/admin/product-images"
                 className={`block p-2 rounded text-sm hover:bg-blue-50 ${
-                  location.pathname === "/product-images"
+                  location.pathname === "/admin/product-images"
                     ? "bg-blue-100 text-blue-600 font-semibold"
                     : "text-gray-600"
                 }`}
@@ -131,15 +117,14 @@ export default function Sidebar() {
 
             </div>
           )}
-
         </div>
 
 
         {/* Inquiries */}
         <Link
-          to="/inquiries"
+          to="/admin/inquiries"
           className={`block p-2 rounded hover:bg-blue-50 ${
-            location.pathname === "/inquiries"
+            location.pathname === "/admin/inquiries"
               ? "bg-blue-100 text-blue-600 font-semibold"
               : "text-gray-700"
           }`}
@@ -150,9 +135,9 @@ export default function Sidebar() {
 
         {/* Customers */}
         <Link
-          to="/customers"
+          to="/admin/customers"
           className={`block p-2 rounded hover:bg-blue-50 ${
-            location.pathname === "/customers"
+            location.pathname === "/admin/customers"
               ? "bg-blue-100 text-blue-600 font-semibold"
               : "text-gray-700"
           }`}
@@ -161,24 +146,11 @@ export default function Sidebar() {
         </Link>
 
 
-        {/* Logistics */}
-        <Link
-          to="/logistics"
-          className={`block p-2 rounded hover:bg-blue-50 ${
-            location.pathname === "/logistics"
-              ? "bg-blue-100 text-blue-600 font-semibold"
-              : "text-gray-700"
-          }`}
-        >
-          Logistics
-        </Link>
-
-
         {/* Settings */}
         <Link
-          to="/settings"
+          to="/admin/settings"
           className={`block p-2 rounded hover:bg-blue-50 ${
-            location.pathname === "/settings"
+            location.pathname === "/admin/settings"
               ? "bg-blue-100 text-blue-600 font-semibold"
               : "text-gray-700"
           }`}

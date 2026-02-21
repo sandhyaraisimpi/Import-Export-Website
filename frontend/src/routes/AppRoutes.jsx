@@ -1,88 +1,34 @@
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "../pages/Dashboard";
+
+import Sidebar from "../components/Sidebar"
+import AdminDashboard from "../pages/Dashboard";
 import Categories from "../pages/Categories";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import ProductManagement from "../pages/ProductManagement";
-import ProductImageManager from "../pages/ProductImageManager";
-import InquiryManagement from "../pages/InquiryManagement";
-import SubCategories from "../pages/SubCategories";
 import Customer from "../pages/Customer";
-import ProtectedRoute from "../auth/ProtectedRoute";
+import InquiryManagement from "../pages/InquiryManagement";
+import ProductImageManager from "../pages/ProductImageManager";
+import ProductManagement from "../pages/ProductManagement";
+import AdminLogin from "../pages/Login";
+import AdminSignup from "../pages/Signup";
 
 export default function AppRoutes() {
   return (
-    <Routes>
+    <div className="flex">
 
-      {/* /admin/login */}
-      <Route path="login" element={<Login />} />
-      <Route path="signup" element={<Signup />} />
+      <Sidebar />
 
-      {/* /admin */}
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+      <div className="flex-1 p-6">
+        <Routes>
+          <Route path="login" element={<AdminLogin />} />
+          <Route path="signup" element={<AdminSignup />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="customers" element={<Customer />} />
+          <Route path="inquiries" element={<InquiryManagement />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="product-images" element={<ProductImageManager />} />
+        </Routes>
+      </div>
 
-      {/* /admin/categories */}
-      <Route
-        path="categories"
-        element={
-          <ProtectedRoute>
-            <Categories />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="products"
-        element={
-          <ProtectedRoute>
-            <ProductManagement />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="product-images"
-        element={
-          <ProtectedRoute>
-            <ProductImageManager />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="inquiries"
-        element={
-          <ProtectedRoute>
-            <InquiryManagement />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="sub-categories"
-        element={
-          <ProtectedRoute>
-            <SubCategories />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="customers"
-        element={
-          <ProtectedRoute>
-            <Customer />
-          </ProtectedRoute>
-        }
-      />
-
-    </Routes>
+    </div>
   );
 }
