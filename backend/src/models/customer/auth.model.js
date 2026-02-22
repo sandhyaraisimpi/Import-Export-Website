@@ -27,11 +27,12 @@ const customerAuth_Schema = new Schema({
     },
     country:{
         type: String,
+    },
+    state:{
+        type: String,
     }
 }, {timestamps: true});
 
-customerAuth_Schema.index({_id:1, email: 1})
-
-const customerAuth_Model = await mongoose.model("Customer", customerAuth_Schema);
+const customerAuth_Model = mongoose.model("Customer", customerAuth_Schema);
 
 export default customerAuth_Model;

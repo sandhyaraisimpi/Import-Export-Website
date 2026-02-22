@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import {cookiesForUser} from "../utils/cookiesForUser.js";
 import { ApiError } from "../utils/api-error.js";
 
-export const requiredToLogin = async (req, res, next) => {
+export const requiredLogin = async (req, res, next) => {
     try {
 
         const jwtKey = process.env.jwtKey;
