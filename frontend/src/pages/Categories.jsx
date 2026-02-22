@@ -275,7 +275,7 @@ export default function Categories() {
               </div>
 
               <div>
-                <label className="block font-medium mb-2">Parent Category</label>
+                <label className="block font-medium mb-2">Category</label>
                 <select
                   value={parentId}
                   onChange={(e) => setParentId(e.target.value)}
