@@ -1,71 +1,71 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useInView } from "framer-motion";
+import React, { useRef, useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
 
-const useCounter = (end, isVisible, duration = 2000) => {
+// ─────────────────────────────────────────────────────────────────────────────
+// ██████  DATA — Edit stats here
+// ─────────────────────────────────────────────────────────────────────────────
+
+const STATS = [
+  { target: 13, suffix: "+", label: "Countries Exported" },
+  { target: 6,  suffix: "+", label: "Variety of Products" },
+  { target: 93, suffix: "%", label: "Customer Satisfaction" },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CountUp
+// ─────────────────────────────────────────────────────────────────────────────
+
+const CountUp = ({ target, suffix = "", duration = 1.8 }) => {
   const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!inView) return;
+    let startTime = null;
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = (timestamp - startTime) / 1000;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(animate);
+      else setCount(target);
+    };
+    requestAnimationFrame(animate);
+  }, [inView, target, duration]);
 
-    let start = 0;
-    const increment = end / (duration / 16);
-
-    const counter = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        setCount(end);
-        clearInterval(counter);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-
-    return () => clearInterval(counter);
-  }, [end, duration, isVisible]);
-
-  return count;
+  return <span ref={ref}>{count}{suffix}</span>;
 };
 
-const Stats = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN COMPONENT
+// ─────────────────────────────────────────────────────────────────────────────
 
-  const transactions = useCounter(67, isInView);
-  const satisfaction = useCounter(66, isInView);
-  const properties = useCounter(336, isInView);
-
-  return (
-    <div ref={ref} className="space-y-10">
-
-      <div className="flex items-center gap-6">
-        <h2 className="text-5xl font-bold text-neutral-900">
-          {transactions}+
-        </h2>
-        <p className="text-neutral-600">
-          Successful Transactions Monthly
-        </p>
+const StatsSection = () => (
+  <section className="bg-[#f0ede8] px-6 pt-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="bg-neutral-900 rounded-3xl overflow-hidden px-10 md:px-14 py-12">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center">
+        {STATS.map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: i * 0.1 }}
+          >
+            <p
+              className="text-white text-5xl md:text-6xl font-light mb-2 tabular-nums"
+              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+            >
+              <CountUp target={stat.target} suffix={stat.suffix} duration={1.5 + i * 0.2} />
+            </p>
+            <p className="text-neutral-400 text-xs tracking-widest uppercase">{stat.label}</p>
+          </motion.div>
+        ))}
       </div>
-
-      <div className="flex items-center gap-6">
-        <h2 className="text-5xl font-bold text-neutral-900">
-          {satisfaction}%
-        </h2>
-        <p className="text-neutral-600">
-          Customer Satisfaction Rate
-        </p>
-      </div>
-
-      <div className="flex items-center gap-6">
-        <h2 className="text-5xl font-bold text-neutral-900">
-          {properties}
-        </h2>
-        <p className="text-neutral-600">
-          Exquisite Properties Ready For Selection
-        </p>
-      </div>
-
     </div>
-  );
-};
+  </section>
+);
 
-export default Stats;
+export default StatsSection;
