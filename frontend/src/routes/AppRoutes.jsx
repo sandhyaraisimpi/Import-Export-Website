@@ -1,12 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "../pages/Dashboard";
+
+import Sidebar from "../components/Sidebar"
+import AdminDashboard from "../pages/Dashboard";
 import Categories from "../pages/Categories";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import ProductManagement from "../pages/ProductManagement";
-import ProductImageManager from "../pages/ProductImageManager";
-import InquiryManagement from "../pages/InquiryManagement";
-import SubCategories from "../pages/SubCategories";
 import Customer from "../pages/Customer";
 import CustomerView from "../pages/CustomerView";
 import TeamRoles from "../pages/TeamRoles";
@@ -18,14 +14,17 @@ import NotificationSettings from "../pages/NotificationSettings";
 import WebsiteSettings from "../pages/WebsiteSettings";
 
 import ProtectedRoute from "../auth/ProtectedRoute";
+import InquiryManagement from "../pages/InquiryManagement";
+import ProductImageManager from "../pages/ProductImageManager";
+import ProductManagement from "../pages/ProductManagement";
+import AdminLogin from "../pages/Login";
+import AdminSignup from "../pages/Signup";
 
 export default function AppRoutes() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+    <div className="flex">
 
-      <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Sidebar />
 
       <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
       <Route path="/products" element={<ProtectedRoute><ProductManagement /></ProtectedRoute>} />
@@ -42,7 +41,19 @@ export default function AppRoutes() {
 <Route path="/settings/notifications" element={<NotificationSettings />} />
 <Route path="/settings/website" element={<WebsiteSettings />} />
 
+      <div className="flex-1 p-6">
+        <Routes>
+          <Route path="login" element={<AdminLogin />} />
+          <Route path="signup" element={<AdminSignup />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="customers" element={<Customer />} />
+          <Route path="inquiries" element={<InquiryManagement />} />
+          <Route path="products" element={<ProductManagement />} />
+          <Route path="product-images" element={<ProductImageManager />} />
+        </Routes>
+      </div>
 
-    </Routes>
+    </div>
   );
 }

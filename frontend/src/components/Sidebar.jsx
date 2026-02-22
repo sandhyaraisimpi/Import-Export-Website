@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   LayoutDashboard,
@@ -25,10 +25,9 @@ export default function Sidebar() {
 
   const location = useLocation();
 
-  const [openCategory, setOpenCategory] = useState(
-    location.pathname.startsWith("/categories") ||
-    location.pathname.startsWith("/sub-categories")
-  );
+  // Dropdown open state based on current URL
+  const [openCategory, setOpenCategory] = useState(false);
+  const [openProducts, setOpenProducts] = useState(false);
 
   const [openProducts, setOpenProducts] = useState(
     location.pathname.startsWith("/products") ||
