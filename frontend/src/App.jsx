@@ -13,6 +13,10 @@ import InquiryDetail from "./pages/user/InquiryDetail";
 import Login from "./pages/user/UserLogin";
 import Signup from "./pages/user/UserSignup";
 import ForgotPass from "./pages/user/ForgotPass";
+import FoodCarousel from "./components/FoodCarousel"; 
+
+import MainCategory from "./pages/Products/MainCategory";
+import SubCategory from "./pages/Products/SubCategory";
 
 
 
@@ -22,6 +26,7 @@ function App() {
 
       
       <Route path="/" element={<Homepage />} />
+      
 
       
       <Route path="/admin/*" element={<AppRoutes />} />
@@ -38,6 +43,11 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/forgot-pass" element={<ForgotPass />} />
+
+<Route path="/food-carousel" element={<FoodCarousel />} />
+        {/* Products Pages */}
+        <Route path="/main-category" element={<MainCategory />} />
+        <Route path="/category/:id" element={<SubCategory />} />
 
       {/* 404 */}
       <Route path="*" element={<Navigate to="/" />} />

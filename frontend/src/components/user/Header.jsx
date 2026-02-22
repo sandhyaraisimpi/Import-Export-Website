@@ -1,5 +1,5 @@
 import { Bell, User, LogOut } from "lucide-react";
-import logo from "../../assets/logo/logo.webp";  
+import logo from "../../assets/logo/logo.webp";    
 import { useState } from "react";
 
 export default function Header() {
@@ -10,8 +10,7 @@ export default function Header() {
       
       {/* Left */}
       <div className="flex text-4xl items-center gap-4">
-       My Dashboard
-       
+       My Dashboard       
       </div>
 
       {/* Right: Icons */}
