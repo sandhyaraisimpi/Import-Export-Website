@@ -34,8 +34,6 @@ const adminAuth_Schema = await Schema({
     { timestamps: true }
 );
 
-adminAuth_Schema.index({_id:1, email: 1});
-
 const adminAuth_Model = await mongoose.model("admin", adminAuth_Schema);
 
 export default adminAuth_Model;
