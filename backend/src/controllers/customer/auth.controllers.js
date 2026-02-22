@@ -85,7 +85,7 @@ const forgetPassword = async (req, res) => {
 const updateProfile = async (req, res) => {
     try {
         const { _id } = req.user;
-        const { contact, gender, country } = req.body;
+        const { contact, gender, country, state } = req.body;
 
         const userDetail = await customerAuth_Model.findById(_id);
 
@@ -114,6 +114,7 @@ const updateProfile = async (req, res) => {
                 contact,
                 gender,
                 country,
+                state,
                 profileImage
             }
         )
