@@ -175,102 +175,140 @@ const VennDiagram = () => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const ServicesSection = () => {
-  return (
-    <section className="bg-[#f0ede8] pt-6 px-3 md:px-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-      <div className="rounded-3xl overflow-hidden" style={{ background: "#1c1c1c" }}>
+  const ref = useRef(null);
 
-        <div className="grid grid-cols-1 md:grid-cols-2 min-h-[480px]">
-          {/* Left — heading + stats */}
-          <div className="p-6 md:p-12 flex flex-col justify-between">
-            <div>
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.9", "start 0.3"],
+  });
+
+  // Cinematic Scroll Animation
+  const y = useTransform(scrollYProgress, [0, 1], [160, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.96, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.6, 1]);
+
+  return (
+    <section
+      ref={ref}
+      className="relative z-30 -mt-24 px-3 md:px-6 pb-20"
+      style={{ background: "#f0ede8", fontFamily: "'DM Sans', sans-serif" }}
+    >
+      <motion.div
+        style={{ y, scale, opacity }}
+        transition={{ duration: 0.6 }}
+        className="rounded-3xl overflow-hidden shadow-[0_-40px_120px_rgba(0,0,0,0.35)]"
+      >
+        <div
+          className="rounded-3xl overflow-hidden"
+          style={{ background: "#1c1c1c" }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 min-h-[480px]">
+            {/* Left — heading + stats */}
+            <div className="p-6 md:p-12 flex flex-col justify-between">
+              <div>
+                <motion.h2
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-white text-3xl md:text-4xl xl:text-5xl font-light leading-[1.15] mb-6 md:mb-8 whitespace-pre-line"
+                  style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                >
+                  {SERVICES_HEADING.title}
+                </motion.h2>
+
+                <motion.a
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                  href="#"
+                  className="flex items-center gap-2 text-white/50 text-sm hover:text-white/80 transition-colors group"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/40 group-hover:bg-white/70 transition-colors" />
+                  {SERVICES_HEADING.exploreLabel}
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </motion.a>
+              </div>
+
+              {/* Stats */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="text-white text-3xl md:text-4xl xl:text-5xl font-light leading-[1.15] mb-6 md:mb-8 whitespace-pre-line"
-                style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="hidden md:flex items-end gap-8 mt-10"
               >
-                {SERVICES_HEADING.title}
-              </motion.h2>
-
-              <motion.a
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-                href="#"
-                className="flex items-center gap-2 text-white/50 text-sm hover:text-white/80 transition-colors group"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-white/40 group-hover:bg-white/70 transition-colors" />
-                {SERVICES_HEADING.exploreLabel}
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-                </svg>
-              </motion.a>
+                {[
+                  { target: 13, suffix: "+", sub: "Countries" },
+                  { target: 93, suffix: "%", sub: "Satisfied" },
+                  { target: 6, suffix: "+", sub: "Products" },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.sub}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.65 + i * 0.12, duration: 0.5 }}
+                    className="flex flex-col"
+                  >
+                    <span
+                      className="text-white text-2xl font-light tabular-nums"
+                      style={{
+                        fontFamily: "'Cormorant Garamond', Georgia, serif",
+                      }}
+                    >
+                      <CountUp
+                        target={stat.target}
+                        suffix={stat.suffix}
+                        duration={1.5 + i * 0.2}
+                      />
+                    </span>
+                    <span className="text-white/30 text-xs tracking-widest uppercase mt-0.5">
+                      {stat.sub}
+                    </span>
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
 
-            {/* ── Animated counting stats — visible only on md+ ── */}
-            <motion.div
+            {/* Right — service pills */}
+            <div className="p-4 md:p-8 flex flex-col justify-center gap-3">
+              {SERVICES.map((s, i) => (
+                <ServicePill key={s.id} service={s} index={i} />
+              ))}
+            </div>
+          </div>
+
+          <DarkMarquee />
+
+          {/* Venn heading */}
+          <div className="px-4 md:px-8 pt-8 text-center">
+            <motion.h3
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="hidden md:flex items-end gap-8 mt-10"
+              transition={{ duration: 0.6 }}
+              className="text-white text-xl md:text-2xl font-light"
+              style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
             >
-              {[
-                { target: 13, suffix: "+", sub: "Countries" },
-                { target: 93, suffix: "%", sub: "Satisfied" },
-                { target: 6,  suffix: "+", sub: "Products"  },
-              ].map((stat, i) => (
-                <motion.div
-                  key={stat.sub}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.65 + i * 0.12, duration: 0.5 }}
-                  className="flex flex-col"
-                >
-                  <span
-                    className="text-white text-2xl font-light tabular-nums"
-                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
-                  >
-                    <CountUp target={stat.target} suffix={stat.suffix} duration={1.5 + i * 0.2} />
-                  </span>
-                  <span className="text-white/30 text-xs tracking-widest uppercase mt-0.5">
-                    {stat.sub}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
+              {VENN_DATA.heading}
+            </motion.h3>
           </div>
 
-          {/* Right — service pills (image + heading, no dropdown) */}
-          <div className="p-4 md:p-8 flex flex-col justify-center gap-3">
-            {SERVICES.map((s, i) => (
-              <ServicePill key={s.id} service={s} index={i} />
-            ))}
-          </div>
+          <VennDiagram />
         </div>
-
-        <DarkMarquee />
-
-        {/* Venn heading */}
-        <div className="px-4 md:px-8 pt-8 text-center">
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-white text-xl md:text-2xl font-light"
-            style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
-          >
-            {VENN_DATA.heading}
-          </motion.h3>
-        </div>
-        <VennDiagram />
-
-      </div>
+      </motion.div>
     </section>
   );
 };
