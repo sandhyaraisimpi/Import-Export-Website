@@ -6,7 +6,6 @@ import AppRoutes from "./routes/AppRoutes";
 
 /* ================= USER PAGES ================= */
 import Dashboard from "./pages/user/Dashboard";
-import Order from "./pages/user/OrderManagement";
 import Profile from "./pages/user/Profile";
 import Settings from "./pages/user/Settings";
 import MyInquiries from "./pages/user/MyInquiries";
@@ -67,8 +66,10 @@ function App() {
       {/* PRODUCT SYSTEM */}
       {/* ================================================= */}
 
-      {/* All main categories */}
-      <Route path="/products" element={<MainCategory />} />
+        {/* User Routes */}
+        <Route path="/user/dashboard" element={<Dashboard />} />
+        <Route path="/user/profile" element={<Profile />} />
+        <Route path="/user/settings" element={<Settings />} />
 
       {/* Category product listing */}
       {/* Valid IDs: food | spices | agri | industrial */}

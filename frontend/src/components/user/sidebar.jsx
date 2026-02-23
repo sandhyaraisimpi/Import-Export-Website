@@ -1,100 +1,116 @@
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
-  ClipboardList,
   User,
   Settings,
-  MessageSquare,    
+  MessageSquare,
+  Menu,
+  X
 } from "lucide-react";
+import { useState } from "react";
 import logo from "../../assets/logo/logo.webp";
 
 export default function Sidebar() {
+  const [open, setOpen] = useState(false);
+
+  const navItem =
+    "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition";
+
+  const activeStyle = "bg-gray-100 text-black";
+  const normalStyle = "text-gray-600 hover:bg-gray-50";
+
   return (
-    <div className="fixed left-0 top-0 h-screen w-64 bg-white shadow-2xl flex flex-col">
+    <>
+      {/* ✅ Mobile Toggle Button */}
+      <button
+        onClick={() => setOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-40 bg-white p-2 rounded-lg shadow"
+      >
+        <Menu size={22} />
+      </button>
 
-      {/* Logo */}
-      <div className="p-6">
-        <img
-          src={logo}
-          alt="Logo"
-          className="h-20 w-52 object-contain"
+      {/* ✅ Overlay */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setOpen(false)}
         />
+      )}
+
+      {/* ✅ Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-screen w-64 bg-white shadow-sm z-50
+        transform transition-transform duration-300
+        ${open ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0`}
+      >
+        {/* Logo + Close Button */}
+        <div className="px-6 py-6 border-b border-gray-200 flex justify-between items-center">
+          <img src={logo} alt="Logo" className="h-10 object-contain" />
+
+          {/* Close Button (Mobile Only) */}
+          <button
+            onClick={() => setOpen(false)}
+            className="md:hidden"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex flex-col justify-between h-[calc(100vh-88px)] p-4">
+
+          <div className="flex flex-col gap-2">
+
+            <NavLink
+              to="/user/dashboard"
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `${navItem} ${isActive ? activeStyle : normalStyle}`
+              }
+            >
+              <LayoutDashboard size={18} />
+              Dashboard
+            </NavLink>
+
+            <NavLink
+              to="/user/inquiries"
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `${navItem} ${isActive ? activeStyle : normalStyle}`
+              }
+            >
+              <MessageSquare size={18} />
+              My Inquiries
+            </NavLink>
+
+            <NavLink
+              to="/user/profile"
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `${navItem} ${isActive ? activeStyle : normalStyle}`
+              }
+            >
+              <User size={18} />
+              Profile
+            </NavLink>
+          </div>
+
+          <div className="border-t border-gray-200 pt-4">
+            <NavLink
+              to="/user/settings"
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `${navItem} ${isActive ? activeStyle : normalStyle}`
+              }
+            >
+              <Settings size={18} />
+              Settings
+            </NavLink>
+          </div>
+
+        </nav>
       </div>
-
-      {/* Navigation */}
-      <nav className="flex flex-col gap-3 px-4 pb-6 h-full">
-
-        {/* Dashboard */}
-        <NavLink
-          to="/user/dashboard"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-            ${isActive 
-                ? "bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg" 
-                : "text-gray-700 hover:bg-gray-100"}`
-          }
-        >
-          <LayoutDashboard size={18} />
-          Dashboard
-        </NavLink>
-
-        {/* Orders */}
-        <NavLink
-          to="/user/orders"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-             ${isActive 
-                ? "bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg" 
-                : "text-gray-700 hover:bg-gray-100"}`
-          }
-        >
-          <ClipboardList size={18} />
-          Orders
-        </NavLink>
-
-        {/*  My Inquiries   */}
-        <NavLink
-          to="/user/inquiries"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-             ${isActive 
-                ? "bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg" 
-                : "text-gray-700 hover:bg-gray-100"}`
-          }
-        >
-          <MessageSquare size={18} />
-          My Inquiries
-        </NavLink>
-
-        {/* Profile */}
-        <NavLink
-          to="/user/profile"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-             ${isActive 
-                ? "bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg" 
-                : "text-gray-700 hover:bg-gray-100"}`
-          }
-        >
-          <User size={18} />
-          Profile
-        </NavLink>
-
-        {/* Settings  */}
-        <NavLink
-          to="/user/settings"
-          className={({ isActive }) =>
-            `mt-auto flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 
-             ${isActive 
-                ? "bg-gradient-to-r from-purple-600 to-pink-500 text-white shadow-lg" 
-                : "text-gray-700 hover:bg-gray-100"}`
-          }
-        >
-          <Settings size={18} />
-          Settings
-        </NavLink>
-
-      </nav>
-    </div>
+    </>
   );
 }

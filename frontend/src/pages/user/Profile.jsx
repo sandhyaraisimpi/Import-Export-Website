@@ -1,21 +1,9 @@
 import { useState } from "react";
 import Sidebar from "../../components/user/sidebar";
 import Header from "../../components/user/Header";
-import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
-  const navigate = useNavigate();
-
   const [twoFactor, setTwoFactor] = useState(true);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showDeactivateModal, setShowDeactivateModal] = useState(false);
-
-  const [showDeleteForm, setShowDeleteForm] = useState(false);
-  const [showDeactivateForm, setShowDeactivateForm] = useState(false);
-
-  const [password, setPassword] = useState("");
-  const [reason, setReason] = useState("");
-  const [deleteText, setDeleteText] = useState("");
 
   const [user] = useState({
     name: "Akhil Jha",
@@ -32,60 +20,108 @@ export default function Profile() {
     orders: 24,
     wishlist: 6,
     savedAddresses: 3,
-    profileImage: "https://i.pravatar.cc/150?img=12",
+    profileImage: "https://i.pravatar.cc/300?img=12",
   });
 
-
-
-
-
-
-
-
   return (
-    <div className="flex">
+    <div className="flex bg-gray-50">
       <Sidebar />
 
-      <div className="flex-1 ml-64">
+      <div className="flex-1 md:ml-64 pt-24 px-4 md:px-8 min-h-screen pb-16">
         <Header />
 
-        <div className="p-8 min-h-screen mt-15 bg-gray-50 space-y-8">
+        <div className="space-y-8">
 
-          {/*  Basic Profile Info */}
-          <div className="bg-white rounded-3xl shadow-xl p-8 flex items-center gap-6">
+          {/* Profile Card */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
             <img
               src={user.profileImage}
               alt="Profile"
-              className="w-28 h-28 rounded-full shadow-md object-cover"
+              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover"
             />
 
-            <div>
-              <h2 className="text-2xl font-bold">{user.name}</h2>
-              <p className="text-gray-500">
+            <div className="text-center md:text-left">
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
+                {user.name}
+              </h2>
+
+              <p className="text-gray-500 text-sm mt-1">
                 {user.email}
                 {user.verified && (
-                  <span className="ml-2 text-green-600 font-semibold text-sm">
+                  <span className="ml-2 text-green-600 font-medium text-sm">
                     ✔ Verified
                   </span>
                 )}
               </p>
+
+              <p className="text-sm text-gray-500 mt-2">
+                {user.city}, {user.state}
+              </p>
             </div>
           </div>
 
-          {/*  Account Status */}
-          <div className="bg-white rounded-3xl shadow-xl p-8">
-            <h3 className="text-xl font-bold mb-4">Account Status</h3>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <p><strong>Account Type:</strong> {user.accountType}</p>
-              <p><strong>Account Created:</strong> {user.createdAt}</p>
-              <p><strong>Verification:</strong> {user.verified ? "Verified" : "Not Verified"}</p>
-              <p><strong>Last Login:</strong> {user.lastLogin}</p>
+          {/* Personal Information */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8">
+            <h3 className="text-lg font-semibold text-gray-800 mb-6">
+              Personal Information
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+
+              <div>
+                <p className="text-gray-500">Phone</p>
+                <p className="font-medium text-gray-800">{user.phone}</p>
+              </div>
+
+              <div>
+                <p className="text-gray-500">Gender</p>
+                <p className="font-medium text-gray-800">{user.gender}</p>
+              </div>
+
+              <div>
+                <p className="text-gray-500">Date of Birth</p>
+                <p className="font-medium text-gray-800">{user.dob}</p>
+              </div>
+
+              <div>
+                <p className="text-gray-500">Account Type</p>
+                <p className="font-medium text-gray-800">{user.accountType}</p>
+              </div>
+
             </div>
           </div>
 
-          
+          {/* Activity Overview */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8">
+            <h3 className="text-lg font-semibold text-gray-800 mb-6">
+              Activity Overview
+            </h3>
 
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 text-center">
 
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-2xl font-semibold text-gray-800">
+                  {user.orders}
+                </p>
+                <p className="text-sm text-gray-500">Total Orders</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-2xl font-semibold text-gray-800">
+                  {user.wishlist}
+                </p>
+                <p className="text-sm text-gray-500">Wishlist Items</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-xl p-4">
+                <p className="text-2xl font-semibold text-gray-800">
+                  {user.savedAddresses}
+                </p>
+                <p className="text-sm text-gray-500">Saved Addresses</p>
+              </div>
+
+            </div>
+          </div>
 
         </div>
       </div>

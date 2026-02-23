@@ -1,5 +1,5 @@
 import Sidebar from "../../components/user/sidebar";
-import Header from "../../components/user/Header";  
+import Header from "../../components/user/Header";
 import { useState } from "react";
 import {
   PlusCircle,
@@ -33,116 +33,168 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 flex">
 
       <Sidebar />
 
-      <div className="flex-1 ml-64 pt-16 p-6 space-y-6 "> 
+      {/* Main Content */}
+      <div className="flex-1 md:ml-64 pt-20 px-4 md:px-8 pb-10">
+
         <Header />
 
-        {/* Dashboard Content */}
-        <div className="space-y-6">
-
-          {/* Welcome */}
-          <div className=" backdrop-blur-lg mt-10 p-6 rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.12)]  flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl text-black font-bold">Welcome, Akhil 👋</h1>
-              <p className="text-gray-500 mt-2">Here’s a summary of your inquiries.</p>
-            </div>
-            <button
-              onClick={() => setOpenForm(true)}
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-2xl shadow-md hover:scale-105 transition"
-            >
-              <PlusCircle size={18} /> New Inquiry
-            </button>
+        {/* Welcome Section */}
+        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+              Welcome, Akhil 👋
+            </h1>
+            <p className="text-gray-500 mt-2">
+              Here's a summary of your inquiries.
+            </p>
           </div>
 
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2   xl:grid-cols-4 gap-6">
-            <Card title="Total Inquiries" value={stats.total} icon={<ClipboardList className="text-blue-500" />} />
-            <Card title="Pending" value={stats.pending} icon={<Clock className="text-yellow-500" />} />
-            <Card title="In Progress" value={stats.inProgress} icon={<Loader className="text-purple-500" />} />
-            <Card title="Closed" value={stats.closed} icon={<CheckCircle className="text-green-500" />} />
-          </div>
-
-          {/* Recent Table */}
-          <div className="bg-white p-6 rounded-3xl shadow-xl">
-            <h2 className="text-lg font-semibold mb-4">Recent Inquiries</h2>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-gray-500 border-b">
-                  <th className="pb-3 text-left">ID</th>
-                  <th className="pb-3 text-left">Subject</th>
-                  <th className="pb-3 text-left">Date</th>
-                  <th className="pb-3 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recent.map((item) => (
-                  <tr key={item.id} className="border-b hover:bg-gray-50 transition">
-                    <td className="py-3">{item.id}</td>
-                    <td>{item.subject}</td>
-                    <td>{item.date}</td>
-                    <td>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColor(item.status)}`}>
-                        {item.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <button
+            onClick={() => setOpenForm(true)}
+            className="flex items-center justify-center gap-2 bg-black hover:bg-gray-700 text-white px-6 py-3 rounded-2xl shadow-md transition"
+          >
+            <PlusCircle size={18} />
+            New Inquiry
+          </button>
         </div>
 
-        {/* New Inquiry Modal */}
-        {openForm && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 relative animate-fadeIn">
-              <button onClick={() => setOpenForm(false)} className="absolute top-4 right-4 text-gray-400 hover:text-black">
-                <X />
-              </button>
-              <h2 className="text-2xl font-bold mb-6">Create New Inquiry</h2>
-              <form className="space-y-5">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Subject</label>
-                  <input type="text" placeholder="Enter subject" className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Category</label>
-                  <select className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Import</option>
-                    <option>Export</option>
-                    <option>Shipment</option>
-                    <option>Custom Clearance</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Description</label>
-                  <textarea rows="4" placeholder="Write your inquiry details..." className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none" />
-                </div>
-                <div className="flex justify-end gap-3 pt-4">
-                  <button type="button" onClick={() => setOpenForm(false)} className="px-5 py-2 rounded-xl border">Cancel</button>
-                  <button type="button" className="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:scale-105 transition">Submit Inquiry</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-8">
+          <Card title="Total Inquiries" value={stats.total} icon={<ClipboardList className="text-blue-500" />} />
+          <Card title="Pending" value={stats.pending} icon={<Clock className="text-yellow-500" />} />
+          <Card title="In Progress" value={stats.inProgress} icon={<Loader className="text-purple-500" />} />
+          <Card title="Closed" value={stats.closed} icon={<CheckCircle className="text-green-500" />} />
+        </div>
 
+        {/* Recent Table */}
+        <div className="bg-white mt-8 p-6 rounded-3xl shadow-sm overflow-x-auto">
+          <h2 className="text-lg font-semibold mb-6 text-gray-800">
+            Recent Inquiries
+          </h2>
+
+          <table className="min-w-full text-sm">
+            <thead>
+              <tr className="text-gray-400 border-b">
+                <th className="pb-4 text-left">ID</th>
+                <th className="pb-4 text-left">Subject</th>
+                <th className="pb-4 text-left">Date</th>
+                <th className="pb-4 text-left">Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {recent.map((item) => (
+                <tr
+                  key={item.id}
+                  className="border-b last:border-none hover:bg-gray-50 transition"
+                >
+                  <td className="py-4 font-medium text-gray-700">{item.id}</td>
+                  <td className="text-gray-600">{item.subject}</td>
+                  <td className="text-gray-500">{item.date}</td>
+                  <td>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${statusColor(
+                        item.status
+                      )}`}
+                    >
+                      {item.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      {/* Modal */}
+      {openForm && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+          <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 relative">
+            <button
+              onClick={() => setOpenForm(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-black"
+            >
+              <X />
+            </button>
+
+            <h2 className="text-2xl font-bold mb-6">
+              Create New Inquiry
+            </h2>
+
+            <form className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter subject"
+                  className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Category
+                </label>
+                <select className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none">
+                  <option>Import</option>
+                  <option>Export</option>
+                  <option>Shipment</option>
+                  <option>Custom Clearance</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Description
+                </label>
+                <textarea
+                  rows="4"
+                  placeholder="Write your inquiry details..."
+                  className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setOpenForm(false)}
+                  className="px-5 py-2 rounded-xl border"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-md transition"
+                >
+                  Submit Inquiry
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 function Card({ title, value, icon }) {
   return (
-    <div className="bg-white p-6 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 flex justify-between items-center">
+    <div className="bg-white p-6 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300 flex justify-between items-center">
       <div>
-        <p className="text-gray-500 text-sm">{title}</p>
-        <h2 className="text-3xl font-bold mt-1">{value}</h2>
+        <p className="text-gray-400 text-sm">{title}</p>
+        <h2 className="text-3xl font-bold mt-1 text-gray-800">
+          {value}
+        </h2>
       </div>
-      {icon}
+      <div className="text-3xl">{icon}</div>
     </div>
   );
 }
