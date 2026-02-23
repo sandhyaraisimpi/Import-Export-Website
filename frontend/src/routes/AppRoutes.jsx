@@ -4,7 +4,7 @@ import ProtectedRoute from "../auth/ProtectedRoute";
 
 import AdminDashboard from "../pages/Dashboard";
 import Categories from "../pages/Categories";
-import SubCategory from "../pages/Products/SubCategory";
+//import SubCategory from "../pages/Products/SubCategory";
 import ProductManagement from "../pages/ProductManagement";
 import ProductImageManager from "../pages/ProductImageManager";
 import InquiryManagement from "../pages/InquiryManagement";
@@ -47,7 +47,7 @@ export default function AppRoutes() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
         <Route path="categories" element={<Categories />} />
-        <Route path="sub-categories" element={<SubCategory />} />
+        //<Route path="sub-categories" element={<SubCategory />} />
 
         <Route path="products" element={<ProductManagement />} />
         <Route path="product-images" element={<ProductImageManager />} />
