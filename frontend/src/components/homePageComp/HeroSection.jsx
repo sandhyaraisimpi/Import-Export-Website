@@ -4,70 +4,47 @@ import { motion, useScroll, useTransform } from "framer-motion";
 const HERO_DATA = {
   companyName: "VR & Sons",
   companySubtitle: "Import Export",
-  heroImg:
-    "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=1200&h=900&fit=crop",
 };
 
-const TOP_CARDS = [
+const SLIDE_IMAGES = [
   {
-    img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&h=200&fit=crop",
+    img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&h=600&fit=crop",
   },
   {
-    img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&h=200&fit=crop",
+    img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=600&fit=crop",
   },
   {
-    img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=300&h=200&fit=crop",
+    img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=600&fit=crop",
   },
   {
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop",
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=600&fit=crop",
   },
 ];
 
-const VerticalColumn = ({ cards, direction = "up" }) => {
+const VerticalColumn = ({ direction = "up" }) => {
   return (
     <div className="overflow-hidden h-full w-full">
       <motion.div
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-6"
         animate={{
           y: direction === "up" ? ["0%", "-50%"] : ["-50%", "0%"],
         }}
         transition={{
-          duration: 22,
+          duration: 25,
           ease: "linear",
           repeat: Infinity,
         }}
       >
-        {[...cards, ...cards].map((card, i) => (
+        {[...SLIDE_IMAGES, ...SLIDE_IMAGES].map((card, i) => (
           <div
             key={i}
-            className="rounded-2xl overflow-hidden opacity-70"
+            className="rounded-3xl overflow-hidden opacity-70"
             style={{ aspectRatio: "2/3" }}
           >
             <img src={card.img} alt="" className="w-full h-full object-cover" />
           </div>
         ))}
       </motion.div>
-    </div>
-  );
-};
-
-const LeftPanel = () => {
-  return (
-    <div className="bg-white flex items-center justify-start pl-24 overflow-hidden">
-      <div
-        className="grid grid-cols-3 gap-6 w-full max-w-[380px]"
-        style={{
-          height: "75vh",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
-          maskImage:
-            "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
-        }}
-      >
-        <VerticalColumn cards={TOP_CARDS} direction="up" />
-        <VerticalColumn cards={TOP_CARDS} direction="down" />
-        <VerticalColumn cards={TOP_CARDS} direction="up" />
-      </div>
     </div>
   );
 };
@@ -79,69 +56,50 @@ const HeroSection = () => {
     target: containerRef,
     offset: ["start start", "end start"],
   });
-  const [isLoaded, setIsLoaded] = React.useState(false);
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.92]);
   const y = useTransform(scrollYProgress, [0, 0.5], [0, -40]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.08]);
 
   return (
-    <div ref={containerRef}
+    <div
+      ref={containerRef}
       className="relative pt-[90px]"
-      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+      style={{ fontFamily: "'Playfair Display', serif" }}
     >
       <section className="sticky top-[90px] h-[calc(100vh-90px)] bg-[#f0ede8] flex items-center justify-center px-6 overflow-hidden">
         <motion.div
-          className="w-full max-w-[1500px] overflow-hidden shadow-2xl"
+          className="relative w-full max-w-[1600px] h-[85vh] shadow-2xl overflow-hidden"
           style={{ scale, y, borderRadius: 32 }}
-          initial={{ scale: 0.96, filter: "blur(12px)" }}
-          animate={isLoaded ? { scale: 1, filter: "blur(0px)" } : {}}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
+          {/* 4 COLUMN MOVING GRID */}
           <div
-            className="relative"
+            className="absolute inset-0 grid grid-cols-4 gap-6 p-10"
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1.2fr",
-              minHeight: "85vh",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
+              maskImage:
+                "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
             }}
           >
-            {/* LEFT */}
-            <LeftPanel />
+            <VerticalColumn direction="up" />
+            <VerticalColumn direction="down" />
+            <VerticalColumn direction="up" />
+            <VerticalColumn direction="down" />
+          </div>
 
-            {/* CENTER TEXT */}
-            <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="text-center"
-              >
-                <h1 className="text-8xl font-light tracking-tight text-neutral-900">
-                  {HERO_DATA.companyName}
-                </h1>
+          {/* OVERLAY for text readability */}
+          <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px]" />
 
-                <p className="uppercase tracking-[0.6em] text-sm text-neutral-600 mt-6">
-                  {HERO_DATA.companySubtitle}
-                </p>
-              </motion.div>
-            </div>
+          {/* CENTER TEXT */}
+          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+            <div className="text-center">
+              <h1 className="text-8xl font-light tracking-tight text-neutral-900">
+                {HERO_DATA.companyName}
+              </h1>
 
-            {/* RIGHT IMAGE */}
-            <div className="relative overflow-hidden">
-              <motion.img
-                src={HERO_DATA.heroImg}
-                alt=""
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{ scale: imageScale }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/20 to-transparent" />
+              <p className="uppercase tracking-[0.6em] text-sm text-neutral-700 mt-6">
+                {HERO_DATA.companySubtitle}
+              </p>
             </div>
           </div>
         </motion.div>
