@@ -2,6 +2,8 @@ import { useState } from "react";
 import Sidebar from "../../components/user/sidebar";
 import Header from "../../components/user/Header";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getService } from "../../service/axios";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -17,7 +19,7 @@ export default function Profile() {
   const [reason, setReason] = useState("");
   const [deleteText, setDeleteText] = useState("");
 
-  const [user] = useState({
+  const [user, setUser] = useState({
     name: "Akhil Jha",
     email: "akhil@example.com",
     phone: "+91 9876543210",
@@ -35,12 +37,21 @@ export default function Profile() {
     profileImage: "https://i.pravatar.cc/150?img=12",
   });
 
+  useEffect(() => {
+    ; (
+      async () => {
+        const apiResponse = await getService("/customer/auth/myprofile");
 
+        if (!apiResponse.ok) {
+          console.log(apiResponse.message);
+          return
+        }
 
+        setUser(apiResponse.data.data)
 
-
-
-
+      }
+    )()
+  }, [])
 
   return (
     <div className="flex">
@@ -76,14 +87,20 @@ export default function Profile() {
           <div className="bg-white rounded-3xl shadow-xl p-8">
             <h3 className="text-xl font-bold mb-4">Account Status</h3>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <p><strong>Account Type:</strong> {user.accountType}</p>
-              <p><strong>Account Created:</strong> {user.createdAt}</p>
-              <p><strong>Verification:</strong> {user.verified ? "Verified" : "Not Verified"}</p>
-              <p><strong>Last Login:</strong> {user.lastLogin}</p>
+              {/* <p><strong>Account Type:</strong> {user.accountType}</p> */}
+              <p><strong>Account Created:</strong> {new Date(user.createdAt).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+              })}</p>
+              {/* <p><strong>Verification:</strong> {user.verified ? "Verified" : "Not Verified"}</p> */}
+              <p><strong>Verification:</strong> Verified</p>
+              {/* <p><strong>Last Login:</strong> {user.lastLogin}</p> */}
+              <p><strong>Last Login:</strong> 20 Feb 2026, 10:45 AM</p>
             </div>
           </div>
 
-          
+
 
 
 

@@ -108,7 +108,7 @@ const updateProfile = async (req, res) => {
             })
         }
 
-        await customerAuth_Model.findByIdAndUpdate(
+        const updatedCustomerDetail =await customerAuth_Model.findByIdAndUpdate(
             _id,
             {
                 contact,
@@ -118,6 +118,8 @@ const updateProfile = async (req, res) => {
                 profileImage
             }
         )
+
+        return res.status(200).json(new ApiResponse(200, updatedCustomerDetail, "Profile Update Successfully."));
 
     }
     catch (err) {

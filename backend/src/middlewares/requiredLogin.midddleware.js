@@ -7,8 +7,8 @@ export const requiredLogin = async (req, res, next) => {
 
         const jwtKey = process.env.jwtKey;
 
-        const accessToken = req.cookie?.AccessToken;
-        const refreshToken = req.cookie?.RefreshToken;
+        const accessToken = req.cookies?.AccessToken;
+        const refreshToken = req.cookies?.RefreshToken;
 
         if (accessToken) {
             const jwtVerification = await jwt.verify(accessToken, jwtKey);

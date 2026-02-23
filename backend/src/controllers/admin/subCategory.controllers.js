@@ -10,7 +10,7 @@ const addSubCategory = async (req, res) => {
             return res.status(404).json(new ApiError(404, "Category Image is Required"));
         }
 
-        const { categoryId, name, skuId, status } = req.body;
+        const { categoryId, name, skuId,decription, status } = req.body;
 
         const subcategoryImage = await new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(
@@ -27,6 +27,7 @@ const addSubCategory = async (req, res) => {
             categoryId,
             name,
             skuId,
+            decription,
             status,
             subcategoryImage
         })

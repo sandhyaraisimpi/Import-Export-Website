@@ -1,4 +1,7 @@
 import React from "react";
+import { useState } from "react";
+import { postService } from "../../service/axios";
+import { Toaster, toast } from "react-hot-toast";
 
 // --- DATA ---
 // Data updated as per the Import-Export project brief
@@ -38,13 +41,36 @@ const legalLinks = [
 // --- COMPONENT ---
 
 const Footer = () => {
+
+  const [email, setEmail] = useState();
+
+  const subscribe = async () => {
+    const apiResponse = await postService("/customer/subscribe", { email });
+
+    if (!apiResponse.ok && !apiResponse.fetchMessage) {
+      toast.error("Failed to Subscribe")
+      console.log(apiResponse.message);
+      return
+    }
+
+    if (!apiResponse.ok && apiResponse.fetchMessage) {
+      toast.error(apiResponse.message || "Failed to Subscribe");
+      return
+    }
+
+    toast.success(apiResponse.data.message || "Subscribe Succesful");
+    setEmail("")
+
+  }
+
   return (
     <footer className="bg-neutral-200 py-24">
+      <Toaster />
       <div className="max-w-[1500px] mx-auto px-8">
-        
+
         {/* TOP GRID */}
         <div className="grid md:grid-cols-3 gap-20 mb-20">
-          
+
           {/* LEFT - Brand Info */}
           <div>
             <h3 className="text-2xl font-semibold tracking-widest mb-4">
@@ -74,18 +100,18 @@ const Footer = () => {
             <h4 className="font-semibold mb-6 text-neutral-900">
               Contact Details
             </h4>
-            
+
             <div className="space-y-4 text-sm mb-6">
               <p className="flex items-center gap-3">
-                <span className="font-semibold text-black">Phone:</span> 
+                <span className="font-semibold text-black">Phone:</span>
                 <span className="text-neutral-600">{contactDetails.phone}</span>
               </p>
               <p className="flex items-center gap-3">
-                <span className="font-semibold text-black">Email:</span> 
+                <span className="font-semibold text-black">Email:</span>
                 <span className="text-neutral-600">{contactDetails.email}</span>
               </p>
               <p className="flex items-start gap-3">
-                <span className="font-semibold text-black">Address:</span> 
+                <span className="font-semibold text-black">Address:</span>
                 <span className="text-neutral-600">{contactDetails.address}</span>
               </p>
             </div>
@@ -99,7 +125,7 @@ const Footer = () => {
 
         {/* BOTTOM GRID */}
         <div className="grid md:grid-cols-3 gap-20">
-          
+
           {/* LEFT - Newsletter */}
           <div>
             <h4 className="font-semibold mb-4 text-neutral-900">
@@ -113,9 +139,14 @@ const Footer = () => {
               type="email"
               placeholder="Enter your email"
               className="w-full border-b border-neutral-400 outline-none py-2 text-sm mb-4 bg-transparent focus:border-black transition-colors"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
-            <button className="px-5 py-2 bg-black text-white rounded-full text-sm hover:bg-neutral-800 transition-colors">
+            <button
+              className="px-5 py-2 bg-black text-white rounded-full text-sm hover:bg-neutral-800 transition-colors"
+              onClick={subscribe}
+            >
               Subscribe
             </button>
           </div>

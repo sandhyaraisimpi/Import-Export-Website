@@ -27,7 +27,7 @@ export default function Sidebar() {
 
   // Dropdown open state based on current URL
   const [openCategory, setOpenCategory] = useState(false);
-  const [openProducts, setOpenProducts] = useState(false);
+  // const [openProducts, setOpenProducts] = useState(false);
 
   const [openProducts, setOpenProducts] = useState(
     location.pathname.startsWith("/products") ||

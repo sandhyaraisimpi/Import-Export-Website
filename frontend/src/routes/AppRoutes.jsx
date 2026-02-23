@@ -28,18 +28,18 @@ export default function AppRoutes() {
 
       <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
       <Route path="/products" element={<ProtectedRoute><ProductManagement /></ProtectedRoute>} />
-      <Route path ="/product-images" element={<ProtectedRoute><ProductImageManager /></ProtectedRoute>} />
+      <Route path="/product-images" element={<ProtectedRoute><ProductImageManager /></ProtectedRoute>} />
       <Route path="/inquiries" element={<ProtectedRoute><InquiryManagement /></ProtectedRoute>} />
       <Route path="/sub-categories" element={<SubCategories />} />
       <Route path="/customers" element={<ProtectedRoute><Customer /></ProtectedRoute>} />
-      <Route path="/customers/:id" element={<ProtectedRoute><CustomerView /> </ProtectedRoute>}/>
+      <Route path="/customers/:id" element={<ProtectedRoute><CustomerView /> </ProtectedRoute>} />
       <Route path="/team-roles" element={<ProtectedRoute><TeamRoles /></ProtectedRoute>} />
       <Route path="/team-roles/details" element={<TeamRolesDetails />} />
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       <Route path="/settings/general" element={<GeneralSettings />} />
-<Route path="/settings/profile" element={<ProfileSettings />} />
-<Route path="/settings/notifications" element={<NotificationSettings />} />
-<Route path="/settings/website" element={<WebsiteSettings />} />
+      <Route path="/settings/profile" element={<ProfileSettings />} />
+      <Route path="/settings/notifications" element={<NotificationSettings />} />
+      <Route path="/settings/website" element={<WebsiteSettings />} />
 
       <div className="flex-1 p-6">
         <Routes>

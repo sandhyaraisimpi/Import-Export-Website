@@ -1,34 +1,22 @@
-import React from "react";
-
-const productsData = [
-  {
-    id: 1,
-    title: "Food Products",
-    desc: "High-quality food items sourced from trusted manufacturers for international markets.",
-    img: "https://images.unsplash.com/photo-1604908176997-4314edc41b88",
-  },
-  {
-    id: 2,
-    title: "Spices",
-    desc: "Premium-grade spices processed under strict quality control for global export.",
-    img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d",
-  },
-  {
-    id: 3,
-    title: "Agricultural Goods",
-    desc: "Fresh and processed agricultural commodities meeting international standards.",
-    img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef",
-  },
-  {
-    id: 4,
-    title: "Bricks",
-    desc: "Durable and export-grade construction bricks for international projects.",
-    img: "https://images.unsplash.com/photo-1581092334484-2b0b6a41a9b1",
-  },
-];
+import React, { useState, useEffect } from "react";
+import { getService } from "../../service/axios";
 
 const ProductScrollSection = () => {
-  const scrollItems = [...productsData, ...productsData];
+  const [scrollItems, setScrollItems] = useState([])
+  useEffect(() => {
+    ; (
+      async () => {
+        const apiResponse = await getService("/customer/product/category");
+
+        if (!apiResponse.ok) {
+          console.log(apiResponse.message);
+          return
+        }
+        setScrollItems(apiResponse.data.data.categoryList)
+
+      }
+    )()
+  }, [])
 
   return (
     <section className="bg-neutral-200 pb-32 overflow-hidden">
@@ -59,31 +47,38 @@ const ProductScrollSection = () => {
 
         <div className="flex gap-12 animate-product-scroll py-8 w-max">
 
-          {scrollItems.map((item, index) => (
+          {(scrollItems.length !== 0) ? [...scrollItems, ...scrollItems].map((item, index) => (
             <div
               key={index}
               className="w-[420px] shrink-0 bg-white rounded-3xl overflow-hidden shadow-xl group hover:-translate-y-4 transition-all duration-300"
             >
               <div className="overflow-hidden">
                 <img
-                  src={item.img}
+                  src={item?.categoryImage}
                   className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700"
-                  alt={item.title}
+                  alt={item?.name}
                 />
               </div>
 
               <div className="p-8 pb-10">
                 <h3 className="font-semibold text-2xl mb-3 text-neutral-900">
-                  {item.title}
+                  {item?.name}
                 </h3>
 
                 <p className="text-neutral-500 text-sm leading-relaxed">
-                  {item.desc}
+                  {item.decription}
                 </p>
               </div>
 
             </div>
-          ))}
+          )) : <div className="text-center py-20">
+            <p className="text-2xl font-semibold text-gray-700">
+              No Categories Available
+            </p>
+            <p className="text-gray-500 mt-3">
+              Please check back later.
+            </p>
+          </div>}
 
         </div>
 
