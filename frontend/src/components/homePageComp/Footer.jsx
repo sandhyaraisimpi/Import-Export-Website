@@ -1,154 +1,115 @@
-import React from "react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
-// --- DATA ---
-// Data updated as per the Import-Export project brief
+// ─────────────────────────────────────────────────────────────────────────────
+// ██████  DATA
+// ─────────────────────────────────────────────────────────────────────────────
 
-const companyInfo = {
-  name: "VR & SONS",
-  description: "Trusted exporters of high-quality products for global trade.", // [cite: 40]
-  copyright: "© 2026 VR & Sons Import Export. All rights reserved.", // 
+const FOOTER_DATA = {
+  companyName: "VR & Sons",
+  subtitle: "Import Export",
+  description: "Trusted exporters of Food Products, Spices, Agricultural Goods & Bricks to 13+ countries worldwide.",
+  navLinks: ["Home", "Our Products", "About Us", "Why Choose Us", "Blog", "Contact"],
+  contact: {
+    phone: "+91 98254 74047",
+    email: "support@vrandsons.com",
+    address: "Kamrej, Surat, Gujarat, India",
+  },
+  legal: {
+    copyright: "© 2025 VR & Sons Import Export.",
+    links: [
+      { label: "Terms of Service", href: "#" },
+      { label: "Privacy Policy",   href: "#" },
+    ],
+  },
 };
 
-const quickLinks = [
-  { id: 1, label: "Home", href: "#" },
-  { id: 2, label: "Products", href: "#" },
-  { id: 3, label: "About Us", href: "#" },
-  { id: 4, label: "Blog", href: "#" },
-  { id: 5, label: "Contact Us", href: "#" },
-];
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN COMPONENT
+// ─────────────────────────────────────────────────────────────────────────────
 
-// Brief ke hisaab se contact details [cite: 62]
-const contactDetails = {
-  phone: "+91 98254 74047", // 
-  email: "support@vrandsons.com", // 
-  address: "Kamrej, Surat, Gujarat, India", // 
-};
+const Footer = () => (
+  <footer className="bg-[#f0ede8] px-3 md:px-6 pt-4 pb-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+    <div className="bg-white rounded-3xl px-6 md:px-10 py-8 md:py-10">
 
-const addressLines = [
-  "Kamrej",
-  "Surat, Gujarat",
-  "India"
-];
+      {/* Top row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-neutral-100">
 
-const legalLinks = [
-  { id: 1, label: "Terms Of Service", href: "#" },
-  { id: 2, label: "Privacy Policy", href: "#" },
-];
-
-// --- COMPONENT ---
-
-const Footer = () => {
-  return (
-    <footer className="bg-neutral-200 py-24">
-      <div className="max-w-[1500px] mx-auto px-8">
-        
-        {/* TOP GRID */}
-        <div className="grid md:grid-cols-3 gap-20 mb-20">
-          
-          {/* LEFT - Brand Info */}
-          <div>
-            <h3 className="text-2xl font-semibold tracking-widest mb-4">
-              {companyInfo.name}
-            </h3>
-            <p className="text-neutral-600 text-sm">
-              {companyInfo.description}
-            </p>
-          </div>
-
-          {/* CENTER - Quick Links */}
-          <div>
-            <h4 className="font-semibold mb-6 text-neutral-900">
-              Quick Links
-            </h4>
-            <ul className="space-y-4 text-sm">
-              {quickLinks.map((link) => (
-                <li key={link.id} className="font-bold cursor-pointer hover:text-neutral-600 transition-colors">
-                  {link.label}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* RIGHT - Contact Details */}
-          <div>
-            <h4 className="font-semibold mb-6 text-neutral-900">
-              Contact Details
-            </h4>
-            
-            <div className="space-y-4 text-sm mb-6">
-              <p className="flex items-center gap-3">
-                <span className="font-semibold text-black">Phone:</span> 
-                <span className="text-neutral-600">{contactDetails.phone}</span>
-              </p>
-              <p className="flex items-center gap-3">
-                <span className="font-semibold text-black">Email:</span> 
-                <span className="text-neutral-600">{contactDetails.email}</span>
-              </p>
-              <p className="flex items-start gap-3">
-                <span className="font-semibold text-black">Address:</span> 
-                <span className="text-neutral-600">{contactDetails.address}</span>
-              </p>
+        {/* Brand */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-6 h-6 bg-black rounded-lg flex items-center justify-center">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
             </div>
-
-            <button className="px-6 py-3 bg-black text-white rounded-full text-sm hover:bg-neutral-800 transition-colors">
-              Submit Inquiry
-            </button>
-          </div>
-
-        </div>
-
-        {/* BOTTOM GRID */}
-        <div className="grid md:grid-cols-3 gap-20">
-          
-          {/* LEFT - Newsletter */}
-          <div>
-            <h4 className="font-semibold mb-4 text-neutral-900">
-              Subscribe to our news
-            </h4>
-            <p className="text-sm mb-6 text-neutral-600">
-              Stay informed and receive exclusive updates on our products.
-            </p>
-
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full border-b border-neutral-400 outline-none py-2 text-sm mb-4 bg-transparent focus:border-black transition-colors"
-            />
-
-            <button className="px-5 py-2 bg-black text-white rounded-full text-sm hover:bg-neutral-800 transition-colors">
-              Subscribe
-            </button>
-          </div>
-
-          {/* CENTER - Address (Visual) */}
-          <div>
-            <p className="text-sm leading-relaxed text-neutral-700">
-              {addressLines.map((line, index) => (
-                <React.Fragment key={index}>
-                  {line}
-                  {index !== addressLines.length - 1 && <br />}
-                </React.Fragment>
-              ))}
-            </p>
-          </div>
-
-          {/* RIGHT - Copyright & Legal */}
-          <div className="text-sm text-neutral-500 flex flex-col justify-between">
-            <p>{companyInfo.copyright}</p>
-
-            <div className="flex gap-6 mt-6">
-              {legalLinks.map((link) => (
-                <span key={link.id} className="cursor-pointer hover:text-black transition-colors">
-                  {link.label}
-                </span>
-              ))}
+            <div>
+              <p className="text-neutral-900 text-sm font-semibold leading-none">{FOOTER_DATA.companyName}</p>
+              <p className="text-neutral-400 text-[10px] tracking-widest uppercase">{FOOTER_DATA.subtitle}</p>
             </div>
           </div>
+          <p className="text-xs text-neutral-400 leading-relaxed max-w-[200px]">
+            {FOOTER_DATA.description}
+          </p>
+        </motion.div>
 
+        {/* Quick Links */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <p className="text-[10px] text-neutral-400 tracking-widest uppercase mb-4">Quick Links</p>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+            {FOOTER_DATA.navLinks.map((link) => (
+              <a key={link} href="#" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+                {link}
+              </a>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Contact */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <p className="text-[10px] text-neutral-400 tracking-widest uppercase mb-4">Contact</p>
+          <div className="flex flex-col gap-2">
+            <a href={`tel:${FOOTER_DATA.contact.phone}`} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+              {FOOTER_DATA.contact.phone}
+            </a>
+            <a href={`mailto:${FOOTER_DATA.contact.email}`} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
+              {FOOTER_DATA.contact.email}
+            </a>
+            <p className="text-sm text-neutral-500">{FOOTER_DATA.contact.address}</p>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6">
+        <p className="text-xs text-neutral-400">{FOOTER_DATA.legal.copyright}</p>
+        <div className="flex items-center gap-5">
+          {FOOTER_DATA.legal.links.map((link) => (
+            <a key={link.label} href={link.href} className="text-xs text-neutral-400 hover:text-neutral-700 transition-colors">
+              {link.label}
+            </a>
+          ))}
         </div>
       </div>
-    </footer>
-  );
-};
+
+    </div>
+  </footer>
+);
 
 export default Footer;
