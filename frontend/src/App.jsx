@@ -25,6 +25,8 @@ import MainCategory from "./pages/Products/MainCategory";
 import ProductPage from "./pages/Products/ProductPage";
 // import ProductDetails from "./pages/Products/ProductDetails";
 
+
+
 function App() {
   return (
     <Routes>
