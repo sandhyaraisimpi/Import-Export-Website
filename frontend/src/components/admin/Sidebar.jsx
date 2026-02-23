@@ -19,7 +19,7 @@ import {
   Sliders
 } from "lucide-react";
 
-import logo from "../assets/logo/logo.webp";
+import logo from "../../assets/logo/logo.webp";
 
 export default function Sidebar() {
 
@@ -28,7 +28,6 @@ export default function Sidebar() {
   const [openCategory, setOpenCategory] = useState(false);
   const [openProducts, setOpenProducts] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
-  // const [openProducts, setOpenProducts] = useState(false);
 
   // Auto open dropdown on route change
   useEffect(() => {

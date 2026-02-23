@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AdminLayout from "../layout/AdminLayout";
+import AdminLayout from "../../layout/AdminLayout";
 import {
   Inbox,
   Clock,
@@ -63,7 +63,7 @@ export default function InquiryManagement() {
 
         {/* PAGE TITLE */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-3xl font-extrabold tracking-tight">
             Inquiry Management
           </h1>
           <p className="text-gray-500 text-sm">

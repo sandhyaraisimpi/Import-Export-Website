@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext";
-import bg from "../assets/Login Background.webp";
-import logo from "../assets/logo/logo.webp";
-
+import { useAuth } from "../../auth/AuthContext";
+import bg from "../../assets/Login Background.webp";
+import logo from "../../assets/logo/logo.webp";
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
