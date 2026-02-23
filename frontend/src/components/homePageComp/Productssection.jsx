@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { getService } from "../../service/axios";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ██████  DATA — Replace with API response mapped to this shape
@@ -206,7 +207,7 @@ const ProductCard = ({ product, delay }) => {
           className="text-white/40 text-[9px] tracking-widest uppercase mb-0.5"
           style={{ fontFamily: "'DM Sans', sans-serif" }}
         >
-          {product.num} · {product.category}
+          {product.skuId} · {product.category.name}
         </p>
         <p
           className="text-white text-sm font-light leading-tight"
@@ -226,7 +227,7 @@ const ProductCard = ({ product, delay }) => {
               className="text-white/55 text-[10px] mt-1 leading-snug"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
-              {product.specifications}
+              {/* {product.specifications} */}
             </motion.p>
           )}
         </AnimatePresence>
@@ -239,8 +240,25 @@ const ProductCard = ({ product, delay }) => {
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────────────────
 
-const ProductsSection = () => (
-  <section
+const ProductsSection = () => {
+
+  const [Product, setProduct] = useState([])
+  useEffect(() => {
+    ;(
+      async () => {
+        const apiResponse = await getService("/customer/product/product?page=1&limit=16");
+
+        if(!apiResponse.ok){
+          console.log(apiResponse.message);
+          return
+        }
+
+        setProduct(apiResponse.data.data.productList)
+      }
+    )()
+  },[])
+
+ return <section
     className="bg-[#f0ede8] pt-6 px-3 md:px-6 pb-6"
     style={{ fontFamily: "'DM Sans', sans-serif" }}
   >
@@ -291,7 +309,7 @@ const ProductsSection = () => (
       `}</style>
 
       <div className="masonry-grid">
-        {PRODUCTS.map((p, i) => (
+        {Product.map((p, i) => (
           <div
             key={p._id}
             className="m-item"
@@ -306,6 +324,6 @@ const ProductsSection = () => (
 
     </div>
   </section>
-);
+};
 
 export default ProductsSection;

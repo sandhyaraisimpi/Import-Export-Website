@@ -19,7 +19,7 @@ const upload = multer({
     }
 });
 
-router.post("/addSubcategory", requiredLogin, upload.array("productImage", 5), addProduct);
+router.post("/addProduct", requiredLogin, upload.array("productImage", 5), addProduct);
 router.patch("/updateStatus", requiredLogin, updateStatus);
 router.delete("/delete", requiredLogin, deleteProduct);
 router.get("/getAll", requiredLogin, getProduct);

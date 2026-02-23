@@ -4,31 +4,25 @@ import { ApiError } from "../../utils/api-error.js";
 import { ApiResponse } from "../../utils/api-response.js";
 
 const addSubscribe = async (req, res) => {
-    try {
-        const { email } = req.body;
+  try {
+    const { email } = req.body;
 
-        const emailPresent = await promotionModel.findOne({ email: email });
+    const emailPresent = await promotionModel.findOne({ email: email });
 
-        if (emailPresent) {
-            return res.status(401).json(new ApiError(401, "Already Subscribe by this email."));
-        }
+    if (emailPresent) {
+      return res.status(401).json(new ApiError(401, "Already Subscribe by this email."));
+    }
 
-        const promotionDetail = await promotionModel.create({ email });
-
-        if (!promotionDetail) {
-            return res.status(400).json(new ApiError(400, "Subscribation is failed"));
-        }
-
-        const emailData = {
-            sender: {
-                name: process.env.companyName,
-                email: process.env.companyEmail,
-            },
-            to: [{
-                email: email
-            }],
-            subject: `Welcome to ${process.env.companyName} – Stay Updated with Our Latest Offers`,
-            htmlContent: `<div style="background: linear-gradient(135deg, #eef2ff, #f8fafc); padding:50px 0; font-family:Arial, sans-serif;">
+    const emailData = {
+      sender: {
+        name: process.env.companyName,
+        email: process.env.companyEmail,
+      },
+      to: [{
+        email: email
+      }],
+      subject: `Welcome to ${process.env.companyName} – Stay Updated with Our Latest Offers`,
+      htmlContent: `<div style="background: linear-gradient(135deg, #eef2ff, #f8fafc); padding:50px 0; font-family:Arial, sans-serif;">
   
   <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:14px; box-shadow:0 8px 25px rgba(0,0,0,0.08); overflow:hidden;">
 
@@ -113,19 +107,25 @@ const addSubscribe = async (req, res) => {
   </div>
 
 </div>`
-        }
-
-        const result = await brevo(emailData);
-
-        if (!result) {
-            return res.status(400).json(new ApiError(400, "Failed to Send Email"));
-        }
-
-        return res.status(200).json(new ApiResponse(200, null, "Successful"));
     }
-    catch (err) {
-        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+
+    const result = await brevo(emailData);
+
+    if (!result) {
+      return res.status(400).json(new ApiError(400, "Failed to Send Email"));
     }
+
+    const promotionDetail = await promotionModel.create({ email });
+
+    if (!promotionDetail) {
+      return res.status(400).json(new ApiError(400, "Subscribation is failed"));
+    }
+
+    return res.status(200).json(new ApiResponse(200, null, "Successful"));
+  }
+  catch (err) {
+    return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+  }
 }
 
-export {addSubscribe};
+export { addSubscribe };

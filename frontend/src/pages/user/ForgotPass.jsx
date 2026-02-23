@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import leftLogin from "../../assets/login/leftlogin.webp";
+import { patchService, postService } from "../../service/axios";
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -12,18 +13,32 @@ export default function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const DEMO_OTP = "123456"; // ✅ Fixed OTP for testing
+  const [sendOtp, setSendOtp] = useState()
 
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   // STEP 1 → Send OTP
-  const handleSendOtp = (e) => {
+  const handleSendOtp = async (e) => {
     e.preventDefault();
 
     if (!email) return toast.error("Please enter email");
     if (!validateEmail(email)) return toast.error("Enter valid email");
 
-    toast.success("OTP Sent Successfully (Use 123456)");
+    const apiResponse = await postService("/customer/auth/forgetpasswordOtp", { email });
+
+    if (!apiResponse.ok && !apiResponse.fetchMessage) {
+      toast.error("OTP Sent Failed");
+      console.log(apiResponse.message);
+      return
+    }
+
+    if (!apiResponse.ok && apiResponse.fetchMessage) {
+      toast.error(apiResponse.message || "OTP Sent Failed");
+      return
+    }
+
+    toast.success("OTP Sent Successfully");
+    setSendOtp(apiResponse.data.data)
     setStep(2);
   };
 
@@ -31,7 +46,7 @@ export default function ForgotPassword() {
   const handleVerifyOtp = (e) => {
     e.preventDefault();
 
-    if (otp !== DEMO_OTP) {
+    if (otp !== sendOtp) {
       return toast.error("Invalid OTP");
     }
 
@@ -40,7 +55,7 @@ export default function ForgotPassword() {
   };
 
   // STEP 3 → Reset Password
-  const handleReset = (e) => {
+  const handleReset = async (e) => {
     e.preventDefault();
 
     if (newPassword.length < 6)
@@ -49,7 +64,20 @@ export default function ForgotPassword() {
     if (newPassword !== confirmPassword)
       return toast.error("Passwords do not match");
 
-    toast.success("Password Reset Successful 🎉");
+    const apiResponse = await patchService("/customer/auth/forgetpassword", { email: email, password: newPassword });
+
+    if (!apiResponse.ok && !apiResponse.fetchMessage) {
+      toast.error("Password Reset Failed");
+      console.log(apiResponse.message);
+      return
+    }
+
+    if (!apiResponse.ok && apiResponse.fetchMessage) {
+      toast.error(apiResponse.message || "Password Reset Failed");
+      return
+    }
+
+    toast.success("Password Reset Successful");
 
     setTimeout(() => {
       navigate("/login");
@@ -77,8 +105,8 @@ export default function ForgotPassword() {
             step === 1
               ? handleSendOtp
               : step === 2
-              ? handleVerifyOtp
-              : handleReset
+                ? handleVerifyOtp
+                : handleReset
           }
           className="bg-white w-full max-w-sm p-6 rounded-2xl shadow-lg"
         >
@@ -86,8 +114,8 @@ export default function ForgotPassword() {
             {step === 1
               ? "Forgot Password"
               : step === 2
-              ? "Verify OTP"
-              : "Reset Password"}
+                ? "Verify OTP"
+                : "Reset Password"}
           </h2>
 
           {/* STEP 1 */}

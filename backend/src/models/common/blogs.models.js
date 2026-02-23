@@ -16,6 +16,10 @@ const blogSchema = new Schema({
     status:{
         type: Boolean,
         default: true
+    },
+    author:{
+        type: String,
+        required: true
     }
 }, {timestamps: true});
 

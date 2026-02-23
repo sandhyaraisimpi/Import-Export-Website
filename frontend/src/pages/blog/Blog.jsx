@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import blogs from "../../data/blogData";
 import Sidebar from "../../components/blog/Sidebar";
+import { getService } from "../../service/axios";
 
 export default function Blog() {
 
@@ -16,10 +17,32 @@ export default function Blog() {
   };
 
 
-  const allBlogs = blogs.map((blog) => ({
-    ...blog,
-    image: blog.image ? blog.image : getOnlineImage(blog.title),
-  }));
+  // const allBlogs = blogs.map((blog) => ({
+  //   ...blog,
+  //   image: blog.image ? blog.image : getOnlineImage(blog.title),
+  // }));
+
+  const [allBlogs, setBlogs] = useState([])
+
+  useEffect(() => {
+    ; (
+      async () => {
+        const apiResponse = await getService("/customer/blog");
+
+        if (!apiResponse.ok) {
+          console.log(apiResponse.message);
+          return
+        }
+
+        console.log(apiResponse.data.data.blogList)
+
+        setBlogs(apiResponse.data.data.blogList)
+
+      }
+    )()
+  }, [])
+
+  
 
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
@@ -62,30 +85,45 @@ export default function Blog() {
         <div className="grid gap-10 lg:grid-cols-4">
 
           {/* Blog Grid */}
-          <div className="lg:col-span-3 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="lg:col-span-3 grid gap-8 md:grid-cols-2 xl:grid-cols-3 items-start">
             {allBlogs.map((blog) => (
               <div
-                key={blog.id}
-                className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden group flex flex-col"
+                key={blog._id}
+                className="bg-white rounded-2xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden flex flex-col h-[380px]"
               >
-                <img
-                  src={blog.image}
-                  alt={blog.title}
-                  className="h-48 w-full object-cover group-hover:scale-105 transition duration-300"
-                />
+                {/* Image */}
+                <div className="h-48 w-full">
+                  <img
+                    src={
+                      blog.blogMedia?.length
+                        ? blog.blogMedia[0]
+                        : getOnlineImage(blog.title)
+                    }
+                    alt={blog.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
 
-                <div className="p-5 flex flex-col flex-grow">
-                  <h2 className="font-semibold text-lg mb-2 text-black/70 group-hover:text-black transition">
-                    {blog.title}
-                  </h2>
+                {/* Content */}
+                <div className="p-5 flex flex-col justify-between flex-1">
+                  <div>
+                    <h2 className="font-semibold text-lg mb-2 line-clamp-2">
+                      {blog.title}
+                    </h2>
 
-                  <p className="text-sm text-gray-500 mb-4">
-                    {blog.author} • {blog.date}
-                  </p>
+                    <p className="text-sm text-gray-500 mb-2">
+                      {blog.author || "Admin"} •{" "}
+                      {new Date(blog.createdAt).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
 
                   <div className="mt-auto">
                     <Link
-                      to={`/blog/${blog.id}`}
+                      to={`/blog/${blog._id}`}
                       className="inline-block px-4 py-2 bg-black/80 text-white rounded-lg text-sm font-medium hover:bg-black transition"
                     >
                       Read More →

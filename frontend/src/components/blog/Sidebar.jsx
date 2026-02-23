@@ -1,4 +1,7 @@
 import { Link } from "react-router-dom";
+import { useState} from "react";
+import { postService } from "../../service/axios";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function Sidebar() {
   const categories = [
@@ -25,9 +28,30 @@ export default function Sidebar() {
     "Export India",
   ];
 
+  const [email, setEmail] = useState("");
+
+  const subscribe = async () => {
+    const apiResponse = await postService("/customer/subscribe", { email });
+
+    if (!apiResponse.ok && !apiResponse.fetchMessage) {
+      toast.error("Failed to Subscribe")
+      console.log(apiResponse.message);
+      return
+    }
+
+    if (!apiResponse.ok && apiResponse.fetchMessage) {
+      toast.error(apiResponse.message || "Failed to Subscribe");
+      return
+    }
+
+    toast.success(apiResponse.data.message || "Subscribe Succesful");
+    setEmail("")
+
+  }
+
   return (
     <div className="space-y-8">
-
+             <Toaster />
       {/* Categories */}
       <div className="bg-white p-6 rounded-2xl shadow-md">
         <h3 className="text-lg font-semibold mb-4 border-b pb-2">
@@ -75,10 +99,15 @@ export default function Sidebar() {
         <input
           type="email"
           placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full px-3 py-2 rounded-lg text-black mb-3 outline-none"
         />
 
-        <button className="w-full bg-white text-black/80 hover:text-black font-semibold py-2 rounded-lg hover:bg-gray-100 transition">
+        <button 
+        className="w-full bg-white text-black/80 hover:text-black font-semibold py-2 rounded-lg hover:bg-gray-100 transition"
+        onClick={subscribe}
+        >
           Subscribe
         </button>
       </div>

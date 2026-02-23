@@ -2,6 +2,16 @@ import { Bell, User, LogOut } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 export default function Header() {
+
+  const [userName, setUserName] = useState("Akhil") 
+
+  useEffect(() => {
+    if(localStorage.getItem("username")){
+    setUserName(localStorage.getItem("username"));
+    console.log(localStorage.getItem("username"))
+  }
+  }, [userName])
+
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const [openNotification, setOpenNotification] = useState(false);
 
@@ -138,10 +148,10 @@ export default function Header() {
             className="flex items-center gap-2 bg-gray-50 hover:bg-gray-100 px-3 py-2 rounded-lg transition"
           >
             <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-sm font-medium text-white">
-              A
+              {userName.charAt(0).toUpperCase()}
             </div>
             <span className="hidden md:block text-sm font-medium text-gray-700">
-              Akhil
+              {(userName)?userName:"Akhil"}
             </span>
           </button>
 

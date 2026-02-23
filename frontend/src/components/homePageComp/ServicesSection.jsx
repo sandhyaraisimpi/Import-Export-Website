@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import {getService} from "../../service/axios"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ██████  DATA — Edit all services content here
@@ -10,28 +11,28 @@ const SERVICES_HEADING = {
   exploreLabel: "Explore More",
 };
 
-const SERVICES = [
-  {
-    id: 1,
-    title: "Product Sourcing",
-    img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&h=200&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Quality Inspection",
-    img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200&h=200&fit=crop",
-  },
-  {
-    id: 3,
-    title: "Export Documentation",
-    img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=200&h=200&fit=crop",
-  },
-  {
-    id: 4,
-    title: "Logistics & Shipping",
-    img: "https://images.unsplash.com/photo-1532336414038-cf19250c5757?w=200&h=200&fit=crop",
-  },
-];
+// const SERVICES = [
+//   {
+//     id: 1,
+//     title: "Product Sourcing",
+//     img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200&h=200&fit=crop",
+//   },
+//   {
+//     id: 2,
+//     title: "Quality Inspection",
+//     img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200&h=200&fit=crop",
+//   },
+//   {
+//     id: 3,
+//     title: "Export Documentation",
+//     img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=200&h=200&fit=crop",
+//   },
+//   {
+//     id: 4,
+//     title: "Logistics & Shipping",
+//     img: "https://images.unsplash.com/photo-1532336414038-cf19250c5757?w=200&h=200&fit=crop",
+//   },
+// ];
 
 const MARQUEE_ITEMS = [
   "EXPORT FROM GUJARAT, INDIA",
@@ -111,11 +112,11 @@ const ServicePill = ({ service, index }) => (
   >
     <div className="flex items-center gap-3 md:gap-4 px-2 py-2 pr-5">
       <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden flex-shrink-0">
-        <img src={service.img} alt={service.title} className="w-full h-full object-cover" />
+        <img src={service.categoryImage} alt={service.name} className="w-full h-full object-cover" />
       </div>
       <span className="text-neutral-900 text-xs md:text-sm font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-        {service.title}
-        {index > 0 && <sup className="text-neutral-400 text-[9px] ml-1">0{index + 1}</sup>}
+        {service.name}
+        {index >= 0 && <sup className="text-neutral-400 text-[9px] ml-1">0{index + 1}</sup>}
       </span>
     </div>
   </motion.div>
@@ -186,6 +187,23 @@ const ServicesSection = () => {
   const y = useTransform(scrollYProgress, [0, 1], [160, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [0.96, 1]);
   const opacity = useTransform(scrollYProgress, [0, 1], [0.6, 1]);
+
+  const [categoryProduct, setcategoryProduct] = useState([])
+    useEffect(() => {
+      ;(
+        async () => {
+          const apiResponse = await getService("/customer/product/category?page=1&limit=4");
+  
+          if(!apiResponse.ok){
+            console.log(apiResponse.message);
+            return
+          }
+  
+          console.log(apiResponse.data.data.categoryList)
+          setcategoryProduct(apiResponse.data.data.categoryList)
+        }
+      )()
+    },[])
 
   return (
     <section
@@ -284,7 +302,7 @@ const ServicesSection = () => {
 
             {/* Right — service pills */}
             <div className="p-4 md:p-8 flex flex-col justify-center gap-3">
-              {SERVICES.map((s, i) => (
+              {categoryProduct.map((s, i) => (
                 <ServicePill key={s.id} service={s} index={i} />
               ))}
             </div>

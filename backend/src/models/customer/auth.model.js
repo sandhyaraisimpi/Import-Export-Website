@@ -25,6 +25,9 @@ const customerAuth_Schema = new Schema({
         type: String,
         enum:["Male", "Female", "Other"]
     },
+    dob:{
+        type: String,
+    },
     country:{
         type: String,
     },

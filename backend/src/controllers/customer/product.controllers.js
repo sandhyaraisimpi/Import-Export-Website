@@ -171,22 +171,50 @@ const getProduct = async (req, res) => {
 
         const skip = (page - 1) * limit;
 
-        const productList = await productModel.find(
+        const productList = await productModel.aggregate([
             {
-                status: "Available"
+                $match: {
+                }
+            },
+            {
+                $sort: { createdAt: -1 }
+            },
+            {
+                $skip: skip
+            },
+            {
+                $limit: limit
+            },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "categoryId",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $project: {
+                    name: 1,
+                    skuId: 1,
+                    description: 1,
+                    specifications: 1,
+                    productImage: 1,
+                    status: 1,
+                    createdAt: 1,
+                    "category": "$category"
+                }
             }
-        )
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: -1 });
+        ]);
 
         if (productList.length === 0) {
             return res.status(404).json(new ApiError(404, "No Product Found."));
         }
 
-        const totalItems = await productModel.countDocuments({
-            status: "Available"
-        });
+        const totalItems = await productModel.countDocuments({});
 
         return res.status(200).json(
             new ApiResponse(200, {
