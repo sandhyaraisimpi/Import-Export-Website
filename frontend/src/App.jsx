@@ -29,6 +29,9 @@ import CategoryProducts from "./pages/Products/CategoryProducts";
 import PrductDetail from "./pages/Products/PrductDetail";
 
 
+//Footer
+import AboutUs from "./pages/user/AboutUs";
+
 
 function App() {
   
@@ -88,7 +91,8 @@ function App() {
       {/* Future product detail page */}
       {/* Example URL → /products/food/f1 */}
       {/* <Route path="/products/:id/:productId" element={<ProductDetails />} /> */}
-
+      <Route path="/AboutUs" element={<AboutUs />} /> 
+   
       {/* ================================================= */}
       {/* 404 FALLBACK */}
       {/* ================================================= */}
