@@ -25,7 +25,7 @@ import FoodCarousel from "./components/FoodCarousel";
 
 /* ================= PRODUCT SYSTEM ================= */
 import MainCategory from "./pages/Products/MainCategory";
-import ProductsPage from "./pages/Products/ProductsPage";
+import CategoryProducts from "./pages/Products/CategoryProducts";
 import PrductDetail from "./pages/Products/PrductDetail";
 
 
@@ -82,7 +82,7 @@ function App() {
       {/* Category product listing */}
       {/* Valid IDs: food | spices | agri | industrial */}
       <Route path="/MainCategory" element={<MainCategory />} />
-      <Route path="/ProductsPage" element={<ProductsPage />} />
+      <Route path="/CategoryProducts" element={<CategoryProducts />} />
       <Route path="/products" element={<PrductDetail />} /> 
 
       {/* Future product detail page */}
