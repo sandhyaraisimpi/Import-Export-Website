@@ -25,18 +25,26 @@ export default function Sidebar() {
 
   const location = useLocation();
 
-  // Dropdown open state based on current URL
   const [openCategory, setOpenCategory] = useState(false);
   const [openProducts, setOpenProducts] = useState(false);
+  const [openSettings, setOpenSettings] = useState(false);
 
-  const [openProducts, setOpenProducts] = useState(
-    location.pathname.startsWith("/products") ||
-    location.pathname.startsWith("/product-images")
-  );
+  // Auto open dropdown on route change
+  useEffect(() => {
+    setOpenCategory(
+      location.pathname.startsWith("/admin/categories") ||
+      location.pathname.startsWith("/admin/sub-categories")
+    );
 
-  const [openSettings, setOpenSettings] = useState(
-    location.pathname.startsWith("/settings")
-  );
+    setOpenProducts(
+      location.pathname.startsWith("/admin/products") ||
+      location.pathname.startsWith("/admin/product-images")
+    );
+
+    setOpenSettings(
+      location.pathname.startsWith("/admin/settings")
+    );
+  }, [location.pathname]);
 
   const isActive = (path) => location.pathname === path;
 
@@ -44,21 +52,20 @@ export default function Sidebar() {
     paths.some(path => location.pathname.startsWith(path));
 
   const buttonClass = (active) =>
-    `flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group
+    `flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
     ${active
       ? "bg-blue-100 text-blue-600 shadow-sm"
-      : "text-gray-700 hover:bg-blue-50 hover:text-blue-600 hover:scale-[1.03]"
+      : "text-gray-700 hover:bg-blue-50 hover:text-blue-600"
     }`;
 
   const subButtonClass = (active) =>
     `flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all duration-200
     ${active
       ? "bg-blue-100 text-blue-600 font-semibold"
-      : "text-gray-600 hover:bg-blue-50 hover:text-blue-600 hover:scale-[1.03]"
+      : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
     }`;
 
   return (
-
     <aside className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col justify-between">
 
       {/* TOP */}
@@ -66,146 +73,132 @@ export default function Sidebar() {
 
         {/* LOGO */}
         <div className="p-4 border-b border-gray-100">
-
           <img
             src={logo}
             alt="Logo"
             className="h-10 object-contain"
           />
-
         </div>
-
 
         {/* NAV */}
         <nav className="p-4 space-y-2">
 
           {/* Dashboard */}
-          <Link to="/" className={buttonClass(isActive("/"))}>
+          <Link
+            to="/admin/dashboard"
+            className={buttonClass(isActive("/admin/dashboard"))}
+          >
             <div className="flex items-center gap-3">
               <LayoutDashboard size={18}/>
               Dashboard
             </div>
           </Link>
 
-
           {/* Categories */}
           <div>
-
             <button
               onClick={() => setOpenCategory(!openCategory)}
               className={buttonClass(
-                isDropdownActive(["/categories", "/sub-categories"])
+                isDropdownActive([
+                  "/admin/categories",
+                  "/admin/sub-categories"
+                ])
               )}
             >
               <div className="flex items-center gap-3">
                 <Folder size={18}/>
                 Categories
               </div>
-
-              {openCategory ?
-                <ChevronDown size={16}/> :
-                <ChevronRight size={16}/>
-              }
-
+              {openCategory ? <ChevronDown size={16}/> : <ChevronRight size={16}/>}
             </button>
 
-
             {openCategory && (
-
               <div className="ml-6 mt-1 space-y-1">
-
                 <Link
-                  to="/categories"
-                  className={subButtonClass(isActive("/categories"))}
+                  to="/admin/categories"
+                  className={subButtonClass(isActive("/admin/categories"))}
                 >
                   <FolderTree size={16}/>
                   All Categories
                 </Link>
 
                 <Link
-                  to="/sub-categories"
-                  className={subButtonClass(isActive("/sub-categories"))}
+                  to="/admin/sub-categories"
+                  className={subButtonClass(isActive("/admin/sub-categories"))}
                 >
                   <FolderTree size={16}/>
                   Sub Categories
                 </Link>
-
               </div>
-
             )}
-
           </div>
-
 
           {/* Products */}
           <div>
-
             <button
               onClick={() => setOpenProducts(!openProducts)}
               className={buttonClass(
-                isDropdownActive(["/products", "/product-images"])
+                isDropdownActive([
+                  "/admin/products",
+                  "/admin/product-images"
+                ])
               )}
             >
               <div className="flex items-center gap-3">
                 <Package size={18}/>
                 Products
               </div>
-
-              {openProducts ?
-                <ChevronDown size={16}/> :
-                <ChevronRight size={16}/>
-              }
-
+              {openProducts ? <ChevronDown size={16}/> : <ChevronRight size={16}/>}
             </button>
 
-
             {openProducts && (
-
               <div className="ml-6 mt-1 space-y-1">
-
                 <Link
-                  to="/products"
-                  className={subButtonClass(isActive("/products"))}
+                  to="/admin/products"
+                  className={subButtonClass(isActive("/admin/products"))}
                 >
                   <Package size={16}/>
                   Product Management
                 </Link>
 
                 <Link
-                  to="/product-images"
-                  className={subButtonClass(isActive("/product-images"))}
+                  to="/admin/product-images"
+                  className={subButtonClass(isActive("/admin/product-images"))}
                 >
                   <Image size={16}/>
                   Image Management
                 </Link>
-
               </div>
-
             )}
-
           </div>
 
-
           {/* Inquiries */}
-          <Link to="/inquiries" className={buttonClass(isActive("/inquiries"))}>
+          <Link
+            to="/admin/inquiries"
+            className={buttonClass(isActive("/admin/inquiries"))}
+          >
             <div className="flex items-center gap-3">
               <MessageSquare size={18}/>
               Inquiries
             </div>
           </Link>
 
-
           {/* Customers */}
-          <Link to="/customers" className={buttonClass(isActive("/customers"))}>
+          <Link
+            to="/admin/customers"
+            className={buttonClass(isActive("/admin/customers"))}
+          >
             <div className="flex items-center gap-3">
               <Users size={18}/>
               Customers
             </div>
           </Link>
 
-
           {/* Terms */}
-          <Link to="/team-roles" className={buttonClass(isActive("/team-roles"))}>
+          <Link
+            to="/admin/team-roles"
+            className={buttonClass(isActive("/admin/team-roles"))}
+          >
             <div className="flex items-center gap-3">
               <FileText size={18}/>
               Terms & Conditions
@@ -213,93 +206,70 @@ export default function Sidebar() {
           </Link>
 
         </nav>
-
       </div>
 
+      {/* SETTINGS */}
+      <div className="p-4 border-t border-gray-100">
+        <button
+          onClick={() => setOpenSettings(!openSettings)}
+          className={buttonClass(
+            isDropdownActive(["/admin/settings"])
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <Settings size={18}/>
+            Settings
+          </div>
+          {openSettings ? <ChevronDown size={16}/> : <ChevronRight size={16}/>}
+        </button>
 
-      {/* SETTINGS AT BOTTOM */}
-<div className="p-4 border-t border-gray-100">
+        {openSettings && (
+          <div className="ml-6 mt-2 space-y-1">
 
-  <button
-    onClick={() => setOpenSettings(!openSettings)}
-    className={buttonClass(
-      isDropdownActive(["/settings"])
-    )}
-  >
+            <Link
+              to="/admin/settings"
+              className={subButtonClass(isActive("/admin/settings"))}
+            >
+              <Settings size={16}/>
+              All Settings
+            </Link>
 
-    <div className="flex items-center gap-3">
-      <Settings size={18}/>
-      Settings
-    </div>
+            <Link
+              to="/admin/settings/general"
+              className={subButtonClass(isActive("/admin/settings/general"))}
+            >
+              <Sliders size={16}/>
+              General Settings
+            </Link>
 
-    {openSettings ?
-      <ChevronDown size={16}/> :
-      <ChevronRight size={16}/>
-    }
+            <Link
+              to="/admin/settings/profile"
+              className={subButtonClass(isActive("/admin/settings/profile"))}
+            >
+              <User size={16}/>
+              Profile Settings
+            </Link>
 
-  </button>
+            <Link
+              to="/admin/settings/notifications"
+              className={subButtonClass(isActive("/admin/settings/notifications"))}
+            >
+              <Bell size={16}/>
+              Notification Settings
+            </Link>
 
+            <Link
+              to="/admin/settings/website"
+              className={subButtonClass(isActive("/admin/settings/website"))}
+            >
+              <Globe size={16}/>
+              Website Settings
+            </Link>
 
-  {openSettings && (
+          </div>
+        )}
+      </div>
 
-    <div className="ml-6 mt-2 space-y-1">
-
-      {/* MAIN SETTINGS PAGE */}
-      <Link
-        to="/settings"
-        className={subButtonClass(isActive("/settings"))}
-      >
-        <Settings size={16}/>
-        All Settings
-      </Link>
-
-
-      {/* GENERAL */}
-      <Link
-        to="/settings/general"
-        className={subButtonClass(isActive("/settings/general"))}
-      >
-        <Sliders size={16}/>
-        General Settings
-      </Link>
-
-
-      {/* PROFILE */}
-      <Link
-        to="/settings/profile"
-        className={subButtonClass(isActive("/settings/profile"))}
-      >
-        <User size={16}/>
-        Profile Settings
-      </Link>
-
-
-      {/* NOTIFICATION */}
-      <Link
-        to="/settings/notifications"
-        className={subButtonClass(isActive("/settings/notifications"))}
-      >
-        <Bell size={16}/>
-        Notification Settings
-      </Link>
-
-
-      {/* WEBSITE */}
-      <Link
-        to="/settings/website"
-        className={subButtonClass(isActive("/settings/website"))}
-      >
-        <Globe size={16}/>
-        Website Settings
-      </Link>
-
-    </div>
-
-  )}
-
-</div>
     </aside>
-
   );
-
 }

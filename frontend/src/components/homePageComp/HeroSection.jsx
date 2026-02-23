@@ -1,38 +1,49 @@
-import React from "react";
-import { motion } from "framer-motion";
-import DownloadButton from "../../includes/DownloadButton"; 
-import video from "../../assets/new-right-video.mp4"; // Aapka imported video
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
-// --- UPDATED DATA (AS PER PDF) ---
-const heroData = {
-  leftBg: "https://images.unsplash.com/photo-1586528116311-ad8ed7c152a5", 
-  titleLeft: "VR & Sons Import Export", 
-  titleCenter: "Trusted exporters of high-quality products for global trade.", 
+const HERO_DATA = {
+  companyName: "VR & Sons",
+  companySubtitle: "Import Export",
+  heroImg:
+    "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=1200&h=900&fit=crop",
 };
 
-// PDF Requirement: 4 photos scrolling upside, 4 downside logic
-const scrollImages = [
-  "https://images.unsplash.com/photo-1596040033229-a9821ebd058d", // Spices
-  "https://images.unsplash.com/photo-1542838132-92c53300491e", // Agricultural
-  "https://images.unsplash.com/photo-1518709766631-a6a7f4e921c4", // Bricks
-  "https://images.unsplash.com/photo-1550989460-0adf9ea622e2", // Food
+const TOP_CARDS = [
+  {
+    img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&h=200&fit=crop",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&h=200&fit=crop",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=300&h=200&fit=crop",
+  },
+  {
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop",
+  },
 ];
 
-// Reusable Scrolling Column Component
-const VerticalScroll = ({ images, direction = "up" }) => {
-  const isUp = direction === "up";
+const VerticalColumn = ({ cards, direction = "up" }) => {
   return (
-    <div className="flex flex-col gap-4 overflow-hidden h-full py-4">
+    <div className="overflow-hidden h-full w-full">
       <motion.div
-        animate={{ y: isUp ? ["0%", "-50%"] : ["-50%", "0%"] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-5"
+        animate={{
+          y: direction === "up" ? ["0%", "-50%"] : ["-50%", "0%"],
+        }}
+        transition={{
+          duration: 22,
+          ease: "linear",
+          repeat: Infinity,
+        }}
       >
-        {/* Array ko double kiya taaki infinite scroll smooth rahe */}
-        {[...images, ...images].map((img, idx) => (
-          // shrink-0 add kiya taaki images height me dabe nahi
-          <div key={idx} className="w-32 h-40 md:w-40 md:h-52 shrink-0 rounded-2xl overflow-hidden shadow-xl">
-            <img src={img} alt="Product" className="w-full h-full object-cover" />
+        {[...cards, ...cards].map((card, i) => (
+          <div
+            key={i}
+            className="rounded-2xl overflow-hidden opacity-70"
+            style={{ aspectRatio: "2/3" }}
+          >
+            <img src={card.img} alt="" className="w-full h-full object-cover" />
           </div>
         ))}
       </motion.div>
@@ -40,85 +51,102 @@ const VerticalScroll = ({ images, direction = "up" }) => {
   );
 };
 
-const HeroSection = () => {
+const LeftPanel = () => {
   return (
-    <section className="bg-neutral-200 min-h-screen pt-32 pb-40">
-      <div className="max-w-[1500px] mx-auto px-8">
-        <div className="grid md:grid-cols-2 h-[80vh] rounded-3xl overflow-hidden shadow-2xl">
+    <div className="bg-white flex items-center justify-start pl-24 overflow-hidden">
+      <div
+        className="grid grid-cols-3 gap-6 w-full max-w-[380px]"
+        style={{
+          height: "75vh",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
+        }}
+      >
+        <VerticalColumn cards={TOP_CARDS} direction="up" />
+        <VerticalColumn cards={TOP_CARDS} direction="down" />
+        <VerticalColumn cards={TOP_CARDS} direction="up" />
+      </div>
+    </div>
+  );
+};
 
-          {/* LEFT SECTION (With PDF Scroll Requirement) */}
-          <div className="relative h-full overflow-hidden bg-neutral-900">
-            {/* Background Image */}
-            <motion.img
-              src={heroData.leftBg}
-              alt="Left Background"
-              className="absolute inset-0 w-full h-full object-cover opacity-40"
-              initial={false}
-              animate={{ scale: [1.15, 1] }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-            />
+const HeroSection = () => {
+  const containerRef = useRef(null);
 
-            {/* Vertical Sliders - 4 Columns as per PDF logic */}
-            <div className="absolute inset-0 flex justify-center gap-4 z-20 px-4">
-               <VerticalScroll images={scrollImages} direction="up" />
-               <VerticalScroll images={scrollImages} direction="down" />
-               <VerticalScroll images={scrollImages} direction="up" />
-               <VerticalScroll images={scrollImages} direction="down" />
-            </div>
-          </div>
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+  const [isLoaded, setIsLoaded] = React.useState(false);
 
-          {/* RIGHT SECTION (Now with Video Background) */}
-          <div className="relative h-full overflow-hidden">
-            
-            {/* Background Video element */}
-            <motion.video
-              src={video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover"
-              initial={false}
-              animate={{ scale: [1.15, 1] }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-            />
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -40]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.08]);
 
-            {/* Dark overlay for better text readability */}
-            <div className="absolute inset-0 bg-black/50"></div> 
+  return (
+    <div ref={containerRef}
+      className="relative pt-[90px]"
+      style={{ fontFamily: "'Cormorant Garamond', serif" }}
+    >
+      <section className="sticky top-[90px] h-[calc(100vh-90px)] bg-[#f0ede8] flex items-center justify-center px-6 overflow-hidden">
+        <motion.div
+          className="w-full max-w-[1500px] overflow-hidden shadow-2xl"
+          style={{ scale, y, borderRadius: 32 }}
+          initial={{ scale: 0.96, filter: "blur(12px)" }}
+          animate={isLoaded ? { scale: 1, filter: "blur(0px)" } : {}}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div
+            className="relative"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1.2fr",
+              minHeight: "85vh",
+            }}
+          >
+            {/* LEFT */}
+            <LeftPanel />
 
-            <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 z-20 px-12 text-center"> 
-              <motion.h1 
-                className="text-4xl md:text-5xl font-bold text-white mb-6"
-                initial={{ opacity: 0, y: 20 }} 
+            {/* CENTER TEXT */}
+            <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
+                className="text-center"
               >
-                {heroData.titleLeft}
-              </motion.h1>
+                <h1 className="text-8xl font-light tracking-tight text-neutral-900">
+                  {HERO_DATA.companyName}
+                </h1>
 
-              <motion.p
-                className="text-lg md:text-xl text-white/90 max-w-lg mx-auto mb-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                {heroData.titleCenter}
-              </motion.p>
-
-              <motion.div 
-                className="flex justify-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                <DownloadButton /> 
+                <p className="uppercase tracking-[0.6em] text-sm text-neutral-600 mt-6">
+                  {HERO_DATA.companySubtitle}
+                </p>
               </motion.div>
             </div>
-          </div>
 
-        </div>
-      </div>
-    </section>
+            {/* RIGHT IMAGE */}
+            <div className="relative overflow-hidden">
+              <motion.img
+                src={HERO_DATA.heroImg}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ scale: imageScale }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-white/70 via-white/20 to-transparent" />
+            </div>
+          </div>
+        </motion.div>
+      </section>
+    </div>
   );
 };
 
