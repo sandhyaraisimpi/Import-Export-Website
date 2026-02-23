@@ -11,6 +11,10 @@ import Settings from "./pages/user/Settings";
 import MyInquiries from "./pages/user/MyInquiries";
 import InquiryDetail from "./pages/user/InquiryDetail";
 
+/* BLOG PAGES */
+import Blog from "./pages/blog/Blog";
+import SingleBlog from "./pages/blog/SingleBlog";
+
 /* ================= AUTH ================= */
 import Login from "./pages/user/UserLogin";
 import Signup from "./pages/user/UserSignup";
@@ -44,11 +48,14 @@ function App() {
       {/* USER DASHBOARD */}
       {/* ================================================= */}
       <Route path="/user/dashboard" element={<Dashboard />} />
-      <Route path="/user/orders" element={<Order />} />
       <Route path="/user/profile" element={<Profile />} />
       <Route path="/user/settings" element={<Settings />} />
       <Route path="/user/inquiries" element={<MyInquiries />} />
       <Route path="/user/inquiries/:id" element={<InquiryDetail />} />
+
+      {/* BLOG ROUTES */}
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:id" element={<SingleBlog />} />
 
       {/* ================================================= */}
       {/* AUTHENTICATION */}

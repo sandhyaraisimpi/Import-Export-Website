@@ -1,122 +1,188 @@
 import { useState } from "react";
-import { CheckCircle, XCircle } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import leftLogin from "../../assets/login/leftlogin.webp";
 
 export default function ForgotPassword() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
-    const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(1);
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-    const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const DEMO_OTP = "123456"; // ✅ Fixed OTP for testing
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-        if (!email) {
-            toast.error("Please enter your email");
-            return;
-        }
+  // STEP 1 → Send OTP
+  const handleSendOtp = (e) => {
+    e.preventDefault();
 
-        if (!validateEmail(email)) {
-            toast.error("Enter valid email address");
-            return;
-        }
+    if (!email) return toast.error("Please enter email");
+    if (!validateEmail(email)) return toast.error("Enter valid email");
 
-        setLoading(true);
+    toast.success("OTP Sent Successfully (Use 123456)");
+    setStep(2);
+  };
 
-        setTimeout(() => {
-            toast.success("Reset link sent to your email 📩");
-            setLoading(false);
-        }, 1500);
-    };
+  // STEP 2 → Verify OTP
+  const handleVerifyOtp = (e) => {
+    e.preventDefault();
 
-    return (
-        <div className="min-h-screen flex bg-[#f4f2ee]">
-            <Toaster />
+    if (otp !== DEMO_OTP) {
+      return toast.error("Invalid OTP");
+    }
 
-            <div className="hidden lg:flex w-1/2 relative">
-                <img
-                    src={leftLogin}
-                    alt="Forgot Password Visual"
-                    className="w-full h-screen object-cover"
-                />
+    toast.success("OTP Verified ✅");
+    setStep(3);
+  };
 
-                {/* Dark Overlay */}
-                <div className="absolute inset-0 bg-black/40"></div>
+  // STEP 3 → Reset Password
+  const handleReset = (e) => {
+    e.preventDefault();
 
-                {/* Text Over Image */}
-                <div className="absolute inset-0 flex items-center p-12">
-                    <div className="text-white max-w-sm">
-                        <h1 className="text-4xl font-bold mb-4 leading-tight">
-                            Reset With Confidence.
-                        </h1>
-                        <p className="text-gray-200 text-sm">
-                            Secure your account and continue your premium import-export journey.
-                        </p>
-                    </div>
+    if (newPassword.length < 6)
+      return toast.error("Password must be at least 6 characters");
+
+    if (newPassword !== confirmPassword)
+      return toast.error("Passwords do not match");
+
+    toast.success("Password Reset Successful 🎉");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 1500);
+  };
+
+  return (
+    <div className="min-h-screen flex bg-[#f4f2ee]">
+      <Toaster />
+
+      {/* LEFT IMAGE */}
+      <div className="hidden lg:flex w-1/2 relative">
+        <img
+          src={leftLogin}
+          alt="Forgot Password"
+          className="w-full h-screen object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
+
+      {/* RIGHT SIDE */}
+      <div className="flex w-full lg:w-1/2 items-center justify-center p-4">
+        <form
+          onSubmit={
+            step === 1
+              ? handleSendOtp
+              : step === 2
+              ? handleVerifyOtp
+              : handleReset
+          }
+          className="bg-white w-full max-w-sm p-6 rounded-2xl shadow-lg"
+        >
+          <h2 className="text-2xl font-semibold text-indigo-900 mb-4">
+            {step === 1
+              ? "Forgot Password"
+              : step === 2
+              ? "Verify OTP"
+              : "Reset Password"}
+          </h2>
+
+          {/* STEP 1 */}
+          {step === 1 && (
+            <>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-3 py-2.5 mb-4 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"
+              />
+
+              <button className="w-full py-2.5 text-sm rounded-lg bg-indigo-900 text-white font-medium hover:bg-indigo-800 transition">
+                Send OTP
+              </button>
+            </>
+          )}
+
+          {/* STEP 2 */}
+          {step === 2 && (
+            <>
+              {/* Email visible with edit option */}
+              <div className="mb-3">
+                <label className="text-xs text-gray-500">
+                  Email Address
+                </label>
+                <div className="flex gap-2 mt-1">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="text-xs text-indigo-600"
+                  >
+                    Edit
+                  </button>
                 </div>
-            </div>
+              </div>
 
-            {/* RIGHT FORM CARD */}
-            <div className="flex w-full lg:w-1/2 items-center justify-center p-4">
-                <form
-                    onSubmit={handleSubmit}
-                    className="bg-white w-full max-w-sm p-6 rounded-2xl shadow-lg"
-                >
-                    <h2 className="text-2xl font-semibold text-indigo-900 mb-1">
-                        Forgot Password
-                    </h2>
-                    <p className="text-gray-500 text-sm mb-4">
-                        Enter your registered email to receive a reset link.
-                    </p>
+              <input
+                type="text"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                className="w-full px-3 py-2.5 mb-4 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"
+              />
 
-                    {/* Email */}
-                    <div className="relative mb-4">
-                        <input
-                            type="email"
-                            placeholder="Email address"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-3 py-2.5 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"
-                        />
-                        {email &&
-                            (validateEmail(email) ? (
-                                <CheckCircle
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500"
-                                    size={16}
-                                />
-                            ) : (
-                                <XCircle
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500"
-                                    size={16}
-                                />
-                            ))}
-                    </div>
+              <button className="w-full py-2.5 text-sm rounded-lg bg-indigo-900 text-white font-medium hover:bg-indigo-800 transition">
+                Verify OTP
+              </button>
+            </>
+          )}
 
-                    {/* Submit */}
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-2.5 text-sm rounded-lg bg-indigo-900 text-white font-medium hover:bg-indigo-800 transition"
-                    >
-                        {loading ? "Sending..." : "Send Reset Link"}
-                    </button>
+          {/* STEP 3 */}
+          {step === 3 && (
+            <>
+              <input
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full px-3 py-2.5 mb-4 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"
+              />
 
-                    {/* Back to Login */}
-                    <p className="text-center text-xs text-gray-500 mt-4">
-                        Remember your password?{" "}
-                        <span
-                            onClick={() => navigate("/login")}
-                            className="text-indigo-900 font-medium cursor-pointer"
-                        >
-                            Sign In
-                        </span>
-                    </p>
-                </form>
-            </div>
-        </div>
-    );
+              <input
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-3 py-2.5 mb-4 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-400 outline-none"
+              />
+
+              <button className="w-full py-2.5 text-sm rounded-lg bg-indigo-900 text-white font-medium hover:bg-indigo-800 transition">
+                Confirm & Login
+              </button>
+            </>
+          )}
+
+          {/* Back to login */}
+          <p className="text-center text-xs text-gray-500 mt-4">
+            Remember password?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className="text-indigo-900 font-medium cursor-pointer"
+            >
+              Sign In
+            </span>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
 }
