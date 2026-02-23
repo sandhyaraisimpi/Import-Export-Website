@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import AdminLayout from "../layout/AdminLayout";
+import AdminLayout from "../../layout/AdminLayout";
 import {
   Plus,
   Package,
@@ -108,7 +108,7 @@ export default function ProductManagement() {
     <AdminLayout>
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Product Management</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight">Product Management</h1>
         <p className="text-gray-500 text-sm">
           Add and catalog international inventory
         </p>

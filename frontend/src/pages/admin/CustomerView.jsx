@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import AdminLayout from "../layout/AdminLayout";
+import AdminLayout from "../../layout/AdminLayout";
 import {
   ArrowLeft,
   Mail,

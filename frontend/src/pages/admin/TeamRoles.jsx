@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdminLayout from "../layout/AdminLayout";
+import AdminLayout from "../../layout/AdminLayout";
 
 import {
   Shield,
@@ -145,7 +145,7 @@ export default function TeamRoles() {
             </div>
 
             <button
-            onClick={() => navigate("/team-roles/details")}
+            onClick={() => navigate("/admin/team-roles/details")}
             className="flex items-center gap-1 text-blue-600 font-semibold"
           >
             Detailed Permissions

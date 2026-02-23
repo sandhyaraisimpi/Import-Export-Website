@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AdminLayout from "../layout/AdminLayout";
+import AdminLayout from "../../layout/AdminLayout";
 import {
   Lock,
   ShieldCheck,

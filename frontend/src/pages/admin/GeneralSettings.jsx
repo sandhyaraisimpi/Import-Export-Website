@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AdminLayout from "../layout/AdminLayout";
+import AdminLayout from "../../layout/AdminLayout";
 import { Settings, Globe, Clock } from "lucide-react";
 
 export default function GeneralSettings() {

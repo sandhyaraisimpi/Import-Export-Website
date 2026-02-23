@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AdminLayout from "../layout/AdminLayout";
+import AdminLayout from "../../layout/AdminLayout";
 import { Pencil, Trash2 } from "lucide-react";
 
 export default function Categories() {
@@ -114,7 +114,7 @@ export default function Categories() {
   return (
     <AdminLayout>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Category Management</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight">Category Management</h1>
         <p className="text-gray-500 text-sm">
           Manage and organize your global product classifications.
         </p>
