@@ -4,164 +4,165 @@ import { ApiResponse } from "../../utils/api-response.js";
 import { cookiesForUser } from "../../utils/cookiesForUser.js";
 import { passwordDecrypt, passwordEncrypt } from "../../utils/bcryption.js";
 import { cloudinary, deleteFromCloudinary } from "../../config/cloudinary.config.js";
-import {brevo} from '../../config/brevo.config.js'
+import { brevo } from '../../config/brevo.config.js'
 
 const Signup = async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
+  try {
+    const { name, email, password } = req.body;
 
-        const hashPassword = await passwordEncrypt(password)
+    const hashPassword = await passwordEncrypt(password)
 
-        const customerDetail = customerAuth_Model({
-            name,
-            email,
-            password: hashPassword
-        });
+    const customerDetail = customerAuth_Model({
+      name,
+      email,
+      password: hashPassword
+    });
 
-        await customerDetail.save();
+    await customerDetail.save();
 
-        customerDetail.password = undefined;
-        customerDetail.email = undefined;
+    customerDetail.password = undefined;
+    customerDetail.email = undefined;
 
-        await cookiesForUser(res, customerDetail);
+    await cookiesForUser(res, customerDetail);
 
-        return res.status(200).json(new ApiResponse(200, null, "Customer Signup Successfully."));
-    }
-    catch (err) {
-        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
-    }
+    return res.status(200).json(new ApiResponse(200, null, "Customer Signup Successfully."));
+  }
+  catch (err) {
+    return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+  }
 }
 
 const Login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-        const customerDetail = await customerAuth_Model.findOne({ email: email });
+    const customerDetail = await customerAuth_Model.findOne({ email: email });
 
-        const decryptResult = await passwordDecrypt(password, customerDetail.password);
+    const decryptResult = await passwordDecrypt(password, customerDetail.password);
 
-        if (!decryptResult) {
-            return res.status(401).json(new ApiError(401, "Incorrect Password"));
-        }
-
-        customerDetail.password = undefined;
-        customerDetail.email = undefined;
-        customerDetail.contact = undefined;
-
-        await cookiesForUser(res, customerDetail);
-
-        return res.status(200).json(new ApiResponse(200, null, "Access Granted"));
+    if (!decryptResult) {
+      return res.status(401).json(new ApiError(401, "Incorrect Password"));
     }
-    catch (err) {
-        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]))
-    }
+
+    customerDetail.password = undefined;
+    customerDetail.email = undefined;
+    customerDetail.contact = undefined;
+
+    await cookiesForUser(res, customerDetail);
+
+    return res.status(200).json(new ApiResponse(200, null, "Access Granted"));
+  }
+  catch (err) {
+    return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]))
+  }
 }
 
 const forgetPassword = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-        const hashPassword = await passwordEncrypt(password);
+    const hashPassword = await passwordEncrypt(password);
 
-        const customerDetail = await customerAuth_Model.findOneAndUpdate(
-            { email: email },
-            { password: hashPassword }
-        );
+    const customerDetail = await customerAuth_Model.findOneAndUpdate(
+      { email: email },
+      { password: hashPassword }
+    );
 
-        customerDetail.email = undefined;
-        customerDetail.password = undefined;
-        customerDetail.contact = undefined;
+    customerDetail.email = undefined;
+    customerDetail.password = undefined;
+    customerDetail.contact = undefined;
 
-        await cookiesForUser(res, customerDetail);
+    await cookiesForUser(res, customerDetail);
 
-        return res.status(200).json(new ApiResponse(200, null, "Your password is Forget Successfully."))
+    return res.status(200).json(new ApiResponse(200, null, "Your password is Forget Successfully."))
 
-    }
-    catch (err) {
-        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]))
-    }
+  }
+  catch (err) {
+    return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]))
+  }
 }
 
 const updateProfile = async (req, res) => {
-    try {
-        const { _id } = req.user;
-        const { contact, gender, country, state } = req.body;
+  try {
+    const { _id } = req.user;
+    const { contact, gender, dob, country, state } = req.body;
 
-        const userDetail = await customerAuth_Model.findById(_id);
+    const userDetail = await customerAuth_Model.findById(_id);
 
-        if (userDetail.profileImage) {
-            deleteFromCloudinary(userDetail.profileImage)
-        }
-
-        let profileImage = null;
-
-        if (req.file) {
-            profileImage = await new Promise((resolve, reject) => {
-                const stream = cloudinary.uploader.upload_stream(
-                    { folder: "image" },
-                    (err, result) => {
-                        if (err) reject(err);
-                        else resolve(result.secure_url);
-                    }
-                );
-                stream.end(req.file.buffer);
-            })
-        }
-
-        const updatedCustomerDetail =await customerAuth_Model.findByIdAndUpdate(
-            _id,
-            {
-                contact,
-                gender,
-                country,
-                state,
-                profileImage
-            }
-        )
-
-        return res.status(200).json(new ApiResponse(200, updatedCustomerDetail, "Profile Update Successfully."));
-
+    if (userDetail.profileImage) {
+      deleteFromCloudinary(userDetail.profileImage)
     }
-    catch (err) {
-        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+
+    let profileImage = null;
+
+    if (req.file) {
+      profileImage = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "image" },
+          (err, result) => {
+            if (err) reject(err);
+            else resolve(result.secure_url);
+          }
+        );
+        stream.end(req.file.buffer);
+      })
     }
+
+    const updatedCustomerDetail = await customerAuth_Model.findByIdAndUpdate(
+      _id,
+      {
+        contact,
+        gender,
+        dob,
+        country,
+        state,
+        profileImage
+      }
+    )
+
+    return res.status(200).json(new ApiResponse(200, updatedCustomerDetail, "Profile Update Successfully."));
+
+  }
+  catch (err) {
+    return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+  }
 }
 
 
 const getMyProfile = async (req, res) => {
-    try{
-        const {_id} = req.user;
+  try {
+    const { _id } = req.user;
 
     const userDetail = await customerAuth_Model.findById(_id);
 
-    if(!userDetail){
-        return res.status(404).json(new ApiError(404, "User Profile is not found"));
+    if (!userDetail) {
+      return res.status(404).json(new ApiError(404, "User Profile is not found"));
     }
 
     return res.status(200).json(new ApiResponse(200, userDetail, "Successful"));
-    }
-    catch(err){
-        return res.status(500).json(new ApiError(500, err.message, [{message: err.message, name: err.name}]))
-    }
+  }
+  catch (err) {
+    return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]))
+  }
 }
 
 
 const signupOtp = async (req, res) => {
-    try {
-        const { email, name } = req.body;
+  try {
+    const { email, name } = req.body;
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        const emailData = {
-            sender: {
-                name: process.env.companyName,
-                email: process.env.companyEmail,
-            },
-            to: [{
-                email: email,
-            }],
-            subject: `Your ${process.env.companyName} Signup Verification Code`,
-            htmlContent:`
+    const emailData = {
+      sender: {
+        name: process.env.companyName,
+        email: process.env.companyEmail,
+      },
+      to: [{
+        email: email,
+      }],
+      subject: `Your ${process.env.companyName} Signup Verification Code`,
+      htmlContent: `
 <div style="background: linear-gradient(135deg, #eef2ff, #f8fafc); padding:50px 0; font-family:Arial, sans-serif;">
   
   <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:14px; box-shadow:0 8px 25px rgba(0,0,0,0.08); overflow:hidden;">
@@ -228,39 +229,41 @@ const signupOtp = async (req, res) => {
 
 </div>
 `
-        }
-
-        const result = await brevo(emailData);
-
-        if(!result){
-            return res.status(400).json(new ApiError(400, "Failed to Send Email"));
-        }
-
-        return res.status(200).json(new ApiResponse(200,otp, "Otp send on email is successfully"));
-
     }
-    catch (err) {
-        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+
+    const result = await brevo(emailData);
+
+    if (!result) {
+      return res.status(400).json(new ApiError(400, "Failed to Send Email"));
     }
+
+    return res.status(200).json(new ApiResponse(200, otp, "Otp send on email is successfully"));
+
+  }
+  catch (err) {
+    return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+  }
 }
 
 
 const forgetPasswordOtp = async (req, res) => {
-    try {
-        const { email } = req.user;
+  try {
+    const { email } = req.body;
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const { name } = req.user
 
-        const emailData = {
-            sender: {
-                name: process.env.companyName,
-                email: process.env.companyEmail
-            },
-            to: [{
-                email: email
-            }],
-            subject:"Password Forget Verification Otp",
-            htmlContent:`
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const emailData = {
+      sender: {
+        name: process.env.companyName,
+        email: process.env.companyEmail
+      },
+      to: [{
+        email: email
+      }],
+      subject: "Password Forget Verification Otp",
+      htmlContent: `
 <div style="background: linear-gradient(135deg, #eef2ff, #f8fafc); padding:50px 0; font-family:Arial, sans-serif;">
   
   <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:14px; box-shadow:0 8px 25px rgba(0,0,0,0.08); overflow:hidden;">
@@ -327,19 +330,19 @@ const forgetPasswordOtp = async (req, res) => {
 
 </div>
 `
-        }
-
-        const result = await brevo(emailData);
-
-        if(!result){
-            return res.status(400).json(new ApiError(400, "Failed to send email"));
-        }
-
-        return res.status(200).json(new ApiResponse(200, otp, "Otp send on email is successful"));
     }
-    catch (err) {
-        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+
+    const result = await brevo(emailData);
+
+    if (!result) {
+      return res.status(400).json(new ApiError(400, "Failed to send email"));
     }
+
+    return res.status(200).json(new ApiResponse(200, otp, "Otp send on email is successful"));
+  }
+  catch (err) {
+    return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+  }
 }
 
 

@@ -12,6 +12,8 @@ export const customerPresent = async (req, res, next) => {
             return res.status(401).json(new ApiError(401, "Email is not Found"));
         }
 
+        req.user = isEmail
+
         return next();
     }
     catch(err){
@@ -28,6 +30,8 @@ export const adminPresent = async (req, res, next) => {
         if(!isEmail){
             return res.status(401).json(new ApiError(401, "Email is not Found"));
         }
+
+        req.user = isEmail
 
         return next();
     }

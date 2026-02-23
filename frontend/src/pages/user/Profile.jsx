@@ -36,6 +36,7 @@ export default function Profile() {
           return
         }
 
+        localStorage.setItem("username", apiResponse.data.data.name)
         setUser(apiResponse.data.data)
 
       }
@@ -44,10 +45,10 @@ export default function Profile() {
 
   return (
     <div className="flex bg-gray-50">
-      <Sidebar />
+      <Sidebar/>
 
       <div className="flex-1 md:ml-64 pt-24 px-4 md:px-8 min-h-screen pb-16">
-        <Header />
+        <Header/>
 
         <div className="space-y-8">
 
@@ -74,7 +75,7 @@ export default function Profile() {
               </p>
 
               <p className="text-sm text-gray-500 mt-2">
-                {user.city}, {user.state}
+                {user.state}, {user.country}
               </p>
             </div>
           </div>

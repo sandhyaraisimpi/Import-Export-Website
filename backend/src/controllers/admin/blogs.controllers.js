@@ -5,7 +5,7 @@ import { ApiResponse } from "../../utils/api-response.js";
 
 const addBlog = async (req, res) => {
     try {
-        const { title, description, status } = req.body;
+        const { title, description, status, author } = req.body;
 
         if (!req.files || !title || !description) {
             return res.status(400).json(new ApiError(400, "Title, Description and Image is required for post blog."));
@@ -30,7 +30,8 @@ const addBlog = async (req, res) => {
             title,
             description,
             blogMedia: blogImage,
-            status
+            status,
+            author
         });
 
         if (!blogDetail) {

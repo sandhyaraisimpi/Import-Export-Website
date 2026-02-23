@@ -1,9 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Globe, ShieldCheck } from "lucide-react";
-import { useState } from "react";
-import { postService } from "../../service/axios";
-import { Toaster, toast } from "react-hot-toast";
+import { useState, useEffect } from "react";
+import { postService, getService } from "../../service/axios";
 
 // --- DATA ---
 // Data updated as per the Import-Export project brief
@@ -44,30 +43,25 @@ const legalLinks = [
 
 const Footer = () => {
 
-  const [email, setEmail] = useState();
-
-  const subscribe = async () => {
-    const apiResponse = await postService("/customer/subscribe", { email });
-
-    if (!apiResponse.ok && !apiResponse.fetchMessage) {
-      toast.error("Failed to Subscribe")
-      console.log(apiResponse.message);
-      return
-    }
-
-    if (!apiResponse.ok && apiResponse.fetchMessage) {
-      toast.error(apiResponse.message || "Failed to Subscribe");
-      return
-    }
-
-    toast.success(apiResponse.data.message || "Subscribe Succesful");
-    setEmail("")
-
-  }
+  const [categoryProduct, setcategoryProduct] = useState([])
+      useEffect(() => {
+        ;(
+          async () => {
+            const apiResponse = await getService("/customer/product/category?page=1&limit=4");
+    
+            if(!apiResponse.ok){
+              console.log(apiResponse.message);
+              return
+            }
+    
+            console.log(apiResponse.data.data.categoryList)
+            setcategoryProduct(apiResponse.data.data.categoryList)
+          }
+        )()
+      },[])
 
   return (
     <footer className="bg-[#f4f1ec] px-4 md:px-8 pt-10 pb-6 font-sans">
-       <Toaster />
       <div className="bg-white rounded-3xl shadow-sm border border-neutral-100 px-8 md:px-14 py-12">
         {/* Top Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-neutral-100">
@@ -142,6 +136,20 @@ const Footer = () => {
             <h3 className="text-sm font-semibold text-neutral-900 mb-4">
               Export Categories
             </h3>
+            {/* <ul className="space-y-2 text-sm text-neutral-500">
+              {categoryProduct.map(
+                (item) => (
+                  <li key={item._id}>
+                    <a
+                      href="#"
+                      className="hover:text-black transition-colors duration-300"
+                    >
+                      {item.name}
+                    </a>
+                  </li>
+                ),
+              )}
+            </ul> */}
             <ul className="space-y-2 text-sm text-neutral-500">
               {["Food Products", "Spices", "Agricultural Goods", "Bricks"].map(
                 (item) => (
