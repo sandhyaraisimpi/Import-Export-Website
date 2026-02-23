@@ -1,5 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
+
 import customerAuthRouter from "./routers/customer/auth.route.js";
 import customerInquiryRouter from "./routers/customer/inquiries.route.js";
 import customerProductRouter from "./routers/customer/product.route.js";
@@ -15,7 +16,9 @@ import adminSearchRouter from "./routers/admin/search.route.js";
 import adminPromotionRouter from "./routers/admin/promotion.route.js";
 import adminBlogRouter from "./routers/admin/blogs.route.js";
 
-import dotenv from "dotenv"
+
+import dotenv from "dotenv";
+import cors from "cors";
 
 
 dotenv.config({
@@ -24,13 +27,22 @@ dotenv.config({
 
 const app = express();
 
-app.use(express.json())
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+
 app.use(cookieParser())
+
+app.use(express.json())
 
 app.use("/api/v1/customer/auth", customerAuthRouter)
 app.use("/api/v1/customer/inquiry", customerInquiryRouter);
 app.use("/api/v1/customer/product", customerProductRouter);
-app.use("/api/v1/customer/seach", customerSearchRouter);
+app.use("/api/v1/customer/search", customerSearchRouter);
 app.use("/api/v1/customer/subscribe", customerSubscribeRouter);
 app.use("/api/v1/customer/blog", customerBlogRouter)
 

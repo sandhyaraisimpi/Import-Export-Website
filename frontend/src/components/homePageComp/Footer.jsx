@@ -1,10 +1,73 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Globe, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+import { postService } from "../../service/axios";
+import { Toaster, toast } from "react-hot-toast";
+
+// --- DATA ---
+// Data updated as per the Import-Export project brief
+
+const companyInfo = {
+  name: "VR & SONS",
+  description: "Trusted exporters of high-quality products for global trade.", // [cite: 40]
+  copyright: "© 2026 VR & Sons Import Export. All rights reserved.", // 
+};
+
+const quickLinks = [
+  { id: 1, label: "Home", href: "#" },
+  { id: 2, label: "Products", href: "#" },
+  { id: 3, label: "About Us", href: "#" },
+  { id: 4, label: "Blog", href: "#" },
+  { id: 5, label: "Contact Us", href: "#" },
+];
+
+// Brief ke hisaab se contact details [cite: 62]
+const contactDetails = {
+  phone: "+91 98254 74047", // 
+  email: "support@vrandsons.com", // 
+  address: "Kamrej, Surat, Gujarat, India", // 
+};
+
+const addressLines = [
+  "Kamrej",
+  "Surat, Gujarat",
+  "India"
+];
+
+const legalLinks = [
+  { id: 1, label: "Terms Of Service", href: "#" },
+  { id: 2, label: "Privacy Policy", href: "#" },
+];
+
+// --- COMPONENT ---
 
 const Footer = () => {
+
+  const [email, setEmail] = useState();
+
+  const subscribe = async () => {
+    const apiResponse = await postService("/customer/subscribe", { email });
+
+    if (!apiResponse.ok && !apiResponse.fetchMessage) {
+      toast.error("Failed to Subscribe")
+      console.log(apiResponse.message);
+      return
+    }
+
+    if (!apiResponse.ok && apiResponse.fetchMessage) {
+      toast.error(apiResponse.message || "Failed to Subscribe");
+      return
+    }
+
+    toast.success(apiResponse.data.message || "Subscribe Succesful");
+    setEmail("")
+
+  }
+
   return (
     <footer className="bg-[#f4f1ec] px-4 md:px-8 pt-10 pb-6 font-sans">
+       <Toaster />
       <div className="bg-white rounded-3xl shadow-sm border border-neutral-100 px-8 md:px-14 py-12">
         {/* Top Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-neutral-100">

@@ -1,11 +1,14 @@
 import { useState } from "react";
 import Sidebar from "../../components/user/sidebar";
 import Header from "../../components/user/Header";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getService } from "../../service/axios";
 
 export default function Profile() {
   const [twoFactor, setTwoFactor] = useState(true);
 
-  const [user] = useState({
+  const [user, setUser] = useState({
     name: "Akhil Jha",
     email: "akhil@example.com",
     phone: "+91 9876543210",
@@ -22,6 +25,22 @@ export default function Profile() {
     savedAddresses: 3,
     profileImage: "https://i.pravatar.cc/300?img=12",
   });
+
+  useEffect(() => {
+    ; (
+      async () => {
+        const apiResponse = await getService("/customer/auth/myprofile");
+
+        if (!apiResponse.ok) {
+          console.log(apiResponse.message);
+          return
+        }
+
+        setUser(apiResponse.data.data)
+
+      }
+    )()
+  }, [])
 
   return (
     <div className="flex bg-gray-50">
@@ -70,7 +89,7 @@ export default function Profile() {
 
               <div>
                 <p className="text-gray-500">Phone</p>
-                <p className="font-medium text-gray-800">{user.phone}</p>
+                <p className="font-medium text-gray-800">{user.contact}</p>
               </div>
 
               <div>
@@ -80,12 +99,12 @@ export default function Profile() {
 
               <div>
                 <p className="text-gray-500">Date of Birth</p>
-                <p className="font-medium text-gray-800">{user.dob}</p>
+                <p className="font-medium text-gray-800">{user?.dob || ""}</p>
               </div>
 
               <div>
                 <p className="text-gray-500">Account Type</p>
-                <p className="font-medium text-gray-800">{user.accountType}</p>
+                <p className="font-medium text-gray-800">{user?.accountType||""}</p>
               </div>
 
             </div>
@@ -101,21 +120,21 @@ export default function Profile() {
 
               <div className="bg-gray-50 rounded-xl p-4">
                 <p className="text-2xl font-semibold text-gray-800">
-                  {user.orders}
+                  {user?.orders || ""}
                 </p>
                 <p className="text-sm text-gray-500">Total Orders</p>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-4">
                 <p className="text-2xl font-semibold text-gray-800">
-                  {user.wishlist}
+                  {user?.wishlist || ""}
                 </p>
                 <p className="text-sm text-gray-500">Wishlist Items</p>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-4">
                 <p className="text-2xl font-semibold text-gray-800">
-                  {user.savedAddresses}
+                  {user?.savedAddresses || ""}
                 </p>
                 <p className="text-sm text-gray-500">Saved Addresses</p>
               </div>

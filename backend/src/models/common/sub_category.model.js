@@ -16,6 +16,10 @@ const subCategory_Schema = new Schema({
         required: true,
         unique: true
     },
+    decription:{
+       type: String,
+        required: true, 
+    },
     status:{
         type: String,
         enum:["Available", "Un-Available"],

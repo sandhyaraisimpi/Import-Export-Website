@@ -12,7 +12,7 @@ const addCategory = async (req, res) => {
             return res.status(404).json(new ApiError(404, "Category Image is Required"));
         }
 
-        const { name, skuId, status } = req.body;
+        const { name, skuId, decription, status } = req.body;
 
         const categoryImage = await new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(
@@ -28,6 +28,7 @@ const addCategory = async (req, res) => {
         const categoryDetail = await categoryModel.create({
             name,
             skuId,
+            decription,
             status,
             categoryImage
         })
@@ -111,8 +112,6 @@ const getCategoryItems = async (req, res) => {
 
         const skip = (page - 1) * limit;
 
-        const totalItems = await categoryModel.countDocuments();
-
         const categoryList = await categoryModel
             .find({})
             .skip(skip)
@@ -124,6 +123,8 @@ const getCategoryItems = async (req, res) => {
                 new ApiError(404, "No Item present in Category.")
             );
         }
+
+        const totalItems = await categoryModel.countDocuments();
 
         return res.status(200).json(
             new ApiResponse(200, {

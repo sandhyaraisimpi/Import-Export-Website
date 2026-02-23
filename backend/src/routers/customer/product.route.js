@@ -1,10 +1,12 @@
 import {Router} from "express";
-import {getCategory, getSubCategory, getProduct} from "../../controllers/customer/product.controllers.js";
+import {getCategory,getSubCategoryByCategoryId, getSubCategory, getProductByParentId, getProduct} from "../../controllers/customer/product.controllers.js";
 
 const router = Router();
 
 router.get("/category", getCategory);
+router.get("/subcategorybycategoryId", getSubCategoryByCategoryId);
 router.get("/subcategory", getSubCategory);
-router.get("/category", getProduct);
+router.get("/productbyparentId", getProductByParentId);
+router.get("/product", getProduct);
 
 export default router;
