@@ -1,115 +1,156 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
+import { Phone, Mail, MapPin, Globe, ShieldCheck } from "lucide-react";
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ██████  DATA
-// ─────────────────────────────────────────────────────────────────────────────
+const Footer = () => {
+  return (
+    <footer className="bg-[#f4f1ec] px-4 md:px-8 pt-10 pb-6 font-sans">
+      <div className="bg-white rounded-3xl shadow-sm border border-neutral-100 px-8 md:px-14 py-12">
+        {/* Top Section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-neutral-100">
+          {/* Brand */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-xl font-semibold text-neutral-900">
+              VR & Sons
+            </h2>
+            <p className="text-xs tracking-widest uppercase text-neutral-400 mt-1">
+              Import Export
+            </p>
 
-const FOOTER_DATA = {
-  companyName: "VR & Sons",
-  subtitle: "Import Export",
-  description: "Trusted exporters of Food Products, Spices, Agricultural Goods & Bricks to 13+ countries worldwide.",
-  navLinks: ["Home", "Our Products", "About Us", "Why Choose Us", "Blog", "Contact"],
-  contact: {
-    phone: "+91 98254 74047",
-    email: "support@vrandsons.com",
-    address: "Kamrej, Surat, Gujarat, India",
-  },
-  legal: {
-    copyright: "© 2025 VR & Sons Import Export.",
-    links: [
-      { label: "Terms of Service", href: "#" },
-      { label: "Privacy Policy",   href: "#" },
-    ],
-  },
-};
+            <p className="text-sm text-neutral-500 mt-4 leading-relaxed max-w-xs">
+              Trusted exporters of high-quality Food Products, Spices,
+              Agricultural Goods & Bricks to 13+ countries worldwide.
+            </p>
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────
-
-const Footer = () => (
-  <footer className="bg-[#f0ede8] px-3 md:px-6 pt-4 pb-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-    <div className="bg-white rounded-3xl px-6 md:px-10 py-8 md:py-10">
-
-      {/* Top row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-neutral-100">
-
-        {/* Brand */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-6 h-6 bg-black rounded-lg flex items-center justify-center">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-              </svg>
+            <div className="flex items-center gap-2 mt-4 text-sm text-neutral-600">
+              <Globe size={16} />
+              <span>Serving 13+ Countries Globally</span>
             </div>
-            <div>
-              <p className="text-neutral-900 text-sm font-semibold leading-none">{FOOTER_DATA.companyName}</p>
-              <p className="text-neutral-400 text-[10px] tracking-widest uppercase">{FOOTER_DATA.subtitle}</p>
+
+            <div className="flex items-center gap-2 mt-2 text-sm text-neutral-600">
+              <ShieldCheck size={16} />
+              <span>Compliance & Export Certified</span>
             </div>
-          </div>
-          <p className="text-xs text-neutral-400 leading-relaxed max-w-[200px]">
-            {FOOTER_DATA.description}
+          </motion.div>
+
+          {/* Quick Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-sm font-semibold text-neutral-900 mb-4">
+              Quick Links
+            </h3>
+            <ul className="space-y-2 text-sm text-neutral-500">
+              {[
+                "Home",
+                "Our Products",
+                "About Us",
+                "Why Choose Us",
+                "Blog",
+                "Contact",
+              ].map((item) => (
+                <li key={item}>
+                  <a
+                    href="#"
+                    className="hover:text-black transition-colors duration-300"
+                  >
+                    {item}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Product Categories (SEO Boost) */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-sm font-semibold text-neutral-900 mb-4">
+              Export Categories
+            </h3>
+            <ul className="space-y-2 text-sm text-neutral-500">
+              {["Food Products", "Spices", "Agricultural Goods", "Bricks"].map(
+                (item) => (
+                  <li key={item}>
+                    <a
+                      href="#"
+                      className="hover:text-black transition-colors duration-300"
+                    >
+                      {item}
+                    </a>
+                  </li>
+                ),
+              )}
+            </ul>
+          </motion.div>
+
+          {/* Contact */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-sm font-semibold text-neutral-900 mb-4">
+              Contact Information
+            </h3>
+
+            <div className="space-y-3 text-sm text-neutral-500">
+              <div className="flex items-start gap-2">
+                <Phone size={16} className="mt-1" />
+                <a href="tel:+919825474047" className="hover:text-black">
+                  +91 98254 74047
+                </a>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <Mail size={16} className="mt-1" />
+                <a
+                  href="mailto:support@vrandsons.com"
+                  className="hover:text-black"
+                >
+                  support@vrandsons.com
+                </a>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <MapPin size={16} className="mt-1" />
+                <span>Kamrej, Surat, Gujarat, India</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row items-center justify-between pt-6 gap-4">
+          <p className="text-xs text-neutral-400">
+            © {new Date().getFullYear()} VR & Sons Import Export. All rights
+            reserved.
           </p>
-        </motion.div>
 
-        {/* Quick Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <p className="text-[10px] text-neutral-400 tracking-widest uppercase mb-4">Quick Links</p>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-            {FOOTER_DATA.navLinks.map((link) => (
-              <a key={link} href="#" className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-                {link}
-              </a>
-            ))}
+          <div className="flex gap-6 text-xs text-neutral-400">
+            <a href="#" className="hover:text-neutral-700">
+              Terms of Service
+            </a>
+            <a href="#" className="hover:text-neutral-700">
+              Privacy Policy
+            </a>
           </div>
-        </motion.div>
-
-        {/* Contact */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <p className="text-[10px] text-neutral-400 tracking-widest uppercase mb-4">Contact</p>
-          <div className="flex flex-col gap-2">
-            <a href={`tel:${FOOTER_DATA.contact.phone}`} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-              {FOOTER_DATA.contact.phone}
-            </a>
-            <a href={`mailto:${FOOTER_DATA.contact.email}`} className="text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-              {FOOTER_DATA.contact.email}
-            </a>
-            <p className="text-sm text-neutral-500">{FOOTER_DATA.contact.address}</p>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Bottom bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6">
-        <p className="text-xs text-neutral-400">{FOOTER_DATA.legal.copyright}</p>
-        <div className="flex items-center gap-5">
-          {FOOTER_DATA.legal.links.map((link) => (
-            <a key={link.label} href={link.href} className="text-xs text-neutral-400 hover:text-neutral-700 transition-colors">
-              {link.label}
-            </a>
-          ))}
         </div>
       </div>
-
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 
 export default Footer;
