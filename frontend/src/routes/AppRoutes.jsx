@@ -25,7 +25,7 @@ import AdminSignup from "../pages/Signup";
 function AdminLayout() {
   return (
     <div className="flex">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 p-6">
         <Outlet />
       </div>
@@ -47,7 +47,7 @@ export default function AppRoutes() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
         <Route path="categories" element={<Categories />} />
-        //<Route path="sub-categories" element={<SubCategory />} />
+        {/* //<Route path="sub-categories" element={<SubCategory />} /> */}
 
         <Route path="products" element={<ProductManagement />} />
         <Route path="product-images" element={<ProductImageManager />} />
