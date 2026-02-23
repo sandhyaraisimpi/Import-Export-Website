@@ -1,40 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, MoveRight } from 'lucide-react';
+import { getService } from '../../service/axios';
+import { useNavigate } from 'react-router-dom';
 
 // ─── MOCK DATA ───────────────────────────────────────────────────────────────
 // Replace this with your API response when going live.
 // Shape mirrors: apiResponse.data.data.categoryList
-const MOCK_CATEGORIES = [
-  {
-    _id: "cat_001",
-    name: "Food Products",
-    decription: "Processed & packaged export-quality food products meeting international hygiene and labelling standards.",
-    categoryImage: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=800",
-    markets: "25 Countries",
-  },
-  {
-    _id: "cat_002",
-    name: "Pure Spices",
-    decription: "Authentic farm-sourced spices with verified origin certificates and high global demand.",
-    categoryImage: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=800",
-    markets: "18 Countries",
-  },
-  {
-    _id: "cat_003",
-    name: "Agri Goods",
-    decription: "Bulk agricultural commodities for global supply chains, available year-round with flexible MOQs.",
-    categoryImage: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=800",
-    markets: "30 Countries",
-  },
-  {
-    _id: "cat_004",
-    name: "Industrial",
-    decription: "Industrial raw materials meeting strict export grading standards with ISO documentation.",
-    categoryImage: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=800",
-    markets: "12 Countries",
-  },
-];
+// const MOCK_CATEGORIES = [
+//   {
+//     _id: "cat_001",
+//     name: "Food Products",
+//     decription: "Processed & packaged export-quality food products meeting international hygiene and labelling standards.",
+//     categoryImage: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=800",
+//     markets: "25 Countries",
+//   },
+//   {
+//     _id: "cat_002",
+//     name: "Pure Spices",
+//     decription: "Authentic farm-sourced spices with verified origin certificates and high global demand.",
+//     categoryImage: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&q=80&w=800",
+//     markets: "18 Countries",
+//   },
+//   {
+//     _id: "cat_003",
+//     name: "Agri Goods",
+//     decription: "Bulk agricultural commodities for global supply chains, available year-round with flexible MOQs.",
+//     categoryImage: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=800",
+//     markets: "30 Countries",
+//   },
+//   {
+//     _id: "cat_004",
+//     name: "Industrial",
+//     decription: "Industrial raw materials meeting strict export grading standards with ISO documentation.",
+//     categoryImage: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=800",
+//     markets: "12 Countries",
+//   },
+// ];
 
 // ─── HERO CONFIG ─────────────────────────────────────────────────────────────
 const HERO_IMAGE = "https://images.unsplash.com/photo-1494412651409-8963ce7935a7?auto=format&fit=crop&q=80&w=2000";
@@ -42,18 +44,20 @@ const TYPING_TEXT = "Optimizing the flow of international trade with precision."
 // ─────────────────────────────────────────────────────────────────────────────
 
 const GlobalPortal = () => {
-  const [categories, setCategory] = useState(MOCK_CATEGORIES);
+  const [categories, setCategory] = useState([]);
   const [hoveredId, setHoveredId] = useState(null);
   const [displayText, setDisplayText] = useState('');
 
+  const navigate = useNavigate();
+
   // Swap this block with the real API call when going live:
-  // useEffect(() => {
-  //   (async () => {
-  //     const apiResponse = await getService("/customer/product/category");
-  //     if (!apiResponse.ok) { console.log(apiResponse.message); return; }
-  //     setCategory(apiResponse.data.data.categoryList);
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const apiResponse = await getService("/customer/product/category");
+      if (!apiResponse.ok) { console.log(apiResponse.message); return; }
+      setCategory(apiResponse.data.data.categoryList);
+    })();
+  }, []);
 
   // Typing Effect
   useEffect(() => {
@@ -192,7 +196,7 @@ const GlobalPortal = () => {
                   )}
                 </AnimatePresence>
 
-                <div className="relative z-10 h-full p-8 flex flex-col justify-between">
+                <div className="relative z-10 h-full p-8 flex flex-col justify-between" onClick={() => navigate(`/CategoryProducts/${cat._id}`)}>
                   <div>
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-all duration-500 ${
                       hoveredId === cat._id ? 'bg-[#C36A4D] text-white rotate-12 scale-110' : 'bg-slate-100 text-slate-500'
@@ -223,7 +227,7 @@ const GlobalPortal = () => {
                     <div className={`flex justify-between text-[10px] font-black uppercase tracking-widest mb-4 transition-colors ${
                       hoveredId === cat._id ? 'text-white/60' : 'text-slate-400'
                     }`}>
-                      <span>{cat.markets}</span>
+                      <span>13+ Countries</span>
                     </div>
 
                     <div className={`flex justify-between items-center pt-4 border-t transition-all duration-300 ${

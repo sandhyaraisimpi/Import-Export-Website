@@ -85,7 +85,7 @@ function App() {
       {/* Category product listing */}
       {/* Valid IDs: food | spices | agri | industrial */}
       <Route path="/MainCategory" element={<MainCategory />} />
-      <Route path="/CategoryProducts" element={<CategoryProducts />} />
+      <Route path="/CategoryProducts/:id" element={<CategoryProducts />} />
       <Route path="/products" element={<PrductDetail />} /> 
 
       {/* Future product detail page */}

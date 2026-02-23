@@ -3,6 +3,7 @@ import subcategoryModel from "../../models/common/sub_category.model.js";
 import productModel from "../../models/common/product.model.js";
 import { ApiError } from "../../utils/api-error.js";
 import { ApiResponse } from "../../utils/api-response.js";
+import mongoose from 'mongoose';
 
 const getCategory = async (req, res) => {
     try {
@@ -12,7 +13,7 @@ const getCategory = async (req, res) => {
         const skip = (page - 1) * limit;
 
         const categoryList = await categoryModel
-            .find({ status: "Available" })
+            .find({status : "Available"})
             .skip(skip)
             .limit(limit)
             .sort({ createdAt: -1 });
@@ -31,6 +32,34 @@ const getCategory = async (req, res) => {
                 totalPage: Math.ceil(totalItems / limit),
                 categoryList
             },
+            "Successful"
+        ))
+
+
+    } catch (err) {
+        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+    }
+}
+
+const getCategoryById = async (req, res) => {
+    try {
+
+        const { categoryId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+            return res.status(400).json({ message: "Invalid Category ID" });
+        }
+
+        const category = await categoryModel.findById(
+            categoryId
+        );
+
+        if (!category) {
+            return res.status(404).json(new ApiError(404, "No Category Found."));
+        }
+
+        return res.status(200).json(new ApiResponse(
+            200,
+            category,
             "Successful"
         ))
 
@@ -231,4 +260,4 @@ const getProduct = async (req, res) => {
     }
 }
 
-export { getCategory, getSubCategoryByCategoryId, getSubCategory, getProductByParentId, getProduct };
+export { getCategory, getCategoryById, getSubCategoryByCategoryId, getSubCategory, getProductByParentId, getProduct };

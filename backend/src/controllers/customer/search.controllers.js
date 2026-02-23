@@ -79,7 +79,6 @@ const search = async (req, res) => {
     }
 };
 
-
 const getSearchSuggestions = async (req, res) => {
     try {
         const { keyword } = req.query;
