@@ -17,7 +17,8 @@ import GeneralSettings from "../pages/admin/GeneralSettings";
 import ProfileSettings from "../pages/admin/ProfileSettings";
 import NotificationSettings from "../pages/admin/NotificationSettings";
 import WebsiteSettings from "../pages/admin/WebsiteSettings";
-
+import Blogs from "../pages/admin/Blogs";
+import Promotion from "../pages/admin/Promotion";
 // User Dashboard 
 import UserLayout from "../layout/UserLayout";
 import UserDashboard from "../pages/user/Dashboard";
@@ -45,6 +46,8 @@ export default function AppRoutes() {
       <Route path="/settings" element={<Settings />} />
       <Route path="/settings/general" element={<GeneralSettings />} />
       <Route path="/settings/profile" element={<ProfileSettings />} />
+      <Route path="/promotion/blogs" element={<Blogs />} />
+      <Route path="/promotion/managPromotion" element={<Promotion />} />
       <Route
         path="/settings/notifications"
         element={<NotificationSettings />}
