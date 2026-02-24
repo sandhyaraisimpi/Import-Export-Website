@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import blogs from "../../data/blogData";
 import Sidebar from "../../components/blog/Sidebar";
 import { getService } from "../../service/axios";
+import Navbar from "../../components/homePageComp/Navbar";
+import Footer from "../../components/homePageComp/Footer";
 
 export default function Blog() {
 
@@ -43,6 +45,7 @@ export default function Blog() {
 
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
+      <Navbar/>
 
       {/* HERO SECTION */}
       <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden">
@@ -174,6 +177,7 @@ export default function Blog() {
           <Sidebar />
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

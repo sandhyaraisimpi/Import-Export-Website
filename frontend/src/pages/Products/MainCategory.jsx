@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, MoveRight } from 'lucide-react';
 import { getService } from '../../service/axios';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/homePageComp/Navbar';
+import Footer from '../../components/homePageComp/Footer';
 
 // ─── MOCK DATA ───────────────────────────────────────────────────────────────
 // Replace this with your API response when going live.
@@ -96,7 +98,7 @@ const GlobalPortal = () => {
 
   return (
     <div className="bg-[#FAF9F6] text-[#1A1A1A] font-sans overflow-x-hidden">
-
+         <Navbar/>
       {/* HERO SECTION */}
       <section className="relative h-[90vh] flex items-center justify-center px-6 text-center overflow-hidden bg-black">
         <div className="absolute inset-0">
@@ -243,6 +245,7 @@ const GlobalPortal = () => {
           </motion.div>
         </div>
       </section>
+      <Footer/>
     </div>
   );
 };

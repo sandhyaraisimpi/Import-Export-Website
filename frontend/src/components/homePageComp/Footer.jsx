@@ -1,71 +1,61 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Globe, ShieldCheck } from "lucide-react";
-import { useState, useEffect } from "react";
-import { postService, getService } from "../../service/axios";
 
-// --- DATA ---
-// Data updated as per the Import-Export project brief
+// ═══════════════════════════════════════════════════════════════
+//  DATA & CONFIGURATION 
+//  (Update anything here, and the footer will automatically change)
+// ═══════════════════════════════════════════════════════════════
 
-const companyInfo = {
-  name: "VR & SONS",
-  description: "Trusted exporters of high-quality products for global trade.", // [cite: 40]
-  copyright: "© 2026 VR & Sons Import Export. All rights reserved.", // 
+const COMPANY_DATA = {
+  name: "VR & Sons",
+  tagline: "Import Export",
+  description: "Trusted exporters of high-quality Food Products, Spices, Agricultural Goods & Bricks to 13+ countries worldwide.",
+  highlights: [
+    { icon: Globe, text: "Serving 13+ Countries Globally" },
+    { icon: ShieldCheck, text: "Compliance & Export Certified" },
+  ],
+  contact: {
+    phone: "+91 98254 74047",
+    email: "support@vrandsons.com",
+    address: "Kamrej, Surat, Gujarat, India",
+  }
 };
 
-const quickLinks = [
-  { id: 1, label: "Home", href: "#" },
-  { id: 2, label: "Products", href: "#" },
-  { id: 3, label: "About Us", href: "#" },
-  { id: 4, label: "Blog", href: "#" },
-  { id: 5, label: "Contact Us", href: "#" },
-];
-
-// Brief ke hisaab se contact details [cite: 62]
-const contactDetails = {
-  phone: "+91 98254 74047", // 
-  email: "support@vrandsons.com", // 
-  address: "Kamrej, Surat, Gujarat, India", // 
+const FOOTER_LINKS = {
+  quickLinks: [
+    { label: "Home", href: "/" },
+    { label: "Our Products", href: "/MainCategory" },
+    { label: "About Us", href: "/AboutUs" },
+    // { label: "Why Choose Us", href: "/#why-choose-us" },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/ContactUs" },
+  ],
+  categories: [
+    { label: "Food Products", href: "/MainCategory" },
+    { label: "Spices", href: "/MainCategory" },
+    { label: "Agricultural Goods", href: "/MainCategory" },
+    { label: "Bricks", href: "/MainCategory" },
+  ],
+  legal: [
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Privacy Policy", href: "/privacy" },
+  ]
 };
 
-const addressLines = [
-  "Kamrej",
-  "Surat, Gujarat",
-  "India"
-];
-
-const legalLinks = [
-  { id: 1, label: "Terms Of Service", href: "#" },
-  { id: 2, label: "Privacy Policy", href: "#" },
-];
-
-// --- COMPONENT ---
+// ═══════════════════════════════════════════════════════════════
+//  COMPONENT
+// ═══════════════════════════════════════════════════════════════
 
 const Footer = () => {
-
-  const [categoryProduct, setcategoryProduct] = useState([])
-      useEffect(() => {
-        ;(
-          async () => {
-            const apiResponse = await getService("/customer/product/category?page=1&limit=4");
-    
-            if(!apiResponse.ok){
-              console.log(apiResponse.message);
-              return
-            }
-    
-            console.log(apiResponse.data.data.categoryList)
-            setcategoryProduct(apiResponse.data.data.categoryList)
-          }
-        )()
-      },[])
-
   return (
     <footer className="bg-[#f4f1ec] px-4 md:px-8 pt-10 pb-6 font-sans">
       <div className="bg-white rounded-3xl shadow-sm border border-neutral-100 px-8 md:px-14 py-12">
-        {/* Top Section */}
+        
+        {/* ── Top Section ── */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-neutral-100">
-          {/* Brand */}
+          
+          {/* 1. Brand & Description */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -73,29 +63,28 @@ const Footer = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-xl font-semibold text-neutral-900">
-              VR & Sons
+              {COMPANY_DATA.name}
             </h2>
             <p className="text-xs tracking-widest uppercase text-neutral-400 mt-1">
-              Import Export
+              {COMPANY_DATA.tagline}
             </p>
-
             <p className="text-sm text-neutral-500 mt-4 leading-relaxed max-w-xs">
-              Trusted exporters of high-quality Food Products, Spices,
-              Agricultural Goods & Bricks to 13+ countries worldwide.
+              {COMPANY_DATA.description}
             </p>
 
-            <div className="flex items-center gap-2 mt-4 text-sm text-neutral-600">
-              <Globe size={16} />
-              <span>Serving 13+ Countries Globally</span>
-            </div>
-
-            <div className="flex items-center gap-2 mt-2 text-sm text-neutral-600">
-              <ShieldCheck size={16} />
-              <span>Compliance & Export Certified</span>
-            </div>
+            {/* FIX: Extracted highlight.icon to a capitalized variable 'Icon' */}
+            {COMPANY_DATA.highlights.map((highlight, index) => {
+              const Icon = highlight.icon;
+              return (
+                <div key={index} className="flex items-center gap-2 mt-4 text-sm text-neutral-600">
+                  <Icon size={16} />
+                  <span>{highlight.text}</span>
+                </div>
+              );
+            })}
           </motion.div>
 
-          {/* Quick Links */}
+          {/* 2. Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -106,27 +95,20 @@ const Footer = () => {
               Quick Links
             </h3>
             <ul className="space-y-2 text-sm text-neutral-500">
-              {[
-                "Home",
-                "Our Products",
-                "About Us",
-                "Why Choose Us",
-                "Blog",
-                "Contact",
-              ].map((item) => (
-                <li key={item}>
+              {FOOTER_LINKS.quickLinks.map((link) => (
+                <li key={link.label}>
                   <a
-                    href="#"
+                    href={link.href}
                     className="hover:text-black transition-colors duration-300"
                   >
-                    {item}
+                    {link.label}
                   </a>
                 </li>
               ))}
             </ul>
           </motion.div>
 
-          {/* Product Categories (SEO Boost) */}
+          {/* 3. Export Categories */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -136,37 +118,21 @@ const Footer = () => {
             <h3 className="text-sm font-semibold text-neutral-900 mb-4">
               Export Categories
             </h3>
-            {/* <ul className="space-y-2 text-sm text-neutral-500">
-              {categoryProduct.map(
-                (item) => (
-                  <li key={item._id}>
-                    <a
-                      href="#"
-                      className="hover:text-black transition-colors duration-300"
-                    >
-                      {item.name}
-                    </a>
-                  </li>
-                ),
-              )}
-            </ul> */}
             <ul className="space-y-2 text-sm text-neutral-500">
-              {["Food Products", "Spices", "Agricultural Goods", "Bricks"].map(
-                (item) => (
-                  <li key={item}>
-                    <a
-                      href="#"
-                      className="hover:text-black transition-colors duration-300"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ),
-              )}
+              {FOOTER_LINKS.categories.map((category) => (
+                <li key={category.label}>
+                  <a
+                    href={category.href}
+                    className="hover:text-black transition-colors duration-300"
+                  >
+                    {category.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </motion.div>
 
-          {/* Contact */}
+          {/* 4. Contact Information */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -176,49 +142,43 @@ const Footer = () => {
             <h3 className="text-sm font-semibold text-neutral-900 mb-4">
               Contact Information
             </h3>
-
             <div className="space-y-3 text-sm text-neutral-500">
-              <div className="flex items-start gap-2">
-                <Phone size={16} className="mt-1" />
-                <a href="tel:+919825474047" className="hover:text-black">
-                  +91 98254 74047
+              <div className="flex items-start gap-2 group">
+                <Phone size={16} className="mt-1 flex-shrink-0" />
+                <a href={`tel:${COMPANY_DATA.contact.phone.replace(/[^+\d]/g, '')}`} className="group-hover:text-black transition-colors">
+                  {COMPANY_DATA.contact.phone}
                 </a>
               </div>
-
-              <div className="flex items-start gap-2">
-                <Mail size={16} className="mt-1" />
-                <a
-                  href="mailto:support@vrandsons.com"
-                  className="hover:text-black"
-                >
-                  support@vrandsons.com
+              <div className="flex items-start gap-2 group">
+                <Mail size={16} className="mt-1 flex-shrink-0" />
+                <a href={`mailto:${COMPANY_DATA.contact.email}`} className="group-hover:text-black transition-colors">
+                  {COMPANY_DATA.contact.email}
                 </a>
               </div>
-
               <div className="flex items-start gap-2">
-                <MapPin size={16} className="mt-1" />
-                <span>Kamrej, Surat, Gujarat, India</span>
+                <MapPin size={16} className="mt-1 flex-shrink-0" />
+                <span className="leading-relaxed">{COMPANY_DATA.contact.address}</span>
               </div>
             </div>
           </motion.div>
+
         </div>
 
-        {/* Bottom Bar */}
+        {/* ── Bottom Bar ── */}
         <div className="flex flex-col md:flex-row items-center justify-between pt-6 gap-4">
           <p className="text-xs text-neutral-400">
-            © {new Date().getFullYear()} VR & Sons Import Export. All rights
-            reserved.
+            © {new Date().getFullYear()} {COMPANY_DATA.name} {COMPANY_DATA.tagline}. All rights reserved.
           </p>
 
           <div className="flex gap-6 text-xs text-neutral-400">
-            <a href="#" className="hover:text-neutral-700">
-              Terms of Service
-            </a>
-            <a href="#" className="hover:text-neutral-700">
-              Privacy Policy
-            </a>
+            {FOOTER_LINKS.legal.map((link) => (
+              <a key={link.label} href={link.href} className="hover:text-neutral-700 transition-colors">
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
+        
       </div>
     </footer>
   );
