@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from 'react-router-dom';
+
 
 const navLinks = [
-  { id: 1, label: "Home", href: "#" },
-  { id: 2, label: "About Us", href: "#" },
+  { id: 1, label: "Home", href: "/" },
+  { id: 2, label: "About Us", href: "AboutUs" },
   { id: 3, label: "Category", href: "/MainCategory" },
-  { id: 4, label: "Services", href: "#" },
-  { id: 5, label: "Blog", href: "#" },
+  { id: 4, label: "Contact Us", href: "/ContactUs" },
+  { id: 5, label: "Blog", href: "/blog" },
 ];
 
 const Navbar = () => {
@@ -63,9 +65,12 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
 
             {/* CTA button — desktop only */}
-            <button className="hidden md:inline-flex px-5 py-2 rounded-full bg-black text-white text-sm font-medium hover:scale-105 transition-all duration-300 shadow-md">
-              Get Started
-            </button>
+           <a 
+  href="/login"
+  className="hidden md:inline-flex px-5 py-2 rounded-full bg-black text-white text-sm font-medium hover:scale-105 transition-all duration-300 shadow-md"
+>
+  Get Started
+</a>
 
             {/* Hamburger — mobile only */}
             <button
@@ -113,13 +118,17 @@ const Navbar = () => {
 
             {/* Get Started button — mobile menu */}
             <li className="mt-2">
-              <button
-                onClick={() => setMenuOpen(false)}
-                className="w-full px-4 py-2.5 rounded-xl bg-black text-white text-sm font-semibold hover:bg-neutral-800 transition"
-              >
-                Get Started
-              </button>
+             
+<Link
+  to="/login"
+  onClick={() => setMenuOpen(false)}
+  className="block text-center w-full px-4 py-2.5 rounded-xl bg-black text-white text-sm font-semibold hover:bg-neutral-800 transition"
+>
+  Get Started
+</Link>
+              
             </li>
+            
           </ul>
         </div>
 
