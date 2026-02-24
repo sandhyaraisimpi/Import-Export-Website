@@ -2,11 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Shield, Truck, Handshake, Package, Globe, FileCheck,
-  ArrowUpRight, ChevronRight, MapPin, Mail, Phone
+  ArrowUpRight
 } from "lucide-react";
 
+import Navbar from "../../components/homePageComp/Navbar";
+import Footer from "../../components/homePageComp/Footer";
+
 // ═══════════════════════════════════════════════════════════════
-//  CONTENT DATA — Update as needed
+//  CONTENT DATA
 // ═══════════════════════════════════════════════════════════════
 
 const COMPANY = {
@@ -66,29 +69,6 @@ const WHY_CHOOSE = [
   },
 ];
 
-const TEAM = [
-  {
-    name: "Vishal Rathod",
-    role: "Founder & Director",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80",
-  },
-  {
-    name: "Rahul Mehta",
-    role: "Export Operations Head",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-  },
-  {
-    name: "Priya Shah",
-    role: "Quality Assurance Lead",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80",
-  },
-  {
-    name: "Amit Patel",
-    role: "Logistics & Supply Chain",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80",
-  },
-];
-
 // ═══════════════════════════════════════════════════════════════
 
 // ── Animated Counter ──────────────────────────────────────────
@@ -139,7 +119,10 @@ export default function AboutUs() {
   const [activeTab, setActiveTab] = useState("mission");
 
   return (
-    <div className="bg-[#080808] text-white font-sans overflow-x-hidden">
+    <div className="bg-white text-neutral-900 font-sans overflow-x-hidden min-h-screen">
+      
+      {/* ── HEADER ──────────────────────────────────────────────── */}
+      <Navbar />
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="relative h-[90vh] flex flex-col justify-end px-6 md:px-20 pb-20 overflow-hidden">
@@ -148,12 +131,11 @@ export default function AboutUs() {
             src={COMPANY.heroImage}
             alt="VR & Sons"
             className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.18) saturate(0.5)" }}
+            style={{ filter: "brightness(0.3) saturate(0.7)" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#080808]/80 to-transparent" />
-          {/* Diagonal accent line */}
-          <div className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-transparent via-[#C36A4D]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
+          <div className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-transparent via-[#C36A4D]/50 to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto w-full">
@@ -170,7 +152,7 @@ export default function AboutUs() {
               {COMPANY.name}<br />
               <span className="text-[#C36A4D]">{COMPANY.tagline}</span>
             </h1>
-            <p className="text-white/40 text-lg max-w-xl border-l-2 border-[#C36A4D]/30 pl-6 leading-relaxed">
+            <p className="text-white/80 text-lg max-w-xl border-l-2 border-[#C36A4D]/50 pl-6 leading-relaxed">
               Trusted exporters of high-quality products for global trade.
             </p>
           </motion.div>
@@ -183,20 +165,20 @@ export default function AboutUs() {
           transition={{ delay: 1.2 }}
           className="absolute bottom-8 right-8 flex flex-col items-center gap-2"
         >
-          <div className="w-px h-16 bg-gradient-to-b from-transparent to-[#C36A4D]/40" />
-          <span className="text-[8px] font-black uppercase tracking-[0.4em] text-white/20 rotate-90 mt-2">Scroll</span>
+          <div className="w-px h-16 bg-gradient-to-b from-transparent to-[#C36A4D]/80" />
+          <span className="text-[8px] font-black uppercase tracking-[0.4em] text-white/50 rotate-90 mt-2">Scroll</span>
         </motion.div>
       </section>
 
       {/* ── WHO WE ARE ─────────────────────────────────────────── */}
-      <section className="py-28 px-6 md:px-20">
+      <section className="py-28 px-6 md:px-20 bg-white">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 
           {/* Left text */}
           <div>
             <FadeUp>
               <SectionLabel>Who We Are</SectionLabel>
-              <h2 className="text-white font-black uppercase tracking-tighter leading-[0.85] mb-10"
+              <h2 className="text-neutral-900 font-black uppercase tracking-tighter leading-[0.85] mb-10"
                 style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}>
                 Bridging Trusted<br />
                 <span className="text-[#C36A4D]">Manufacturers</span><br />
@@ -207,16 +189,16 @@ export default function AboutUs() {
             <div className="space-y-5">
               {ABOUT_PARAGRAPHS.map((para, i) => (
                 <FadeUp key={i} delay={i * 0.1}>
-                  <p className="text-white/45 text-[15px] leading-[1.85]">{para}</p>
+                  <p className="text-neutral-600 font-medium text-[15px] leading-[1.85]">{para}</p>
                 </FadeUp>
               ))}
             </div>
 
             <FadeUp delay={0.3} className="mt-10">
-              <button className="flex items-center gap-3 px-7 py-4 rounded-2xl bg-[#C36A4D] text-white text-[11px] font-black uppercase tracking-[0.35em] hover:bg-[#d4785a] transition-all duration-300 hover:shadow-[0_15px_40px_rgba(195,106,77,0.35)] group">
+              <a href="/MainCategory" className="inline-flex items-center gap-3 px-7 py-4 rounded-2xl bg-[#C36A4D] text-white text-[11px] font-black uppercase tracking-[0.35em] hover:bg-[#d4785a] transition-all duration-300 hover:shadow-[0_15px_40px_rgba(195,106,77,0.35)] group">
                 Explore Products
                 <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
+              </a>
             </FadeUp>
           </div>
 
@@ -224,18 +206,18 @@ export default function AboutUs() {
           <FadeUp delay={0.15}>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4">
-                <div className="h-64 rounded-2xl overflow-hidden">
+                <div className="h-64 rounded-2xl overflow-hidden shadow-sm border border-neutral-100">
                   <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=600&q=80" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="" />
                 </div>
-                <div className="h-40 rounded-2xl overflow-hidden">
+                <div className="h-40 rounded-2xl overflow-hidden shadow-sm border border-neutral-100">
                   <img src="https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=600&q=80" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="" />
                 </div>
               </div>
               <div className="space-y-4 mt-8">
-                <div className="h-40 rounded-2xl overflow-hidden">
+                <div className="h-40 rounded-2xl overflow-hidden shadow-sm border border-neutral-100">
                   <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=600&q=80" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="" />
                 </div>
-                <div className="h-64 rounded-2xl overflow-hidden">
+                <div className="h-64 rounded-2xl overflow-hidden shadow-sm border border-neutral-100">
                   <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600&q=80" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="" />
                 </div>
               </div>
@@ -245,16 +227,16 @@ export default function AboutUs() {
       </section>
 
       {/* ── STATS STRIP ────────────────────────────────────────── */}
-      <section className="py-6 border-y border-white/5">
+      <section className="py-6 border-y border-neutral-200 bg-neutral-50/50">
         <div className="max-w-7xl mx-auto px-6 md:px-20">
-          <div className="grid grid-cols-3 divide-x divide-white/8">
+          <div className="grid grid-cols-3 divide-x divide-neutral-200">
             {STATS.map((stat, i) => (
               <FadeUp key={i} delay={i * 0.12} className="px-8 py-12 text-center">
-                <p className="font-black text-white leading-none mb-3"
+                <p className="font-black text-neutral-900 leading-none mb-3"
                   style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)" }}>
                   <Counter value={stat.value} suffix={stat.suffix} />
                 </p>
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/25">{stat.label}</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-500">{stat.label}</p>
               </FadeUp>
             ))}
           </div>
@@ -262,15 +244,11 @@ export default function AboutUs() {
       </section>
 
       {/* ── MISSION & VISION ───────────────────────────────────── */}
-      <section className="py-28 px-6 md:px-20 relative overflow-hidden">
-        {/* BG texture */}
-        <div className="absolute inset-0 opacity-[0.025] pointer-events-none"
-          style={{ backgroundImage: "url('https://www.transparenttextures.com/patterns/carbon-fibre.png')" }} />
-
+      <section className="py-28 px-6 md:px-20 relative overflow-hidden bg-white">
         <div className="max-w-7xl mx-auto relative z-10">
           <FadeUp className="text-center mb-16">
             <SectionLabel>Our Direction</SectionLabel>
-            <h2 className="text-white font-black uppercase tracking-tighter"
+            <h2 className="text-neutral-900 font-black uppercase tracking-tighter"
               style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}>
               Mission &amp; Vision
             </h2>
@@ -278,7 +256,7 @@ export default function AboutUs() {
 
           {/* Tab toggle */}
           <FadeUp delay={0.1} className="flex justify-center mb-12">
-            <div className="flex bg-white/5 border border-white/8 p-1 rounded-full gap-1">
+            <div className="flex bg-neutral-50 border border-neutral-200 p-1 rounded-full gap-1 shadow-sm">
               {["mission", "vision"].map((tab) => (
                 <button
                   key={tab}
@@ -286,7 +264,7 @@ export default function AboutUs() {
                   className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.35em] transition-all duration-300
                     ${activeTab === tab
                       ? "bg-[#C36A4D] text-white shadow-[0_4px_20px_rgba(195,106,77,0.35)]"
-                      : "text-white/30 hover:text-white/60"
+                      : "text-neutral-500 hover:text-neutral-900"
                     }`}
                 >
                   Our {tab}
@@ -304,7 +282,7 @@ export default function AboutUs() {
               transition={{ duration: 0.45 }}
               className="max-w-3xl mx-auto text-center"
             >
-              <p className="text-white/50 text-xl leading-[1.9] font-light">
+              <p className="text-neutral-600 text-xl leading-[1.9] font-medium">
                 {activeTab === "mission" ? MISSION : VISION}
               </p>
             </motion.div>
@@ -313,11 +291,11 @@ export default function AboutUs() {
       </section>
 
       {/* ── WHY CHOOSE US ──────────────────────────────────────── */}
-      <section className="py-28 px-6 md:px-20 border-t border-white/5">
+      <section className="py-28 px-6 md:px-20 border-t border-neutral-200 bg-neutral-50/30">
         <div className="max-w-7xl mx-auto">
           <FadeUp className="mb-16">
             <SectionLabel>Why Choose Us</SectionLabel>
-            <h2 className="text-white font-black uppercase tracking-tighter"
+            <h2 className="text-neutral-900 font-black uppercase tracking-tighter"
               style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}>
               Built on <span className="text-[#C36A4D]">Excellence</span>
             </h2>
@@ -326,8 +304,8 @@ export default function AboutUs() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {WHY_CHOOSE.map((item, i) => (
               <FadeUp key={i} delay={i * 0.07}>
-                <div className="group relative bg-white/3 border border-white/6 rounded-3xl p-8
-                  hover:border-[#C36A4D]/30 hover:bg-white/5 hover:shadow-[0_20px_60px_-20px_rgba(195,106,77,0.15)]
+                <div className="group relative bg-white border border-neutral-200 shadow-sm rounded-3xl p-8
+                  hover:border-[#C36A4D]/30 hover:shadow-[0_20px_60px_-20px_rgba(195,106,77,0.15)]
                   transition-all duration-500 cursor-default h-full">
 
                   {/* Icon */}
@@ -336,14 +314,14 @@ export default function AboutUs() {
                     <item.icon size={20} className="text-[#C36A4D] group-hover:text-white transition-colors" />
                   </div>
 
-                  <h3 className="text-white text-xl font-black uppercase tracking-tight mb-3
+                  <h3 className="text-neutral-900 text-xl font-black uppercase tracking-tight mb-3
                     group-hover:text-[#C36A4D] transition-colors duration-300">
                     {item.title}
                   </h3>
-                  <p className="text-white/35 text-sm leading-relaxed">{item.desc}</p>
+                  <p className="text-neutral-600 font-medium text-sm leading-relaxed">{item.desc}</p>
 
                   {/* Bottom accent */}
-                  <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#C36A4D]/20 to-transparent
+                  <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#C36A4D]/40 to-transparent
                     opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
               </FadeUp>
@@ -352,67 +330,30 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* ── TEAM ───────────────────────────────────────────────── */}
-      <section className="py-28 px-6 md:px-20 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <FadeUp className="mb-16">
-            <SectionLabel>Our People</SectionLabel>
-            <h2 className="text-white font-black uppercase tracking-tighter"
-              style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}>
-              Meet The <span className="text-[#C36A4D]">Team</span>
-            </h2>
-          </FadeUp>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {TEAM.map((member, i) => (
-              <FadeUp key={i} delay={i * 0.09}>
-                <div className="group cursor-default">
-                  <div className="relative h-72 rounded-3xl overflow-hidden mb-5">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/60 to-transparent" />
-                  </div>
-                  <h3 className="text-white font-black uppercase tracking-tight text-lg group-hover:text-[#C36A4D] transition-colors">
-                    {member.name}
-                  </h3>
-                  <p className="text-white/30 text-xs font-mono tracking-widest mt-1">{member.role}</p>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── CTA BANNER ─────────────────────────────────────────── */}
-      <section className="py-28 px-6 md:px-20 border-t border-white/5">
+      <section className="py-28 px-6 md:px-20 border-t border-neutral-200 bg-white">
         <div className="max-w-7xl mx-auto">
           <FadeUp>
-            <div className="relative bg-[#C36A4D]/8 border border-[#C36A4D]/20 rounded-3xl p-14 md:p-20 text-center overflow-hidden">
-              {/* Glow */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#C36A4D]/10 rounded-full blur-3xl pointer-events-none" />
-
+            <div className="relative bg-neutral-50 border border-neutral-200 shadow-sm rounded-3xl p-14 md:p-20 text-center overflow-hidden">
               <div className="relative z-10">
-                <p className="text-[#C36A4D] text-[9px] font-black uppercase tracking-[0.5em] mb-5">Start a Conversation</p>
-                <h2 className="text-white font-black uppercase tracking-tighter leading-[0.88] mb-8"
+                <p className="text-[#C36A4D] text-[9px] font-black uppercase tracking-[0.5em] mb-5">Join Our Network</p>
+                <h2 className="text-neutral-900 font-black uppercase tracking-tighter leading-[0.88] mb-8"
                   style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}>
                   Ready to Trade<br />With the World?
                 </h2>
-                <p className="text-white/35 text-base max-w-lg mx-auto mb-10 leading-relaxed">
-                  Send us your requirements and we'll connect you with the right products from our catalog.
+                <p className="text-neutral-600 font-medium text-base max-w-lg mx-auto mb-10 leading-relaxed">
+                  Create an account to browse our comprehensive product catalog and request customized quotes directly from your dashboard.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button className="px-8 py-4 rounded-2xl bg-[#C36A4D] text-white text-[11px] font-black uppercase tracking-[0.35em]
-                    hover:bg-[#d4785a] transition-all duration-300 hover:shadow-[0_15px_40px_rgba(195,106,77,0.4)]">
-                    Send an Inquiry
-                  </button>
-                  <button className="px-8 py-4 rounded-2xl bg-white/5 border border-white/10 text-white/50 text-[11px] font-black uppercase tracking-[0.35em]
-                    hover:bg-white/10 hover:text-white transition-all duration-300">
+                  <a href="/login" className="px-8 py-4 rounded-2xl bg-black text-white text-[11px] font-black uppercase tracking-[0.35em]
+                    hover:bg-neutral-800 transition-all duration-300 shadow-md">
+                    Login / Register
+                  </a>
+                  <a href="/MainCategory" className="px-8 py-4 rounded-2xl bg-white border border-neutral-200 text-neutral-700 text-[11px] font-black uppercase tracking-[0.35em]
+                    hover:bg-neutral-50 hover:text-neutral-900 transition-all duration-300 shadow-sm">
                     Browse Products
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
@@ -420,76 +361,8 @@ export default function AboutUs() {
         </div>
       </section>
 
-      {/* ── FOOTER ─────────────────────────────────────────────── */}
-      <footer className="border-t border-white/5 py-16 px-6 md:px-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-
-          {/* Logo + tagline */}
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-9 h-9 bg-[#C36A4D] rounded-full flex items-center justify-center text-white font-black text-sm">
-                V
-              </div>
-              <span className="text-white font-black uppercase tracking-widest text-lg">VR & Sons</span>
-            </div>
-            <p className="text-white/30 text-sm leading-relaxed max-w-xs">
-              Trusted global exporters committed to quality, reliability, and long-term trade partnerships.
-            </p>
-
-            {/* Contact details */}
-            <div className="mt-8 space-y-3">
-              <div className="flex items-center gap-3 text-white/35 text-sm">
-                <Phone size={13} className="text-[#C36A4D]" /> 98254 74047
-              </div>
-              <div className="flex items-center gap-3 text-white/35 text-sm">
-                <Mail size={13} className="text-[#C36A4D]" /> support@vrandsons.com
-              </div>
-              <div className="flex items-start gap-3 text-white/35 text-sm">
-                <MapPin size={13} className="text-[#C36A4D] mt-0.5 flex-shrink-0" /> Kamrej, Surat, Gujarat, India
-              </div>
-            </div>
-          </div>
-
-          {/* Quick links */}
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/25 mb-6">Quick Links</p>
-            <ul className="space-y-3">
-              {["Home", "About Us", "Products", "Blog", "Contact"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="flex items-center gap-2 text-white/35 text-sm hover:text-[#C36A4D] transition-colors group">
-                    <ChevronRight size={10} className="group-hover:translate-x-1 transition-transform" />
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/25 mb-6">Categories</p>
-            <ul className="space-y-3">
-              {["Food Products", "Spices", "Agricultural Goods", "Bricks"].map((cat) => (
-                <li key={cat}>
-                  <a href="#" className="flex items-center gap-2 text-white/35 text-sm hover:text-[#C36A4D] transition-colors group">
-                    <ChevronRight size={10} className="group-hover:translate-x-1 transition-transform" />
-                    {cat}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-white/20 text-xs font-mono">
-            © {new Date().getFullYear()} VR & Sons Import Export. All rights reserved.
-          </p>
-          <p className="text-white/15 text-xs font-mono">
-            Developed by <span className="text-[#C36A4D]/60">Graphura India Private Limited</span>
-          </p>
-        </div>
-      </footer>
+      {/* ── FOOTER ──────────────────────────────────────────────── */}
+      <Footer />
 
     </div>
   );

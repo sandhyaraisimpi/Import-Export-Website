@@ -5,6 +5,9 @@ import {
   Clock, Globe, HelpCircle
 } from "lucide-react";
 
+import Navbar from "../../components/homePageComp/Navbar";
+import Footer from "../../components/homePageComp/Footer";
+
 // ═══════════════════════════════════════════════════════════════
 //  DATA
 // ═══════════════════════════════════════════════════════════════
@@ -170,6 +173,7 @@ export default function ContactUs() {
       {/* ── FAQ + MAP SECTION ─────────────────────────────────────────── */}
       <section className="py-24 px-6 md:px-20 bg-white">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-14">
+        <Navbar/>
 
           {/* ── FAQ SECTION (Replaced the Form) ─── (3/5 width) */}
           <div className="lg:col-span-3">
@@ -278,23 +282,7 @@ export default function ContactUs() {
         </div>
       </section>
 
-      {/* ── FOOTER ─────────────────────────────────────────────── */}
-      <footer className="border-t border-neutral-200 py-12 px-6 md:px-20 bg-neutral-50">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#C36A4D] rounded-full flex items-center justify-center text-white font-black text-sm shadow-sm">
-              V
-            </div>
-            <span className="text-neutral-900 font-black uppercase tracking-widest text-sm">VR & Sons</span>
-          </div>
-          <p className="text-neutral-500 text-xs font-mono font-medium">
-            © {new Date().getFullYear()} VR & Sons Import Export. All rights reserved.
-          </p>
-          {/* <p className="text-neutral-400 text-xs font-mono">
-            Developed by <span className="text-[#C36A4D] font-bold">Graphura India Pvt. Ltd.</span>
-          </p> */}
-        </div>
-      </footer>
+       <Footer/>
 
     </div>
   );
