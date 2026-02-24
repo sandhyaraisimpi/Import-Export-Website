@@ -16,7 +16,6 @@ export default function Blog() {
     )}`;
   };
 
-
   // const allBlogs = blogs.map((blog) => ({
   //   ...blog,
   //   image: blog.image ? blog.image : getOnlineImage(blog.title),
@@ -42,26 +41,63 @@ export default function Blog() {
     )()
   }, [])
 
-  
-
   return (
     <div className="bg-gradient-to-b from-gray-50 to-white min-h-screen">
 
-      {/*  HERO SECTION */}
+      {/* HERO SECTION */}
       <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden">
 
-        {/* Background Image */}
+        {/* Keyframe styles */}
+        <style>{`
+          @keyframes kenBurns {
+            0%   { transform: scale(1.05) translate(0px, 0px); }
+            25%  { transform: scale(1.12) translate(-15px, -8px); }
+            50%  { transform: scale(1.08) translate(-8px, 10px); }
+            75%  { transform: scale(1.13) translate(12px, -6px); }
+            100% { transform: scale(1.05) translate(0px, 0px); }
+          }
+
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(24px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes overlayPulse {
+            0%, 100% { opacity: 0.60; }
+            50%       { opacity: 0.50; }
+          }
+
+          .hero-img {
+            animation: kenBurns 18s ease-in-out infinite;
+          }
+
+          .hero-overlay {
+            animation: overlayPulse 18s ease-in-out infinite;
+          }
+
+          .hero-content {
+            animation: fadeInUp 1s ease-out both;
+          }
+        `}</style>
+
+        {/* Background Image with Ken Burns */}
         <img
-          src="https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55"
+          src="https://images.unsplash.com/photo-1578575437130-527eed3abbec"
           alt="Import Export Logistics"
-          className="w-full h-full object-cover scale-105"
+          className="hero-img w-full h-full object-cover"
         />
 
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/60"></div>
+        {/* Dark Overlay with subtle pulse */}
+        <div className="hero-overlay absolute inset-0 bg-black/60"></div>
 
-        {/* Hero Content */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6">
+        {/* Hero Content with fade-in */}
+        <div className="hero-content absolute inset-0 flex flex-col items-center justify-center text-center text-white px-6">
           <h1 className="text-3xl md:text-5xl font-bold max-w-4xl leading-tight">
             Import Export Insights & Guides
           </h1>
