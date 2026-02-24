@@ -383,5 +383,17 @@ const GoogleAuth = async (req, res) => {
     }
 }
 
+const Signout = async (req, res) => {
+    try {
+        res.clearCookie("AccessToken");
+        res.clearCookie("RefreshToken");
 
-export { Signup, Login, forgetPassword, updateProfile, getMyProfile, signupOtp, forgetPasswordOtp, GoogleAuth };
+        return res.status(200).json(new ApiResponse(200, null, "Signout Successfully"))
+    }
+    catch (err) {
+        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]))
+    }
+}
+
+
+export { Signup, Login, forgetPassword, updateProfile, getMyProfile, signupOtp, forgetPasswordOtp, GoogleAuth, Signout };

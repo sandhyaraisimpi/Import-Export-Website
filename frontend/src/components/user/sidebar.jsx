@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   User,
@@ -10,9 +10,28 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import logo from "../../assets/logo/logo.webp";
+import { postService } from "../../service/axios";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const signout = async () => {
+    const apiResponse = await postService("/customer/auth/signout");
+
+    if(!apiResponse.ok){
+      console.log(apiResponse.message)
+      toast.error("Signout Failed");
+      return
+    }
+
+    toast.success("Signout");
+
+    setTimeout(() => {
+      navigate("/")
+    }, 1000)
+  }
 
   const navItem =
     "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200";
@@ -23,6 +42,8 @@ export default function Sidebar() {
 
   return (
     <>
+
+    <Toaster/>
       {/* Mobile Toggle */}
       <button
         onClick={() => setOpen(true)}
@@ -104,8 +125,8 @@ export default function Sidebar() {
           </div>
 
           {/* Bottom Section */}
-          <div className="pt-4 border-t border-gray-200">
-            <button className="flex items-center gap-3 px-4 py-3 w-full text-sm font-medium text-red-600 hover:bg-gray-50 rounded-lg transition">
+          <div className="pt-4 border-t border-gray-200" onClick={signout}>
+            <button  className="flex items-center gap-3 px-4 py-3 w-full text-sm font-medium text-red-600 hover:bg-gray-50 rounded-lg transition">
               <LogOut size={18} />
               Logout
             </button>
