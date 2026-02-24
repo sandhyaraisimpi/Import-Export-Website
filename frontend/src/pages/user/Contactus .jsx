@@ -1,56 +1,46 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Phone, Mail, MapPin, Send,
-  CheckCircle2, Clock, Globe, MessageSquare
+  Phone, Mail, MapPin, ChevronDown,
+  Clock, Globe, HelpCircle
 } from "lucide-react";
 
 // ═══════════════════════════════════════════════════════════════
-//  CONTACT DATA — Cleaned up (No active links)
+//  DATA
 // ═══════════════════════════════════════════════════════════════
 
 const CONTACT_INFO = [
-  {
-    icon: Phone,
-    label: "Phone Numbers",
-    lines: ["98254 74047", "98254 74047", "98254 74047"],
-  },
-  {
-    icon: Mail,
-    label: "Email Address",
-    lines: ["support@vrandsons.com"],
-  },
-  {
-    icon: MapPin,
-    label: "Office Address",
-    lines: ["Kamrej, Surat", "Gujarat, India"],
-  },
-  {
-    icon: Clock,
-    label: "Business Hours",
-    lines: ["Mon – Sat: 9:00 AM – 7:00 PM", "Sunday: Closed"],
-  },
+  { icon: Phone, label: "Phone Numbers", lines: ["98254 74047", "98254 74047", "98254 74047"] },
+  { icon: Mail, label: "Email Address", lines: ["support@vrandsons.com"] },
+  { icon: MapPin, label: "Office Address", lines: ["Kamrej, Surat", "Gujarat, India"] },
+  { icon: Clock, label: "Business Hours", lines: ["Mon – Sat: 9:00 AM – 7:00 PM", "Sunday: Closed"] },
 ];
 
-const COUNTRIES = [
-  "Afghanistan", "Australia", "Bangladesh", "Brazil", "Canada",
-  "China", "Egypt", "France", "Germany", "India", "Indonesia",
-  "Iran", "Iraq", "Italy", "Japan", "Jordan", "Kenya", "Kuwait",
-  "Malaysia", "Mexico", "Morocco", "Nepal", "Netherlands",
-  "New Zealand", "Nigeria", "Pakistan", "Philippines", "Qatar",
-  "Russia", "Saudi Arabia", "Singapore", "South Africa",
-  "South Korea", "Spain", "Sri Lanka", "Tanzania", "Thailand",
-  "Turkey", "UAE", "Uganda", "UK", "USA", "Vietnam", "Other",
+const FAQ_DATA = [
+  {
+    question: "Do I need to create an account to send an inquiry?",
+    answer: "Yes, to ensure secure and streamlined communication, we request all our buyers to create an account. Once logged in, you can send product-specific inquiries directly from your personalized dashboard."
+  },
+  {
+    question: "What is your Minimum Order Quantity (MOQ)?",
+    answer: "Our MOQ varies depending on the product category (Spices, Agricultural Goods, Bricks, etc.). Please log in and view the specific product details, or mention your required quantity in your inquiry."
+  },
+  {
+    question: "Do you provide sample shipments for quality checks?",
+    answer: "Absolutely. We understand the importance of quality assurance in global trade. Sample shipments can be arranged upon request before finalizing bulk commercial orders."
+  },
+  {
+    question: "What are your standard export payment terms?",
+    answer: "We generally work with standard international trade payment terms including Letter of Credit (L/C) and Telegraphic Transfer (T/T). Specific terms can be negotiated based on the order volume and relationship."
+  },
+  {
+    question: "How do you ensure the safe transit of goods?",
+    answer: "All our products are packed using export-grade materials. We partner with reliable international logistics providers to ensure secure handling and timely delivery across our 13+ export countries."
+  }
 ];
-
-const INITIAL_FORM = {
-  name: "", email: "", mobile: "", company: "",
-  country: "", quantity: "", message: "",
-};
 
 // ═══════════════════════════════════════════════════════════════
 
-// ── Fade-up wrapper ───────────────────────────────────────────
 const FadeUp = ({ children, delay = 0, className = "" }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
@@ -63,7 +53,6 @@ const FadeUp = ({ children, delay = 0, className = "" }) => (
   </motion.div>
 );
 
-// ── Section Label ─────────────────────────────────────────────
 const SectionLabel = ({ children }) => (
   <div className="flex items-center gap-3 mb-4">
     <div className="w-6 h-0.5 bg-[#C36A4D]" />
@@ -73,69 +62,53 @@ const SectionLabel = ({ children }) => (
   </div>
 );
 
-// ── Input Field ───────────────────────────────────────────────
-const Field = ({ label, error, children }) => (
-  <div className="flex flex-col gap-2">
-    <label className="text-[9px] font-black uppercase tracking-[0.35em] text-neutral-500">
-      {label}
-    </label>
-    {children}
-    {error && (
-      <span className="text-[10px] text-red-500 font-medium">{error}</span>
-    )}
-  </div>
-);
+// ── FAQ Accordion Item ─────────────────────────────────────────
+const FAQItem = ({ faq, isOpen, onClick }) => {
+  return (
+    <div className="border border-neutral-200 rounded-2xl bg-white overflow-hidden transition-all duration-300 hover:border-[#C36A4D]/30">
+      <button
+        onClick={onClick}
+        className="w-full flex items-center justify-between p-5 text-left bg-transparent"
+      >
+        <span className="text-neutral-900 font-bold text-sm md:text-base pr-4">
+          {faq.question}
+        </span>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="w-8 h-8 rounded-full bg-neutral-50 flex items-center justify-center flex-shrink-0"
+        >
+          <ChevronDown size={16} className="text-[#C36A4D]" />
+        </motion.div>
+      </button>
+      
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <div className="px-5 pb-5 text-neutral-500 text-sm leading-relaxed border-t border-neutral-100 pt-4">
+              {faq.answer}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
-// Updated for light theme
-const inputClass =
-  "w-full bg-neutral-50 border border-neutral-200 rounded-xl px-5 py-3.5 text-[13px] text-neutral-900 placeholder-neutral-400 outline-none focus:border-[#C36A4D]/50 focus:bg-white focus:shadow-sm transition-all duration-300";
 
 // ── Main Component ────────────────────────────────────────────
 export default function ContactUs() {
-  const [form, setForm] = useState(INITIAL_FORM);
-  const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
-
-  const validate = () => {
-    const newErrors = {};
-    if (!form.name.trim()) newErrors.name = "Name is required.";
-    if (!form.email.trim()) newErrors.email = "Email is required.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      newErrors.email = "Enter a valid email address.";
-    if (!form.mobile.trim()) newErrors.mobile = "Mobile number is required.";
-    if (!form.country) newErrors.country = "Please select a country.";
-    if (!form.message.trim()) newErrors.message = "Message is required.";
-    return newErrors;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validation = validate();
-    if (Object.keys(validation).length > 0) {
-      setErrors(validation);
-      return;
-    }
-    setLoading(true);
-    // Simulate API call for the UI effect
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 1600);
-  };
+  const [openFAQ, setOpenFAQ] = useState(0); // First FAQ open by default
 
   return (
-    // Updated background to white and text to dark neutral
     <div className="bg-white text-neutral-900 font-sans overflow-x-hidden min-h-screen">
 
       {/* ── HERO ──────────────────────────────────────────────── */}
-      {/* Kept the dark overlay on the hero image so the white text still pops beautifully */}
       <section className="relative h-[60vh] flex flex-col justify-end px-6 md:px-20 pb-16 overflow-hidden">
         <div className="absolute inset-0">
           <img
@@ -163,7 +136,7 @@ export default function ContactUs() {
             Contact <span className="text-[#C36A4D]">Us</span>
           </h1>
           <p className="text-white/70 text-base max-w-md border-l-2 border-[#C36A4D]/50 pl-5 leading-relaxed">
-            Reach out with your requirements and our team will get back to you promptly.
+            Our global support team is ready to assist you with onboarding, compliance, and trade inquiries.
           </p>
         </motion.div>
       </section>
@@ -176,13 +149,11 @@ export default function ContactUs() {
               <div className="group bg-white border border-neutral-200 shadow-sm rounded-3xl p-7 h-full flex flex-col justify-between
                 hover:border-[#C36A4D]/30 hover:shadow-[0_20px_50px_-15px_rgba(195,106,77,0.08)]
                 transition-all duration-500">
-
                 <div>
                   <div className="w-11 h-11 rounded-2xl bg-[#C36A4D]/10 border border-[#C36A4D]/20 flex items-center justify-center mb-6
                     group-hover:bg-[#C36A4D] group-hover:border-[#C36A4D] transition-all duration-300">
                     <item.icon size={18} className="text-[#C36A4D] group-hover:text-white transition-colors" />
                   </div>
-
                   <p className="text-[8px] font-black uppercase tracking-[0.4em] text-neutral-400 mb-3">
                     {item.label}
                   </p>
@@ -196,179 +167,59 @@ export default function ContactUs() {
         </div>
       </section>
 
-      {/* ── FORM + MAP ─────────────────────────────────────────── */}
+      {/* ── FAQ + MAP SECTION ─────────────────────────────────────────── */}
       <section className="py-24 px-6 md:px-20 bg-white">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-14">
 
-          {/* ── INQUIRY FORM ─── (3/5 width) */}
+          {/* ── FAQ SECTION (Replaced the Form) ─── (3/5 width) */}
           <div className="lg:col-span-3">
             <FadeUp>
               <div className="flex items-center gap-3 mb-2">
-                <MessageSquare size={16} className="text-[#C36A4D]" />
-                <SectionLabel>Inquiry Form</SectionLabel>
+                <HelpCircle size={16} className="text-[#C36A4D]" />
+                <SectionLabel>Trade Queries</SectionLabel>
               </div>
               <h2
                 className="text-neutral-900 font-black uppercase tracking-tighter mb-10"
                 style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)" }}
               >
-                Send Your <span className="text-[#C36A4D]">Requirements</span>
+                Frequently Asked <span className="text-[#C36A4D]">Questions</span>
               </h2>
             </FadeUp>
 
-            <AnimatePresence mode="wait">
-              {submitted ? (
-                /* ── Success State ── */
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="bg-emerald-50 border border-emerald-100 rounded-3xl p-14 text-center"
-                >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                    className="w-16 h-16 rounded-full bg-emerald-100 border border-emerald-200 flex items-center justify-center mx-auto mb-6"
-                  >
-                    <CheckCircle2 size={28} className="text-emerald-600" />
-                  </motion.div>
-                  <h3 className="text-neutral-900 text-2xl font-black uppercase tracking-tight mb-3">
-                    Inquiry Sent!
-                  </h3>
-                  <p className="text-neutral-600 text-sm leading-relaxed max-w-sm mx-auto mb-8">
-                    Thank you for reaching out. Our team will review your inquiry and contact you within 24 hours.
-                  </p>
-                  <button
-                    onClick={() => { setSubmitted(false); setForm(INITIAL_FORM); }}
-                    className="px-6 py-3 rounded-xl bg-white border border-neutral-200 text-neutral-500 text-[10px] font-black uppercase tracking-[0.35em] hover:bg-neutral-50 hover:text-neutral-900 transition-all shadow-sm"
-                  >
-                    Send Another
-                  </button>
-                </motion.div>
-              ) : (
-                /* ── Form ── */
-                <motion.form
-                  key="form"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  onSubmit={handleSubmit}
-                  className="space-y-5"
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <FadeUp delay={0.05}>
-                      <Field label="Full Name *" error={errors.name}>
-                        <input
-                          name="name" value={form.name} onChange={handleChange}
-                          placeholder="John Doe"
-                          className={`${inputClass} ${errors.name ? "border-red-400" : ""}`}
-                        />
-                      </Field>
-                    </FadeUp>
-                    <FadeUp delay={0.08}>
-                      <Field label="Email Address *" error={errors.email}>
-                        <input
-                          name="email" value={form.email} onChange={handleChange}
-                          type="email" placeholder="john@company.com"
-                          className={`${inputClass} ${errors.email ? "border-red-400" : ""}`}
-                        />
-                      </Field>
-                    </FadeUp>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <FadeUp delay={0.1}>
-                      <Field label="Mobile Number *" error={errors.mobile}>
-                        <input
-                          name="mobile" value={form.mobile} onChange={handleChange}
-                          placeholder="+1 234 567 8900"
-                          className={`${inputClass} ${errors.mobile ? "border-red-400" : ""}`}
-                        />
-                      </Field>
-                    </FadeUp>
-                    <FadeUp delay={0.12}>
-                      <Field label="Company Name" error={errors.company}>
-                        <input
-                          name="company" value={form.company} onChange={handleChange}
-                          placeholder="Your Company Ltd."
-                          className={inputClass}
-                        />
-                      </Field>
-                    </FadeUp>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <FadeUp delay={0.14}>
-                      <Field label="Country *" error={errors.country}>
-                        <select
-                          name="country" value={form.country} onChange={handleChange}
-                          className={`${inputClass} ${errors.country ? "border-red-400" : ""}`}
-                        >
-                          <option value="" disabled>Select Country</option>
-                          {COUNTRIES.map((c) => (
-                            <option key={c} value={c}>{c}</option>
-                          ))}
-                        </select>
-                      </Field>
-                    </FadeUp>
-                    <FadeUp delay={0.16}>
-                      <Field label="Required Quantity" error={errors.quantity}>
-                        <input
-                          name="quantity" value={form.quantity} onChange={handleChange}
-                          placeholder="e.g. 500 kg / 10 tons"
-                          className={inputClass}
-                        />
-                      </Field>
-                    </FadeUp>
-                  </div>
-
-                  <FadeUp delay={0.18}>
-                    <Field label="Message *" error={errors.message}>
-                      <textarea
-                        name="message" value={form.message} onChange={handleChange}
-                        placeholder="Describe your product requirements, specifications, or any questions..."
-                        rows={5}
-                        className={`${inputClass} resize-none ${errors.message ? "border-red-400" : ""}`}
-                      />
-                    </Field>
-                  </FadeUp>
-
-                  <FadeUp delay={0.2}>
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-[#C36A4D] text-white
-                        text-[11px] font-black uppercase tracking-[0.35em] transition-all duration-300
-                        hover:bg-[#d4785a] hover:shadow-[0_15px_40px_rgba(195,106,77,0.35)]
-                        disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {loading ? (
-                        <>
-                          <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                          </svg>
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          <Send size={14} /> Submit Inquiry
-                        </>
-                      )}
-                    </button>
-                    <p className="text-center text-[9px] text-neutral-400 tracking-widest uppercase mt-4">
-                      Your inquiry will be reviewed within 24 business hours
-                    </p>
-                  </FadeUp>
-                </motion.form>
-              )}
-            </AnimatePresence>
+            <FadeUp delay={0.1}>
+              <div className="space-y-4">
+                {FAQ_DATA.map((faq, index) => (
+                  <FAQItem 
+                    key={index} 
+                    faq={faq} 
+                    isOpen={openFAQ === index}
+                    onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+                  />
+                ))}
+              </div>
+            </FadeUp>
+            
+            {/* Call to action prompting them to login */}
+            <FadeUp delay={0.2}>
+               <div className="mt-10 p-6 rounded-2xl bg-neutral-50 border border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-6">
+                 <div>
+                    <h4 className="text-neutral-900 font-bold mb-1">Ready to request a quote?</h4>
+                    <p className="text-neutral-500 text-sm">Create an account to browse products and send direct inquiries.</p>
+                 </div>
+                 <a 
+                   href="/login" 
+                   className="whitespace-nowrap px-6 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-neutral-800 transition-colors"
+                 >
+                   Login / Register
+                 </a>
+               </div>
+            </FadeUp>
           </div>
 
-          {/* ── SIDEBAR INFO ─── (2/5 width) */}
+          {/* ── SIDEBAR MAP & INFO ─── (2/5 width) */}
           <div className="lg:col-span-2 flex flex-col gap-6">
 
-            {/* Map embed - Removed the invert CSS filter for light theme */}
+            {/* Map embed */}
             <FadeUp delay={0.1}>
               <div className="rounded-3xl overflow-hidden border border-neutral-200 shadow-sm h-64">
                 <iframe
@@ -393,15 +244,15 @@ export default function ContactUs() {
                 </div>
 
                 <h3 className="text-neutral-900 text-xl font-black uppercase tracking-tight mb-4">
-                  Why Inquire With Us?
+                  Why Trade With Us?
                 </h3>
 
                 <ul className="space-y-4">
                   {[
-                    "No minimum order for first inquiry",
+                    "Strict Quality Control",
                     "Direct manufacturer pricing",
                     "Export documentation support",
-                    "Sample shipments available",
+                    "Reliable Global Logistics",
                     "Dedicated account manager",
                   ].map((point, i) => (
                     <li key={i} className="flex items-start gap-3 text-neutral-600 text-sm font-medium">
@@ -413,7 +264,7 @@ export default function ContactUs() {
 
                 <div className="mt-8 pt-6 border-t border-neutral-200">
                   <p className="text-[8px] font-black uppercase tracking-[0.4em] text-neutral-400 mb-3">
-                    Response Time
+                    Inquiry Response Time
                   </p>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -439,9 +290,9 @@ export default function ContactUs() {
           <p className="text-neutral-500 text-xs font-mono font-medium">
             © {new Date().getFullYear()} VR & Sons Import Export. All rights reserved.
           </p>
-          <p className="text-neutral-400 text-xs font-mono">
+          {/* <p className="text-neutral-400 text-xs font-mono">
             Developed by <span className="text-[#C36A4D] font-bold">Graphura India Pvt. Ltd.</span>
-          </p>
+          </p> */}
         </div>
       </footer>
 
