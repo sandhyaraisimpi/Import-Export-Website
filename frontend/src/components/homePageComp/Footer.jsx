@@ -38,8 +38,8 @@ const FOOTER_LINKS = {
     { label: "Bricks", href: "/MainCategory" },
   ],
   legal: [
-    { label: "Terms of Service", href: "/terms" },
-    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/Term_Services" },
+    { label: "Privacy Policy", href: "/PrivacyPolicy" },
   ]
 };
 

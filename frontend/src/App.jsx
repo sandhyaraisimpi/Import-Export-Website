@@ -33,6 +33,8 @@ import Product from "./pages/Products/Product"
 //Footer
 import AboutUs from "./pages/user/AboutUs";
 import ContactUs from "./pages/user/Contactus ";
+import Term_Services from "./pages/user/Term_Services";
+import PrivacyPolicy from "./pages/user/CompanyPolicy";
 
 function App() {
   
@@ -95,6 +97,8 @@ function App() {
       {/* <Route path="/products/:id/:productId" element={<ProductDetails />} /> */}
       <Route path="/AboutUs" element={<AboutUs />} /> 
       <Route path="/ContactUs" element={<ContactUs />} /> 
+      <Route path="/Term_Services" element={<Term_Services />} /> 
+      <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} /> 
    
       {/* ================================================= */}
       {/* 404 FALLBACK */}
