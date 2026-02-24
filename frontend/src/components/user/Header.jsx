@@ -102,6 +102,7 @@ export default function Header() {
                 )}
               </div>
 
+              {/* List */}
               <div className="max-h-80 overflow-y-auto">
                 {notifications.length === 0 ? (
                   <div className="p-6 text-center text-sm text-gray-500">

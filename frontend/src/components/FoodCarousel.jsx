@@ -54,7 +54,7 @@ const FoodCarousel = () => {
   };
 
   return (
-    <section className="py-24 bg-[#F2F0EB] relative overflow-hidden">
+    <section className="py-24 bg-[#F2F0EB] relative overflow-hidden w-full">
 
       {/* ===== SECTION HEADER ===== */}
       <div className="text-center mb-14 px-6">
@@ -88,7 +88,7 @@ const FoodCarousel = () => {
       {/* ===== SLIDER ===== */}
       <div
         ref={scrollRef}
-        className="flex gap-8 overflow-x-hidden px-16"
+        className="flex gap-8 overflow-x-hidden px-16 relative"
       >
         {foodImages.map((item, i) => (
           <motion.div

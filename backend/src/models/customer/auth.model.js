@@ -33,6 +33,19 @@ const customerAuth_Schema = new Schema({
     },
     state:{
         type: String,
+    },
+    // OTP Fields for forgot password
+    otp: {
+        type: String,
+        default: null
+    },
+    otpExpiry: {
+        type: Date,
+        default: null
+    },
+    isOtpVerified: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true});
 

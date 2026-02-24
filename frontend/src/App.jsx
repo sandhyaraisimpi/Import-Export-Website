@@ -46,10 +46,14 @@ function App() {
       {/* ================================================= */}
       <Route path="/" element={<Homepage />} />
 
+
       {/* ================================================= */}
-      {/* ADMIN PANEL */}
+      {/* ADMIN PANEL & AUTH */}
       {/* ================================================= */}
       <Route path="/admin/*" element={<AppRoutes />} />
+      {/* Direct admin login/signup routes for convenience */}
+      {/* <Route path="/admin/login" element={<AppRoutes />} />
+
 
       {/* ================================================= */}
       {/* USER DASHBOARD */}

@@ -128,7 +128,7 @@ export default function InquiryManagement() {
             </div>
 
             {/* TABLE */}
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto relative">
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 text-gray-400 uppercase text-xs border-b">
                   <tr>

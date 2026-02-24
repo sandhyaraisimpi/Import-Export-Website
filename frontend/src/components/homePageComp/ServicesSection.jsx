@@ -144,7 +144,7 @@ const VennDiagram = () => {
 
   return (
     <div ref={ref} className="flex flex-col items-center justify-center py-10 md:py-20 relative px-4">
-      <div className="w-full overflow-x-auto flex justify-center">
+      <div className="w-full overflow-x-auto flex justify-center relative">
         <svg width="720" height="400" viewBox="0 0 720 400" className="overflow-visible max-w-full" style={{ maxWidth: "100%", height: "auto" }}>
           <motion.circle cx={cx} cy={topY} r={r} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
           <motion.circle cx={leftX} cy={bottomY} r={r} fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />

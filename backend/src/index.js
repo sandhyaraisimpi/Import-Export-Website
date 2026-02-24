@@ -16,5 +16,12 @@ initSocket(server);
 
 const PORT = process.env.PORT;
 
-server.listen(PORT, console.log(`Server Running on PORT: ${PORT}`))
+
+server.listen(PORT, () => {
+    if (PORT) {
+        console.log(`✅ Backend running successfully on PORT: ${PORT}`);
+    } else {
+        console.error("❌ Backend failed to start: PORT is undefined.");
+    }
+});
 

@@ -112,7 +112,7 @@ export default function EditCustomer() {
               </div>
 
               {/* Inquiry Table */}
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto relative">
                 <table className="w-full text-sm">
                   <thead className="bg-slate-50 text-xs uppercase text-slate-500">
                     <tr>

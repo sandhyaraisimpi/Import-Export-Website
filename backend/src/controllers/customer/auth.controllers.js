@@ -5,7 +5,8 @@ import { cookiesForUser } from "../../utils/cookiesForUser.js";
 import { passwordDecrypt, passwordEncrypt } from "../../utils/bcryption.js";
 import { cloudinary, deleteFromCloudinary } from "../../config/cloudinary.config.js";
 import { brevo } from '../../config/brevo.config.js';
-import { OAuth2Client } from "google-auth-library"
+import { OAuth2Client } from "google-auth-library";
+import { generateOTP, getOTPExpiry, sendOTPEmail, verifyOTPValidity } from "../../utils/otp.js";
 
 const Signup = async (req, res) => {
   try {
@@ -395,5 +396,132 @@ const Signout = async (req, res) => {
     }
 }
 
+// Customer Forgot Password - Send OTP
+const customerForgotPassword = async (req, res) => {
+    try {
+        console.log("📧 Customer Forgot Password API Hit");
+        const { email } = req.body;
 
-export { Signup, Login, forgetPassword, updateProfile, getMyProfile, signupOtp, forgetPasswordOtp, GoogleAuth, Signout };
+        if (!email || !email.trim()) {
+            return res.status(400).json(new ApiError(400, "Email is required"));
+        }
+
+        const customerDetail = await customerAuth_Model.findOne({ email: email.trim() });
+        if (!customerDetail) {
+            console.log(`⚠️ Customer not found with email: ${email}`);
+            return res.status(404).json(new ApiError(404, "No account found with this email"));
+        }
+
+        // Generate OTP
+        const otp = generateOTP();
+        const otpExpiry = getOTPExpiry();
+
+        console.log(`🔐 Generated OTP: ${otp}, Expiry: ${otpExpiry}`);
+
+        // Send OTP email
+        try {
+            await sendOTPEmail(customerDetail.email, otp, customerDetail.name);
+        } catch (emailError) {
+            console.error("❌ Failed to send email:", emailError.message);
+            return res.status(500).json(new ApiError(500, "Failed to send OTP email. Please try again later."));
+        }
+
+        // Update customer with OTP
+        customerDetail.otp = otp;
+        customerDetail.otpExpiry = otpExpiry;
+        customerDetail.isOtpVerified = false;
+        await customerDetail.save();
+
+        console.log("✅ OTP sent successfully");
+        return res.status(200).json(new ApiResponse(200, null, "OTP sent to your registered email"));
+    } catch (err) {
+        console.error("❌ Forgot Password Error:", err);
+        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+    }
+};
+
+// Customer Verify OTP
+const customerVerifyOTP = async (req, res) => {
+    try {
+        console.log("🔍 Customer Verify OTP API Hit");
+        const { email, otp } = req.body;
+
+        if (!email || !otp) {
+            return res.status(400).json(new ApiError(400, "Email and OTP are required"));
+        }
+
+        const customerDetail = await customerAuth_Model.findOne({ email: email.trim() });
+        if (!customerDetail) {
+            return res.status(404).json(new ApiError(404, "Customer not found"));
+        }
+
+        if (!customerDetail.otp) {
+            return res.status(400).json(new ApiError(400, "No OTP request found. Please request a new OTP."));
+        }
+
+        // Verify OTP validity
+        const otpVerification = verifyOTPValidity(customerDetail.otp, otp, customerDetail.otpExpiry);
+        if (!otpVerification.valid) {
+            console.log(`❌ OTP verification failed: ${otpVerification.message}`);
+            return res.status(400).json(new ApiError(400, otpVerification.message));
+        }
+
+        // Mark OTP as verified
+        customerDetail.isOtpVerified = true;
+        await customerDetail.save();
+
+        console.log("✅ OTP verified successfully");
+        return res.status(200).json(new ApiResponse(200, { email }, "OTP verified successfully"));
+    } catch (err) {
+        console.error("❌ OTP Verification Error:", err);
+        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+    }
+};
+
+// Customer Reset Password
+const customerResetPassword = async (req, res) => {
+    try {
+        console.log("🔐 Customer Reset Password API Hit");
+        const { email, newPassword, confirmPassword } = req.body;
+
+        if (!email || !newPassword || !confirmPassword) {
+            return res.status(400).json(new ApiError(400, "Email and passwords are required"));
+        }
+
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json(new ApiError(400, "Passwords do not match"));
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json(new ApiError(400, "Password must be at least 6 characters long"));
+        }
+
+        const customerDetail = await customerAuth_Model.findOne({ email: email.trim() });
+        if (!customerDetail) {
+            return res.status(404).json(new ApiError(404, "Customer not found"));
+        }
+
+        if (!customerDetail.isOtpVerified) {
+            return res.status(400).json(new ApiError(400, "OTP verification required before resetting password"));
+        }
+
+        // Encrypt new password
+        const hashPassword = await passwordEncrypt(newPassword);
+
+        // Update password and clear OTP
+        customerDetail.password = hashPassword;
+        customerDetail.otp = null;
+        customerDetail.otpExpiry = null;
+        customerDetail.isOtpVerified = false;
+        await customerDetail.save();
+
+        console.log("✅ Password reset successfully");
+        return res.status(200).json(new ApiResponse(200, null, "Password reset successfully"));
+    } catch (err) {
+        console.error("❌ Reset Password Error:", err);
+        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+    }
+};
+
+
+export { Signup, Login, forgetPassword, updateProfile, getMyProfile, signupOtp, forgetPasswordOtp, GoogleAuth, Signout, customerForgotPassword, customerVerifyOTP, customerResetPassword };

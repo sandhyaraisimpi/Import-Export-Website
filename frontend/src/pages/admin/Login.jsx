@@ -12,22 +12,29 @@ export default function Login() {
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = (e) => {
+
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    const result = login(email, password);
-
-    if (result === "SUCCESS") {
-      navigate("/");
-    } else if (result === "NO_ACCOUNT") {
-      setError("No account found. Please signup first.");
-    } else {
-      setError("Invalid credentials");
+    setLoading(true);
+    setError("");
+    try {
+      const result = await login(email, password);
+      if (result === "SUCCESS") {
+        navigate("/");
+      } else if (result === "NO_ACCOUNT") {
+        setError("No account found. Please signup first.");
+      } else {
+        setError("Invalid credentials");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="h-screen flex">
+    <div className="h-screen flex relative">
 
       {/* LEFT LOGIN FORM */}
       <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-100 p-8">
@@ -37,6 +44,7 @@ export default function Login() {
         >
           {/* Logo */}
           <div className="flex items-center gap-3 mb-6">
+            {loading && <div className="text-blue-500 mb-2">Logging in...</div>}
             <img src={logo} alt="logo" className="w-24 h-10" />
           </div>
 
@@ -68,9 +76,13 @@ export default function Login() {
           {/* Password */}
           <div className="flex justify-between text-sm text-gray-600">
             <label>Password</label>
-            <span className="text-blue-600 cursor-pointer">
+            <button
+              type="button"
+              onClick={() => navigate("/admin/forgot-password")}
+              className="text-blue-600 cursor-pointer hover:text-blue-700 hover:underline transition"
+            >
               Forgot Password?
-            </span>
+            </button>
           </div>
 
           <input
@@ -92,8 +104,12 @@ export default function Login() {
           </label>
 
           {/* Button */}
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
-            Sign In to Dashboard →
+          <button 
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-3 rounded-lg font-medium transition"
+          >
+            {loading ? "Signing In..." : "Sign In to Dashboard →"}
           </button>
 
           <p className="text-center text-xs text-gray-500 mt-6">

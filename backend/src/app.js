@@ -1,3 +1,4 @@
+import adminAuthRouter from "./routers/admin/auth.route.js";
 import express from "express";
 import cookieParser from "cookie-parser";
 
@@ -27,17 +28,23 @@ dotenv.config({
 
 const app = express();
 
+// CORS Configuration - Allow multiple frontend ports
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 
+
 app.use(cookieParser())
 
 app.use(express.json())
+
+// Admin Auth API
+app.use("/api/v1/admin/auth", adminAuthRouter);
+console.log("✅ Admin Auth Routes Registered");
 
 app.use("/api/v1/customer/auth", customerAuthRouter)
 app.use("/api/v1/customer/inquiry", customerInquiryRouter);

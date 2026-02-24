@@ -54,7 +54,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen flex">
+    <div className="h-screen flex relative">
 
       {/* ================= LEFT HERO ================= */}
       <div
@@ -66,20 +66,16 @@ export default function Signup() {
         }}
       >
         <div className="absolute inset-0 bg-blue-900/70" />
-
         <div className="relative z-10 p-12 flex flex-col justify-between">
-
           <div>
             {/* LOGO */}
             <div className="flex items-center gap-3 mb-12">
               <img src={logo} alt="logo" className="w-50 h-15" />
             </div>
-
             <h2 className="text-4xl font-bold leading-tight">
               Powering the future of <br />
               international commerce.
             </h2>
-
             <p className="mt-4 text-blue-100 max-w-md">
               Manage your entire supply chain, customs
               documentation, and logistics partners in one
