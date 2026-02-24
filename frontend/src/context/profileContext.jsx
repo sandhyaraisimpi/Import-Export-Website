@@ -8,14 +8,17 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await getService("/customer/profile");
-      if (res?.ok) {
-        setUser(res.data);
+      const apiResponse = await getService("/customer/auth/myprofile");
+
+
+
+      if (apiResponse?.ok) {
+        setUser(apiResponse.data.data);
       }
     };
 
     fetchUser();
-  }, []); // 🔥 Runs only once
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -24,4 +27,4 @@ export const UserProvider = ({ children }) => {
   );
 };
 
-export const useUser = () => useContext(UserContext);
+export const userProfile = () => useContext(UserContext);

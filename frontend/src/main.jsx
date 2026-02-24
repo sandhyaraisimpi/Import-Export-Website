@@ -6,16 +6,19 @@ import App from "./App";
 import "./index.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import axios from "axios";
+import { UserProvider } from "./context/profileContext"
 
 axios.defaults.withCredentials = true;
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId="499348321855-fnedlnu6qk87hie9thu98q1b0q4a143t.apps.googleusercontent.com">
-    <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BrowserRouter>
+    </UserProvider>
   </GoogleOAuthProvider>
 );

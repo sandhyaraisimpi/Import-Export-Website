@@ -1,54 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../../components/user/sidebar";
 import Header from "../../components/user/Header";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { getService } from "../../service/axios";
+import { userProfile } from "../../context/profileContext";
 
 export default function Profile() {
   const [twoFactor, setTwoFactor] = useState(true);
+  const navigate = useNavigate();
 
-  const [user, setUser] = useState({
-    name: "Akhil Jha",
-    email: "akhil@example.com",
-    phone: "+91 9876543210",
-    gender: "Male",
-    dob: "1995-08-12",
-    city: "Madhubani",
-    state: "Bihar",
-    accountType: "Premium User",
-    createdAt: "15 Jan 2024",
-    verified: true,
-    lastLogin: "20 Feb 2026, 10:45 AM",
-    orders: 24,
-    wishlist: 6,
-    savedAddresses: 3,
-    profileImage: "https://i.pravatar.cc/300?img=12",
-  });
+  const { user } = userProfile();
 
   useEffect(() => {
-    ; (
-      async () => {
-        const apiResponse = await getService("/customer/auth/myprofile");
+    if (!user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
-        if (!apiResponse.ok) {
-          console.log(apiResponse.message);
-          return
-        }
-
-        localStorage.setItem("username", apiResponse.data.data.name)
-        setUser(apiResponse.data.data)
-
-      }
-    )()
-  }, [])
+  if (!user) {
+    return <div className="p-10">Loading...</div>;
+  }
 
   return (
     <div className="flex bg-gray-50">
-      <Sidebar/>
+      <Sidebar />
 
       <div className="flex-1 md:ml-64 pt-24 px-4 md:px-8 min-h-screen pb-16">
-        <Header/>
+        <Header />
 
         <div className="space-y-8">
 
@@ -105,7 +83,7 @@ export default function Profile() {
 
               <div>
                 <p className="text-gray-500">Account Type</p>
-                <p className="font-medium text-gray-800">{user?.accountType||""}</p>
+                <p className="font-medium text-gray-800">{user?.accountType || ""}</p>
               </div>
 
             </div>

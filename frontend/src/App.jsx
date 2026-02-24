@@ -55,7 +55,7 @@ function App() {
       <Route path="/user/dashboard" element={<Dashboard />} />
       <Route path="/user/profile" element={<Profile />} />
       <Route path="/user/settings" element={<Settings />} />
-      <Route path="/user/inquiries" element={<MyInquiries />} />
+      <Route path="/user/myinquiries" element={<MyInquiries />} />
       <Route path="/user/inquiries/:id" element={<InquiryDetail />} />
 
       {/* BLOG ROUTES */}

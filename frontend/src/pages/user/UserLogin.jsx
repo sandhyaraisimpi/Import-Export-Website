@@ -93,6 +93,7 @@ export default function Login() {
         }
 
         toast.success("Login Successful");
+        localStorage.setItem("access", "Successful");
         setLoading(false);
         setTimeout(() => (navigate("/")), 1000)
         return

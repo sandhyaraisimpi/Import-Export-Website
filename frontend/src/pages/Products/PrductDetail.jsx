@@ -12,9 +12,10 @@ import {
   Calendar,
   Hash,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getService } from "../../service/axios";
 import InquiryForm from "../../components/user/InquiryForm";
+import { userProfile } from "../../context/profileContext";
 
 // Parse specifications safely
 const parseSpecifications = (specStr = "") => {
@@ -35,6 +36,10 @@ const formatDate = (iso) =>
 
 export default function ProductDetail() {
   const { id } = useParams();
+
+  const { user } = userProfile();
+
+  const navigate= useNavigate();
 
   const [product, setProduct] = useState(null);
   const [activeImage, setActiveImage] = useState(0);
@@ -233,7 +238,12 @@ export default function ProductDetail() {
             className="flex flex-col sm:flex-row gap-3 pt-2"
           >
             <button
-              onClick={() => setShowInquiry(true)}
+              onClick={() => {
+                if (!user) {
+                  navigate("/login");
+                }
+                setShowInquiry(true)
+              }}
               className="flex-1 px-6 py-4 rounded-2xl bg-[#C36A4D] text-white text-[11px] font-black uppercase tracking-[0.35em] hover:bg-[#d4785a] transition-all duration-300 hover:shadow-[0_15px_40px_rgba(195,106,77,0.35)]">
               Send Inquiry
             </button>

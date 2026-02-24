@@ -1,46 +1,118 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Sidebar from "../../components/user/sidebar";
 import Header from "../../components/user/Header";
+import { putService } from "../../service/axios";
+import { userProfile } from "../../context/profileContext";
+import { Toaster, toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Profile() {
   const fileInputRef = useRef(null);
 
-  const [twoFactor, setTwoFactor] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
 
-  const [user, setUser] = useState({
-    name: "Akhil Jha",
-    email: "akhil@example.com",
-    phone: "9876543210",
-    gender: "Male",
-    dob: "1995-08-12",
-    city: "Madhubani",
-    state: "Bihar",
-    accountType: "Premium User",
-    createdAt: "15 Jan 2024",
-    verified: true,
-    lastLogin: "20 Feb 2026, 10:45 AM",
-    profileImage: "https://i.pravatar.cc/300?img=12",
-  });
+
+  const { user, setUser } = userProfile();
+
+    useEffect(() => {
+      if (!user) {
+        navigate("/");
+      }
+    }, [user, navigate]);
+
+  if (!user) {
+    return <div className="p-10">Loading...</div>;
+  }
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
+      setSelectedFile(file);
       const imageURL = URL.createObjectURL(file);
-      setUser({ ...user, profileImage: imageURL });
+
+      setUser({
+        ...user,
+        profileImage: imageURL,
+      });
     }
   };
 
-  const handleSave = () => {
-    setIsEditing(false);
+  const updateProfile = async () => {
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("contact", user.contact || "");
+      formData.append("gender", user.gender || "");
+      formData.append("dob", user.dob || "");
+      formData.append("country", user.country || "");
+      formData.append("state", user.state || "");
+
+      if (selectedFile) {
+        formData.append("profileImage", selectedFile);
+      }
+
+      const apiResponse = await putService(
+        "/customer/auth/updateProfile",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (!apiResponse.ok && !apiResponse.fetchMessage) {
+        console.log(apiResponse?.message);
+        toast.error("Update Profile Failed")
+        setLoading(false);
+        return;
+      }
+
+      if (!apiResponse.ok && apiResponse.fetchMessage) {
+        console.log(apiResponse?.message);
+        toast.error(apiResponse?.message)
+        setLoading(false);
+        return;
+      }
+
+      toast.success("Update Profile Successful");
+      setUser(apiResponse.data.data);
+      setIsEditing(false);
+      setLoading(false);
+
+      console.log("Profile Updated Successfully");
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
+
+  // Format createdAt nicely
+  const formattedCreatedAt = user?.createdAt
+    ? new Date(user.createdAt).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : "";
 
   return (
     <div className="flex bg-gray-50">
+        <Toaster />
       <Sidebar />
 
       <div className="flex-1 md:ml-64 pt-24 px-4 md:px-8 min-h-screen pb-16">
@@ -55,7 +127,7 @@ export default function Profile() {
               {/* Profile Image */}
               <div className="relative">
                 <img
-                  src={user.profileImage}
+                  src={user?.profileImage}
                   alt="Profile"
                   className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border"
                 />
@@ -86,23 +158,18 @@ export default function Profile() {
                   <input
                     type="text"
                     name="name"
-                    value={user.name}
+                    value={user?.name || ""}
                     onChange={handleChange}
                     className="text-xl md:text-2xl font-semibold border-b w-full outline-none"
                   />
                 ) : (
                   <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
-                    {user.name}
+                    {user?.name}
                   </h2>
                 )}
 
                 <p className="text-gray-500 text-sm mt-1">
-                  {user.email}
-                  {user.verified && (
-                    <span className="ml-2 text-green-600 text-xs font-medium">
-                      ✔ Verified
-                    </span>
-                  )}
+                  {user?.email}
                 </p>
 
                 {!isEditing ? (
@@ -115,10 +182,11 @@ export default function Profile() {
                 ) : (
                   <div className="mt-4 flex gap-3 justify-center md:justify-start">
                     <button
-                      onClick={handleSave}
+                      onClick={updateProfile}
+                      disabled={loading}
                       className="px-4 py-2 bg-black text-white rounded-lg text-sm"
                     >
-                      Save
+                      {loading ? "Saving..." : "Save"}
                     </button>
                     <button
                       onClick={() => setIsEditing(false)}
@@ -134,122 +202,111 @@ export default function Profile() {
             {/* Editable Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 text-sm">
 
-              {/* Mobile Number (Non Editable) */}
-<div>
-  <label className="text-gray-500 text-xs">Mobile Number</label>
+              {/* Contact */}
+              <div>
+                <label className="text-gray-500 text-xs">Mobile Number</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    name="contact"
+                    value={user?.contact || ""}
+                    maxLength={10}
+                    onChange={handleChange}
+                    className="w-full border rounded-lg px-3 py-2 mt-1"
+                  />
+                ) : (
+                  <p className="font-medium text-gray-800 mt-1">
+                    +91 {user?.contact || ""}
+                  </p>
+                )}
+              </div>
 
-  <div className="flex items-center justify-between  rounded-lg px-3 py-2 mt-1">
-
-    <div className="flex items-center gap-2">
-      <span className="text-gray-800 font-medium">
-        +91 {user.phone}
-      </span>
-
-      <span className="text-green-600 text-xs font-medium">
-        ✔ Verified
-      </span>
-    </div>
-
- 
-
-  </div>
-
-  <p className="text-xs text-gray-400 mt-1">
-    Mobile number cannot be changed.
-  </p>
-</div>
-
-              {/* Gender Dropdown */}
+              {/* Gender */}
               <div>
                 <label className="text-gray-500 text-xs">Gender</label>
                 {isEditing ? (
                   <select
                     name="gender"
-                    value={user.gender}
+                    value={user?.gender || ""}
                     onChange={handleChange}
                     className="w-full border rounded-lg px-3 py-2 mt-1"
                   >
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Other</option>
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                   </select>
                 ) : (
                   <p className="font-medium text-gray-800 mt-1">
-                    {user.gender}
+                    {user?.gender || ""}
                   </p>
                 )}
               </div>
 
-              {/* Date Picker */}
+              {/* DOB */}
               <div>
                 <label className="text-gray-500 text-xs">Date of Birth</label>
                 {isEditing ? (
                   <input
                     type="date"
                     name="dob"
-                    value={user.dob}
+                    value={user?.dob || ""}
                     onChange={handleChange}
                     className="w-full border rounded-lg px-3 py-2 mt-1"
                   />
                 ) : (
                   <p className="font-medium text-gray-800 mt-1">
-                    {user.dob}
+                    {user?.dob || ""}
                   </p>
                 )}
               </div>
 
+              {/* State */}
               <div>
-                <label className="text-gray-500 text-xs">City</label>
+                <label className="text-gray-500 text-xs">State</label>
                 {isEditing ? (
                   <input
                     type="text"
-                    name="city"
-                    value={user.city}
+                    name="state"
+                    value={user?.state || ""}
                     onChange={handleChange}
                     className="w-full border rounded-lg px-3 py-2 mt-1"
                   />
                 ) : (
                   <p className="font-medium text-gray-800 mt-1">
-                    {user.city}
+                    {user?.state || ""}
                   </p>
                 )}
               </div>
 
-            </div>
-          </div>
-
-          {/* Account Status */}
-          <div className="bg-white border border-gray-200 rounded-2xl p-6 md:p-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-6">
-              Account Status
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+              {/* Country */}
               <div>
-                <p className="text-gray-500">Account Type</p>
-                <p className="font-medium">{user.accountType}</p>
+                <label className="text-gray-500 text-xs">Country</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    name="country"
+                    value={user?.country || ""}
+                    onChange={handleChange}
+                    className="w-full border rounded-lg px-3 py-2 mt-1"
+                  />
+                ) : (
+                  <p className="font-medium text-gray-800 mt-1">
+                    {user?.country || ""}
+                  </p>
+                )}
               </div>
 
+              {/* Created At (Non Editable) */}
               <div>
-                <p className="text-gray-500">Created On</p>
-                <p className="font-medium">{user.createdAt}</p>
-              </div>
-
-              <div>
-                <p className="text-gray-500">Last Login</p>
-                <p className="font-medium">{user.lastLogin}</p>
-              </div>
-
-              <div>
-                <p className="text-gray-500">Verification</p>
-                <p className="font-medium text-green-600">
-                  {user.verified ? "Verified" : "Not Verified"}
+                <label className="text-gray-500 text-xs">Account Created</label>
+                <p className="font-medium text-gray-800 mt-1">
+                  {formattedCreatedAt}
                 </p>
               </div>
+
             </div>
           </div>
-
-          
 
         </div>
       </div>
