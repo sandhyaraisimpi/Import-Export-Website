@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import Sidebar from "../../components/user/sidebar";
-import Header from "../../components/user/Header";
+// import Sidebar from "../../components/user/sidebar";
+// import Header from "../../components/user/Header";
 
 export default function MyInquiries() {
   const { id } = useParams();
