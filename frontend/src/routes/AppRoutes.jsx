@@ -18,33 +18,48 @@ import ProfileSettings from "../pages/admin/ProfileSettings";
 import NotificationSettings from "../pages/admin/NotificationSettings";
 import WebsiteSettings from "../pages/admin/WebsiteSettings";
 
+// User Dashboard 
+import UserLayout from "../layout/UserLayout";
+import UserDashboard from "../pages/user/Dashboard";
+import MyInquiries from "../pages/user/MyInquiries";
+import Profile from "../pages/user/Profile";
+import UserSettings from "../pages/user/Settings";
+
 
 
 export default function AppRoutes() {
   return (
-        <Routes>
-          <Route path="/login" element={<AdminLogin />} />
-          <Route path="/signup" element={<AdminSignup />} />
-          <Route path="/dashboard" element={<AdminDashboard />} />
-          <Route path="/categories" element={<Categories />} />
-          <Route path="/sub-categories" element={<SubCategories />} />
-          <Route path="/customers" element={<Customer />} />
-          <Route path="/customers/:id" element={<CustomerView />} />
-          <Route path="/products" element={<ProductManagement />} />
-          <Route path="/product-images" element={<ProductImageManager />} />
-          <Route path="/inquiries" element={<InquiryManagement />} />
-          <Route path="/team-roles" element={<TeamRoles />} />
-          <Route path="/team-roles/:id" element={<TeamRolesDetails />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/settings/general" element={<GeneralSettings />} />
-          <Route path="/settings/profile" element={<ProfileSettings />} />
-          <Route path="/settings/notifications" element={<NotificationSettings />} />
-          <Route path="/settings/website" element={<WebsiteSettings />} />
+    <Routes>
+      <Route path="/login" element={<AdminLogin />} />
+      <Route path="/signup" element={<AdminSignup />} />
+      <Route path="/dashboard" element={<AdminDashboard />} />
+      <Route path="/categories" element={<Categories />} />
+      <Route path="/sub-categories" element={<SubCategories />} />
+      <Route path="/customers" element={<Customer />} />
+      <Route path="/customers/:id" element={<CustomerView />} />
+      <Route path="/products" element={<ProductManagement />} />
+      <Route path="/product-images" element={<ProductImageManager />} />
+      <Route path="/inquiries" element={<InquiryManagement />} />
+      <Route path="/team-roles" element={<TeamRoles />} />
+      <Route path="/team-roles/:id" element={<TeamRolesDetails />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/settings/general" element={<GeneralSettings />} />
+      <Route path="/settings/profile" element={<ProfileSettings />} />
+      <Route
+        path="/settings/notifications"
+        element={<NotificationSettings />}
+      />
+      <Route path="/settings/website" element={<WebsiteSettings />} />
 
-          <Route path="/adminlayout" element={<AdminLayout />} />
+      <Route path="/adminlayout" element={<AdminLayout />} />
 
-
-        </Routes>
-
+      <Route path="/user/*" element={<UserLayout />}>
+        <Route index element={<UserDashboard />} />
+        <Route path="dashboard" element={<UserDashboard />} />
+        <Route path="myinquiries" element={<MyInquiries />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="settings" element={<UserSettings />} />
+      </Route>
+    </Routes>
   );
 }
