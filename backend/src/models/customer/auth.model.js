@@ -12,11 +12,11 @@ const customerAuth_Schema = new Schema({
     },
     password:{
         type: String,
-        required: true
     },
     contact: {
         type: Number,
-        unique: true
+        unique: true,
+        sparse: true
     },
     profileImage:{
         type: String

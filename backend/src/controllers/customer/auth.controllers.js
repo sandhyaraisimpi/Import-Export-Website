@@ -4,7 +4,8 @@ import { ApiResponse } from "../../utils/api-response.js";
 import { cookiesForUser } from "../../utils/cookiesForUser.js";
 import { passwordDecrypt, passwordEncrypt } from "../../utils/bcryption.js";
 import { cloudinary, deleteFromCloudinary } from "../../config/cloudinary.config.js";
-import { brevo } from '../../config/brevo.config.js'
+import { brevo } from '../../config/brevo.config.js';
+import { OAuth2Client } from "google-auth-library"
 
 const Signup = async (req, res) => {
   try {
@@ -345,5 +346,42 @@ const forgetPasswordOtp = async (req, res) => {
   }
 }
 
+const GoogleAuth = async (req, res) => {
+    try {
+        const { token } = req.body;
 
-export { Signup, Login, forgetPassword, updateProfile, getMyProfile, signupOtp, forgetPasswordOtp };
+        const client = new OAuth2Client(process.env.Google_ClientId)
+
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.Google_ClientId
+        });
+
+        const payload = ticket.getPayload();
+        const { email, name, picture } = payload;
+
+
+        let user = await customerAuth_Model.findOne({ email });
+
+        if (!user) {
+            user = customerAuth_Model({
+                email: email,
+                name,
+                profileImage: picture
+            })
+
+            await user.save();
+        }
+
+
+        await cookiesForUser(res, user);
+
+        return res.status(200).json(new ApiResponse(200, { userEmail: email }, "Successful"));
+    }
+    catch (err) {
+        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name, GoogleAuth }]));
+    }
+}
+
+
+export { Signup, Login, forgetPassword, updateProfile, getMyProfile, signupOtp, forgetPasswordOtp, GoogleAuth };

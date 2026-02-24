@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Signup, Login, forgetPassword, updateProfile, getMyProfile, signupOtp, forgetPasswordOtp } from "../../controllers/customer/auth.controllers.js";
+import { Signup, Login, forgetPassword, updateProfile, getMyProfile, signupOtp, forgetPasswordOtp, GoogleAuth } from "../../controllers/customer/auth.controllers.js";
 import { duplicateEmail } from "../../middlewares/duplicateEmail.middleware.js";
 import { customerPresent } from "../../middlewares/emailIsPresent.middleware.js";
 import { requiredLogin } from "../../middlewares/requiredLogin.midddleware.js";
@@ -28,5 +28,7 @@ router.put('/updateProfile', requiredLogin, upload.single("profileImage"), updat
 router.get("/myprofile", requiredLogin, getMyProfile);
 router.post('/signupOtp', duplicateEmail, signupOtp);
 router.post("/forgetpasswordOtp", customerPresent, forgetPasswordOtp);
+
+router.post("/google", GoogleAuth);
 
 export default router

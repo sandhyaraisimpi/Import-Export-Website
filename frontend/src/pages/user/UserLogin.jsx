@@ -4,6 +4,7 @@ import { Toaster, toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import leftLogin from "../../assets/login/leftlogin.webp";
 import { postService } from "../../service/axios";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -18,6 +19,37 @@ export default function Login() {
 
     const validateEmail = (email) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        try {
+            if (!credentialResponse?.credential) {
+                toast.error("Invalid Google response");
+                return;
+            }
+
+            const token = credentialResponse.credential; // ✅ ID TOKEN
+
+            const apiResponse = await postService(
+                "/customer/auth/google",
+                { token }
+            );
+
+            if (!apiResponse.ok) {
+                toast.error(apiResponse.message || "Google Login Failed");
+                return;
+            }
+
+            toast.success("Login Successful");
+
+            setTimeout(() => {
+                navigate("/");
+            }, 1500);
+
+        } catch (error) {
+            console.error("Google Login Error:", error);
+            toast.error("Google Login Failed");
+        }
     };
 
     const handleChange = (e) => {
@@ -188,25 +220,11 @@ export default function Login() {
 
 
                         {/* Google Login  */}
-                        <button
-                            type="button"
-                            className="w-full flex items-center justify-center gap-2 py-2.5 text-sm border rounded-lg hover:bg-gray-50 transition"
-                        >
-                            {/* Google SVG Icon */}
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 48 48"
-                                width="18px"
-                                height="18px"
-                            >
-                                <path fill="#EA4335" d="M24 9.5c3.54 0 6.74 1.22 9.25 3.6l6.9-6.9C35.92 2.8 30.4 0 24 0 14.64 0 6.44 5.64 2.68 13.84l8.04 6.24C12.64 13.2 17.84 9.5 24 9.5z" />
-                                <path fill="#34A853" d="M46.14 24.5c0-1.64-.14-3.2-.4-4.7H24v9h12.44c-.54 2.9-2.18 5.36-4.64 7.04l7.16 5.56C43.98 37.04 46.14 31.36 46.14 24.5z" />
-                                <path fill="#4A90E2" d="M10.72 28.08a14.8 14.8 0 010-8.16l-8.04-6.24A23.96 23.96 0 000 24c0 3.84.92 7.46 2.68 10.32l8.04-6.24z" />
-                                <path fill="#FBBC05" d="M24 48c6.4 0 11.92-2.12 15.96-5.8l-7.16-5.56c-2 1.36-4.56 2.16-8.8 2.16-6.16 0-11.36-3.7-13.28-8.84l-8.04 6.24C6.44 42.36 14.64 48 24 48z" />
-                            </svg>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => toast.error("Google Login Failed")}
+                        />
 
-                            Continue with Google
-                        </button>
                     </div>
 
                     <p className="text-center text-xs text-gray-500 mt-4">

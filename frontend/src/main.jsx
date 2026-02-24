@@ -4,11 +4,18 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthContext";
 import App from "./App";
 import "./index.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </BrowserRouter>
+  <GoogleOAuthProvider clientId="499348321855-fnedlnu6qk87hie9thu98q1b0q4a143t.apps.googleusercontent.com">
+    <BrowserRouter>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </BrowserRouter>
+  </GoogleOAuthProvider>
 );
