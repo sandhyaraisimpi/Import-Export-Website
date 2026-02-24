@@ -435,11 +435,7 @@ const getProductSuggestions = async (req, res) => {
             new ApiResponse(
                 200,
                 {
-                    suggestions: products.map(p => ({
-                        id: p._id,
-                        name: p.name,
-                        subcategoryId: p.subcategoryId
-                    })),
+                    products,
                     total: products.length
                 },
                 "Product suggestions fetched successfully"

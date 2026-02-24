@@ -13,7 +13,7 @@ const getCategory = async (req, res) => {
         const skip = (page - 1) * limit;
 
         const categoryList = await categoryModel
-            .find({status : "Available"})
+            .find({ status: "Available" })
             .skip(skip)
             .limit(limit)
             .sort({ createdAt: -1 });
@@ -147,9 +147,38 @@ const getSubCategory = async (req, res) => {
     }
 }
 
+const getSubCategoryById = async (req, res) => {
+    try {
+
+        const { subcategoryId } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(subcategoryId)) {
+            return res.status(400).json({ message: "Invalid Category ID" });
+        }
+
+        const subcategory = await subcategoryModel.findById(
+            subcategoryId
+        );
+
+        if (!subcategory) {
+            return res.status(404).json(new ApiError(404, "No Category Found."));
+        }
+
+        return res.status(200).json(new ApiResponse(
+            200,
+            subcategory,
+            "Successful"
+        ))
+
+
+    } catch (err) {
+        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+    }
+}
+
 const getProductByParentId = async (req, res) => {
     try {
-        const { categoryId, subCategoryId } = req.query;
+        const {subCategoryId } = req.query;
 
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
@@ -158,7 +187,6 @@ const getProductByParentId = async (req, res) => {
 
         const productList = await productModel.find(
             {
-                categoryId: categoryId,
                 subCategoryId: subCategoryId,
                 status: "Available"
             }
@@ -172,7 +200,6 @@ const getProductByParentId = async (req, res) => {
         }
 
         const totalItems = await productModel.countDocuments({
-            categoryId: categoryId,
             subCategoryId: subCategoryId,
             status: "Available"
         });
@@ -260,4 +287,32 @@ const getProduct = async (req, res) => {
     }
 }
 
-export { getCategory, getCategoryById, getSubCategoryByCategoryId, getSubCategory, getProductByParentId, getProduct };
+const getProductById = async (req, res) => {
+    try {
+
+        const { productId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({ message: "Invalid Category ID" });
+        }
+
+        const product = await productModel.findById(
+            productId
+        );
+
+        if (!product) {
+            return res.status(404).json(new ApiError(404, "No Category Found."));
+        }
+
+        return res.status(200).json(new ApiResponse(
+            200,
+            product,
+            "Successful"
+        ))
+
+
+    } catch (err) {
+        return res.status(500).json(new ApiError(500, err.message, [{ message: err.message, name: err.name }]));
+    }
+}
+
+export { getCategory, getCategoryById, getSubCategoryByCategoryId, getSubCategory, getSubCategoryById, getProductByParentId, getProduct, getProductById };
