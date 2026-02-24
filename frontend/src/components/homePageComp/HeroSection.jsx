@@ -91,15 +91,33 @@ const HeroSection = () => {
           <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px]" />
 
           {/* CENTER TEXT */}
+          {/* CENTER TEXT */}
           <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
             <div className="text-center">
-              <h1 className="text-8xl font-light tracking-tight text-neutral-900">
-                {HERO_DATA.companyName}
+              {/* Main Logo */}
+              <h1 className="relative leading-none">
+                {/* VR */}
+                <span className="text-[7rem] md:text-[9rem] font-semibold tracking-[-0.02em] bg-gradient-to-b from-neutral-900 via-neutral-700 to-neutral-900 bg-clip-text text-transparent drop-shadow-[0_8px_25px_rgba(0,0,0,0.15)]">
+                  VR
+                </span>
+
+                {/* & Sons */}
+                <span className="ml-4 text-[5rem] md:text-[6rem] font-light tracking-wide text-neutral-800">
+                  & Sons
+                </span>
+
+                {/* Elegant underline accent */}
+                <span className="absolute left-1/2 -bottom-6 w-32 h-[2px] -translate-x-1/2 bg-gradient-to-r from-transparent via-neutral-700 to-transparent opacity-60" />
               </h1>
 
-              <p className="uppercase tracking-[0.6em] text-sm text-neutral-700 mt-6">
-                {HERO_DATA.companySubtitle}
-              </p>
+              {/* Subtitle */}
+              <div className="mt-10 flex items-center justify-center gap-6">
+                <div className="w-16 h-[1px] bg-neutral-500 opacity-50" />
+                <p className="uppercase tracking-[0.5em] text-xs text-neutral-700 font-medium">
+                  Global Import • Export
+                </p>
+                <div className="w-16 h-[1px] bg-neutral-500 opacity-50" />
+              </div>
             </div>
           </div>
         </motion.div>
