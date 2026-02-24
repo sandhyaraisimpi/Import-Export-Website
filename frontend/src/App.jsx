@@ -27,6 +27,7 @@ import FoodCarousel from "./components/FoodCarousel";
 import MainCategory from "./pages/Products/MainCategory";
 import CategoryProducts from "./pages/Products/CategoryProducts";
 import PrductDetail from "./pages/Products/PrductDetail";
+import Product from "./pages/Products/Product"
 
 
 //Footer
@@ -86,7 +87,8 @@ function App() {
       {/* Valid IDs: food | spices | agri | industrial */}
       <Route path="/MainCategory" element={<MainCategory />} />
       <Route path="/CategoryProducts/:id" element={<CategoryProducts />} />
-      <Route path="/products" element={<PrductDetail />} /> 
+      <Route path="/products/:id" element={<Product/>} />
+      <Route path="/productsDetail/:id" element={<PrductDetail />} /> 
 
       {/* Future product detail page */}
       {/* Example URL → /products/food/f1 */}

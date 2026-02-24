@@ -12,288 +12,11 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getService } from "../../service/axios";
 
-// ═══════════════════════════════════════════════════════════════
-//  MOCK DATA — Replace each section with your real API responses
-// ═══════════════════════════════════════════════════════════════
-
-const MOCK_CATEGORY = {
-  _id: "cat_001",
-  name: "Textiles",
-  decription:
-    "Premium-grade raw textile materials sourced from certified suppliers across South Asia, East Africa, and South America.",
-  categoryImage:
-    "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&q=80",
-};
-
-// Matches subCategory_Schema
-const MOCK_SUBCATEGORIES = [
-  {
-    _id: "sub_001",
-    categoryId: "cat_001",
-    name: "Raw Cotton",
-    skuId: "SKU-TC-001",
-    decription: "Long-staple, unprocessed cotton bales from Gujarat. Low moisture content, high tensile strength.",
-    status: "Available",
-    subcategoryImage: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=800&q=80",
-  },
-  {
-    _id: "sub_002",
-    categoryId: "cat_001",
-    name: "Mulberry Silk",
-    skuId: "SKU-TC-002",
-    decription: "Grade-A mulberry silk reeled from double-cocoon filaments. Exceptionally uniform denier.",
-    status: "Available",
-    subcategoryImage: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-  },
-  {
-    _id: "sub_003",
-    categoryId: "cat_001",
-    name: "Merino Wool",
-    skuId: "SKU-TC-003",
-    decription: "Ultra-fine 17-micron Merino fleece sourced from free-range farms in Patagonia.",
-    status: "Available",
-    subcategoryImage: "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=800&q=80",
-  },
-  {
-    _id: "sub_004",
-    categoryId: "cat_001",
-    name: "Linen Fibre",
-    skuId: "SKU-TC-004",
-    decription: "Wet-retted flax fibre with low lignin content. Exceptionally durable and biodegradable.",
-    status: "Un-Available",
-    subcategoryImage: "https://images.unsplash.com/photo-1586348943529-beaae6c28db9?w=800&q=80",
-  },
-  {
-    _id: "sub_005",
-    categoryId: "cat_001",
-    name: "Bamboo Yarn",
-    skuId: "SKU-TC-005",
-    decription: "Mechanically processed bamboo yarn with antibacterial properties. Silky hand-feel.",
-    status: "Available",
-    subcategoryImage: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80",
-  },
-  {
-    _id: "sub_006",
-    categoryId: "cat_001",
-    name: "Hemp Fabric",
-    skuId: "SKU-TC-006",
-    decription: "Industrial-grade hemp woven into base cloth. Resistant to mold, UV, and abrasion.",
-    status: "Available",
-    subcategoryImage: "https://images.unsplash.com/photo-1565035010268-a3816f98589a?w=800&q=80",
-  },
-];
-
-// Matches productSchema — keyed by subCategoryId for easy lookup
-// Replace with: products filtered by subCategoryId from your API
-const MOCK_PRODUCTS = {
-  sub_001: [
-    {
-      _id: "prod_001",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Gujarat Pima Bale",
-      skuId: "SKU-P-0011",
-      description: "Extra-long staple Pima cotton from Saurashtra region. 34mm fibre length, moisture below 8%. Ideal for combed yarn.",
-      specifications: "Grade: ELS | Staple: 34mm | Mic: 3.8 | Moisture: <8% | Pack: 170kg bales",
-      status: "Available",
-      productImage: ["https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&q=80"],
-    },
-    {
-      _id: "prod_002",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Shankar-6 Cotton",
-      skuId: "SKU-P-0012",
-      description: "Medium-staple Shankar-6 variety, most exported Indian cotton. Consistent quality, wide mill acceptance.",
-      specifications: "Grade: S6 | Staple: 28mm | Mic: 4.2 | Moisture: <8.5% | Pack: 165kg bales",
-      status: "Available",
-      productImage: ["https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&q=80"],
-    },
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    },
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    },
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    },
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    },
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    },
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    },
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    },
-
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    },
-    {
-      _id: "prod_003",
-      categoryId: "cat_001",
-      subCategoryId: "sub_001",
-      name: "Organic Cotton Lint",
-      skuId: "SKU-P-0013",
-      description: "GOTS-certified organic cotton, pesticide-free cultivation. Premium pricing, niche but high-demand segment.",
-      specifications: "Cert: GOTS | Staple: 30mm | Mic: 4.0 | Moisture: <7.5% | Pack: 160kg bales",
-      status: "Un-Available",
-      productImage: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?w=600&q=80"],
-    }
-  ],
-  sub_002: [
-    {
-      _id: "prod_004",
-      categoryId: "cat_001",
-      subCategoryId: "sub_002",
-      name: "20/22D Raw Silk",
-      skuId: "SKU-P-0021",
-      description: "Reeled raw silk 20/22 denier, double-cocoon grade. Smooth hand-feel, low nep count, suitable for luxury warp weaving.",
-      specifications: "Denier: 20/22D | Grade: 3A | Neatness: 95%+ | Sericin: 25% | Reel: 500m hanks",
-      status: "Available",
-      productImage: ["https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"],
-    },
-    {
-      _id: "prod_005",
-      categoryId: "cat_001",
-      subCategoryId: "sub_002",
-      name: "Spun Silk Yarn",
-      skuId: "SKU-P-0022",
-      description: "Spun from pierced cocoon waste. Slightly irregular texture adds character. Popular in artisan and handloom segments.",
-      specifications: "Count: Nm120 | Grade: B | Twist: 600 TPM | Package: 100g cones",
-      status: "Available",
-      productImage: ["https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80"],
-    },
-  ],
-  sub_003: [
-    {
-      _id: "prod_006",
-      categoryId: "cat_001",
-      subCategoryId: "sub_003",
-      name: "Superfine 17.5µ Fleece",
-      skuId: "SKU-P-0031",
-      description: "Patagonian Merino fleece, 17.5 micron. Certified non-mulesed. Exceptional softness for next-to-skin knitwear.",
-      specifications: "Micron: 17.5µ | Length: 85mm | VM: <0.5% | Cert: ZQ, RWS | Pack: 200kg bales",
-      status: "Available",
-      productImage: ["https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=600&q=80"],
-    },
-  ],
-  sub_004: [],
-  sub_005: [
-    {
-      _id: "prod_007",
-      categoryId: "cat_001",
-      subCategoryId: "sub_005",
-      name: "Bamboo Ring-Spun Yarn",
-      skuId: "SKU-P-0051",
-      description: "Ne30/1 ring-spun bamboo viscose yarn. High sheen, smooth surface, excellent drape for woven fabrics.",
-      specifications: "Count: Ne30/1 | Twist: Z | Tenacity: 18cN/tex | Elongation: 18% | Package: 1kg cones",
-      status: "Available",
-      productImage: ["https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80"],
-    },
-    {
-      _id: "prod_008",
-      categoryId: "cat_001",
-      subCategoryId: "sub_005",
-      name: "Bamboo-Cotton Blend",
-      skuId: "SKU-P-0052",
-      description: "70/30 bamboo-cotton blend yarn. Combines softness with durability. Preferred for T-shirt and activewear knitting.",
-      specifications: "Blend: 70% Bamboo / 30% Cotton | Count: Ne40/1 | Package: 1kg cones",
-      status: "Available",
-      productImage: ["https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&q=80"],
-    },
-  ],
-  sub_006: [
-    {
-      _id: "prod_009",
-      categoryId: "cat_001",
-      subCategoryId: "sub_006",
-      name: "Hemp Canvas 12oz",
-      skuId: "SKU-P-0061",
-      description: "12oz plain-weave hemp canvas. Heavy-duty, naturally anti-microbial. Suited for industrial bags and upholstery.",
-      specifications: "Weight: 12oz/yd² | Width: 58\" | Weave: Plain | Finish: Unbleached | Roll: 50m",
-      status: "Available",
-      productImage: ["https://images.unsplash.com/photo-1565035010268-a3816f98589a?w=600&q=80"],
-    },
-  ],
-};
-
-// ═══════════════════════════════════════════════════════════════
 
 
-// ── Subcategory Card ──────────────────────────────────────────
 const SubcategoryCard = ({ sub, index, onClick }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
@@ -354,6 +77,8 @@ const SubcategoryCard = ({ sub, index, onClick }) => (
 
 
 export default function CategoryDetail() {
+
+  const navigate = useNavigate()
 
   const { id } = useParams();
 
@@ -424,7 +149,7 @@ export default function CategoryDetail() {
 
       setSubCateogory(data.subcategories);
       setSubCategoryCount(data.subcategories.length);
-      setTotalPages(data.totalPage);
+      setTotalPages(data.pagination.totalPage);
     }, 400);
 
     return () => clearTimeout(delayDebounce);
@@ -461,19 +186,56 @@ export default function CategoryDetail() {
 
       {/* HERO SAME AS BEFORE */}
       <section className="relative h-[70vh] flex flex-col justify-end px-6 md:px-16 pb-16 overflow-hidden">
+
         <div className="absolute inset-0">
           <img
             src={category?.categoryImage}
-            alt=""
-            className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.25)" }}
+            alt={category?.name}
+            className="w-full h-full object-cover transition-all duration-1000"
+            style={{ filter: "brightness(0.25) saturate(0.6)" }}
           />
+
+          {/* Overlay Gradients */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0D0D0D]/60 to-transparent" />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <h1 className="text-white font-black uppercase tracking-tighter leading-[0.8] mb-6"
-            style={{ fontSize: "clamp(3.5rem, 9vw, 8rem)" }}>
-            {category?.name}
-          </h1>
+
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto">
+
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-3 mb-8 text-[9px] font-black uppercase tracking-[0.4em] text-white/30">
+
+            <button
+              onClick={() => navigate(-1)}
+              className={`flex items-center gap-2 transition-colors ${"hover:text-[#C36A4D] cursor-pointer"
+                }`}
+            >
+              <ArrowLeft size={11} onClick={() => navigate(-1)} />
+              {category?.name}
+            </button>
+
+          </div>
+
+          {/* Title & Description */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={category?._id || "category"}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h1
+                className="text-white font-black uppercase tracking-tighter leading-[0.8] mb-6"
+                style={{ fontSize: "clamp(3.5rem, 9vw, 8rem)" }}
+              >
+                {category?.name}
+              </h1>
+
+            </motion.div>
+          </AnimatePresence>
+
         </div>
       </section>
 
@@ -523,15 +285,42 @@ export default function CategoryDetail() {
       {/* CONTENT */}
       <main className="max-w-7xl mx-auto py-16 px-6">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {subCategory.map((sub, i) => (
-            <SubcategoryCard
-              key={sub._id}
-              sub={sub}
-              index={i}
-            />
-          ))}
-        </div>
+
+        {subCategory.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {subCategory.map((sub, i) => (
+              <SubcategoryCard
+                key={sub._id}
+                sub={sub}
+                index={i}
+                onClick={(sub) => navigate(`/products/${sub._id}`)}
+              />
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col items-center justify-center py-32 text-center"
+          >
+            <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8">
+              <Search size={32} className="text-[#C36A4D]" />
+            </div>
+
+            <h2
+              className="text-white font-black uppercase tracking-tight mb-4"
+              style={{ fontSize: "clamp(2rem, 5vw, 3rem)" }}
+            >
+              No Subcategories Found
+            </h2>
+
+            <p className="text-white/40 text-lg max-w-md leading-relaxed">
+              We couldn’t find any matching results. Try adjusting your search or explore other categories.
+            </p>
+          </motion.div>
+        )}
+
 
         {/* PAGINATION */}
         {totalPages > 1 && (
