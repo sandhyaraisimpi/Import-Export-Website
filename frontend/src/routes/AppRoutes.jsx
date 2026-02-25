@@ -22,6 +22,14 @@ import AdminSignup from "../pages/admin/Signup";
 import ForgotPasswordOTP from "../pages/admin/ForgotPasswordOTP";
 import VerifyOTP from "../pages/admin/VerifyOTP";
 import ResetPasswordOTP from "../pages/admin/ResetPasswordOTP";
+import Blogs from "../pages/admin/Blogs";
+import Promotion from "../pages/admin/Promotion";
+// User Dashboard 
+import UserLayout from "../layout/UserLayout";
+import UserDashboard from "../pages/user/Dashboard";
+import MyInquiries from "../pages/user/MyInquiries";
+import Profile from "../pages/user/Profile";
+import UserSettings from "../pages/user/Settings";
 
 
 // Layout for Protected Admin Pages
@@ -39,6 +47,28 @@ function AdminLayout() {
 export default function AppRoutes() {
   return (
     <Routes>
+      <Route path="/login" element={<AdminLogin />} />
+      <Route path="/signup" element={<AdminSignup />} />
+      <Route path="/dashboard" element={<AdminDashboard />} />
+      <Route path="/categories" element={<Categories />} />
+      <Route path="/sub-categories" element={<SubCategories />} />
+      <Route path="/customers" element={<Customer />} />
+      <Route path="/customers/:id" element={<CustomerView />} />
+      <Route path="/products" element={<ProductManagement />} />
+      <Route path="/product-images" element={<ProductImageManager />} />
+      <Route path="/inquiries" element={<InquiryManagement />} />
+      <Route path="/team-roles" element={<TeamRoles />} />
+      <Route path="/team-roles/:id" element={<TeamRolesDetails />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/settings/general" element={<GeneralSettings />} />
+      <Route path="/settings/profile" element={<ProfileSettings />} />
+      <Route path="/promotion/blogs" element={<Blogs />} />
+      <Route path="/promotion/managPromotion" element={<Promotion />} />
+      <Route
+        path="/settings/notifications"
+        element={<NotificationSettings />}
+      />
+      <Route path="/settings/website" element={<WebsiteSettings />} />
 
       {/* AUTH ROUTES (NO SIDEBAR) */}
       <Route path="login" element={<AdminLogin />} />

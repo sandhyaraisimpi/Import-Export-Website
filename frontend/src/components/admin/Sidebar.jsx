@@ -16,7 +16,10 @@ import {
   User,
   Bell,
   Globe,
-  Sliders
+  Sliders,
+  Megaphone,
+  BookOpen,
+  Sparkles,
 } from "lucide-react";
 
 import logo from "../../assets/logo/logo.webp";
@@ -28,6 +31,7 @@ export default function Sidebar() {
   const [openCategory, setOpenCategory] = useState(false);
   const [openProducts, setOpenProducts] = useState(false);
   const [openSettings, setOpenSettings] = useState(false);
+  const [openPromotion, setOpenPromotion] = useState(false);
 
   // Auto open dropdown on route change
   useEffect(() => {
@@ -43,6 +47,10 @@ export default function Sidebar() {
 
     setOpenSettings(
       location.pathname.startsWith("/admin/settings")
+    );
+
+    setOpenPromotion(
+      location.pathname.startsWith("/admin/promotion")
     );
   }, [location.pathname]);
 
@@ -193,6 +201,42 @@ export default function Sidebar() {
               Customers
             </div>
           </Link>
+
+          {/* Promotion */}
+          <div>
+            <button
+              onClick={() => setOpenPromotion(!openPromotion)}
+              className={buttonClass(
+                isDropdownActive(["/admin/promotion"])
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <Megaphone size={18}/>
+                Promotion
+              </div>
+              {openPromotion ? <ChevronDown size={16}/> : <ChevronRight size={16}/>}
+            </button>
+
+            {openPromotion && (
+              <div className="ml-6 mt-1 space-y-1">
+                <Link
+                  to="/admin/promotion/blogs"
+                  className={subButtonClass(isActive("/admin/promotion/blogs"))}
+                >
+                  <BookOpen size={16}/>
+                  Blogs
+                </Link>
+
+                <Link
+                  to="/admin/promotion/managPromotion"
+                  className={subButtonClass(isActive("/admin/promotion/new-products"))}
+                >
+                  <Sparkles size={16}/>
+                  Promotion Manager
+                </Link>
+              </div>
+            )}
+          </div>
 
           {/* Terms */}
           <Link
